@@ -118,6 +118,18 @@ class m_lpbj extends Model
         return $data;
     }
 
+    public function deleteDtl($id)
+    {
+        $data = DB::table('m_lpbj_dtl')
+            ->where('id', $id)
+            ->update([
+                'isdeleted' => 1,
+                'modified_by' => session('iduser')
+            ]);
+
+        return $data;
+    }
+
     public function cekDraft($id)
     {
         $data = DB::table('vw_getdraftlpbj')
@@ -144,15 +156,16 @@ class m_lpbj extends Model
 
     public function editHdr($params)
     {
-        $userid = $params['userid'];
-        $company = $params['companycode'];
-        $desc = $params['description'];
-        $note = $params['note'];
-        $status = $params['status'];
+        // dd($params);
+        $data = DB::table('m_lpbj_hdr')
+            ->where('id', $params['hdrid'])
+            ->update([
+                'status' => $params['status'],
+                'description' => $params['description'],
+                'note' => $params['note'],
+                'modified_by' => session('iduser')
+            ]);
 
-        $data = DB::statement("CALL sp_addlpbjhdr($userid,'$company','$desc','$note','$status')");
-        $data = DB::table("m_lpbj_hdr")
-            ->max('id');
         return $data;
     }
 
@@ -197,6 +210,16 @@ class m_lpbj extends Model
         return $data;
     }
 
+    public function getHistoryDetailEdt($id)
+    {
+        $data = DB::table('vw_historylpbjdtl')
+            ->select('*')
+            ->where('dtlid', '=', $id)
+            ->get();
+
+        return $data;
+    }
+
     public function insertLpbj($id, $status)
     {
         // dd($status);
@@ -204,9 +227,56 @@ class m_lpbj extends Model
             ->where('id', $id)
             ->update([
                 'status' => ($status + 1),
-                'workflow' => 'Approved_by_' . session('groupname'),
+                'workflow' => 'Approved_by_' . session('name'),
                 'modified_by' => session('iduser')
             ]);
+
+        return $data;
+    }
+
+    public function updateDraftDetail($params)
+    {
+        // dd($status);
+        $data = DB::table('m_lpbj_dtl')
+            ->where('id', $params['dtlid'])
+            ->update([
+                'articlecode' => $params['articlecode'],
+                'remark' => $params['remark'],
+                'qty' => $params['qty'],
+                'sitecode' => $params['sitecode'],
+                'accassign' => $params['accassign'],
+                'gl' => $params['gl'],
+                'costcenter' => $params['costcenter'],
+                'order' => $params['order'],
+                'asset' => $params['asset'],
+                'keterangan' => $params['keterangan'],
+                'gambar' => $params['gambar'],
+                'modified_by' => $params['userid'],
+            ]);
+
+        return $data;
+    }
+
+    public function insertDraftHistory($params)
+    {
+        $date = new DateTime('now');
+
+        $data = DB::table('m_lpbj_dtl')->insert([
+            'hdrid' => $params['hdrid'],
+            'articlecode' => $params['article'],
+            'remark' => $params['remark'],
+            'qty' => $params['qty'],
+            'sitecode' => $params['site'],
+            'accassign' => $params['assign'],
+            'gl' => $params['gl'],
+            'costcenter' => $params['cost'],
+            'order' => $params['order'],
+            'asset' => $params['asset'],
+            'keterangan' => $params['ket'],
+            'gambar' => $params['pic'],
+            'created_at' => $date,
+            'created_by' => $params['userid'],
+        ]);
 
         return $data;
     }
@@ -219,7 +289,7 @@ class m_lpbj extends Model
             ->update([
                 'status' => $status,
                 'reason' => $reason,
-                'workflow' => 'Reject_by_' . session('groupname'),
+                'workflow' => 'Reject_by_' . session('name'),
                 'modified_by' => session('iduser')
             ]);
 

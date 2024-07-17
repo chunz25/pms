@@ -93,7 +93,7 @@
                                 <td>{{ $dh->reason }}</td>
                                 <td style="width: 10%"><a href="{{ url("/detaillpbj/$dh->hdrid") }}"
                                         class="btn btn-sm btn-success"><i class="bi bi-search"></i></a>
-                                    @if ($dh->status == 'Draft')
+                                    @if ($dh->status == 'Draft' && $dh->userid == session('iduser'))
                                         <a href="{{ url("/editlpbj/$dh->hdrid") }}" class="btn btn-sm btn-primary"><i
                                                 class="bi bi-pencil"></i></a>
                                     @endif

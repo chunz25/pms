@@ -148,28 +148,25 @@ class c_lpbj extends Controller
 
     public function ajukanEdit(Request $params)
     {
-        dd($params);
+        // dd($params);
         $hdrid = $params->hdrid;
-        $dtlid = $params->dtlid;
         $dokumen = 1;
 
-        if (session('doc') == 'drf') {
+        if ($params->pilihan == 'drf') {
             $dokumen = 0;
         }
 
         $data = [
             'hdrid' => $hdrid,
-            'dtlid' => $dtlid,
-            'companycode' => $params->companyCode,
             'description' => $params->descLPBJ,
             'note' => $params->noteLPBJ,
             'status' => $dokumen
         ];
-
+        
         $editHdr = $this->db->editHdr($data);
-
+        
         if ($editHdr) {
-            $databody = $this->db->getHistoryHeader($editHdr)->toArray();
+            $databody = $this->db->getHistoryHeader($hdrid)->toArray();
             $emailapprove = session('emailapprove');
 
             $details = [
@@ -185,7 +182,8 @@ class c_lpbj extends Controller
             session()->forget(['cc', 'jdl', 'note', 'doc']);
             return redirect('historylpbj');
         } else {
-            return redirect('pengajuanlpbj')->with('pesan', 'Gagal mengajukan LPBJ, silahkan ulangi kembali');
+            echo 'gagal cukk';
+            // return redirect('pengajuanlpbj')->with('pesan', 'Gagal mengajukan LPBJ, silahkan ulangi kembali');
         }
     }
 
@@ -200,9 +198,10 @@ class c_lpbj extends Controller
         if ($params->hasFile('imgLPBJ')) {
             $filename = $params->file('imgLPBJ')->getClientOriginalName();
             $ext = $params->file('imgLPBJ')->getClientOriginalExtension();
-            $name = 'LPBJ_' . session('iduser') . '_' . $params->input('artLPBJ') . '.' . $ext;
+            $name = 'LPBJ_' . session('iduser') . '_' . $params->input('artLPBJ');
             $name = preg_replace('/[^A-Za-z0-9\-]/', '_', $name);
             $name = preg_replace('/\s+/', '_', $name);
+            $name = $name . '.' . $ext;
             $filename = $params->file('imgLPBJ')->storeAs('lpbj', $filename);
             Storage::move($filename, 'lpbj/' . $name);
         }
@@ -301,6 +300,10 @@ class c_lpbj extends Controller
 
     public function editLpbj($id)
     {
+        if (!session('iduser')) {
+            return redirect('login')->with('pesan', 'Session anda telah habis, silahkan login kembali.');
+        }
+
         session()->forget(['jdl', 'note', 'doc']);
 
         $dataDetail = $this->db->getHistoryDetail($id)->toArray();
@@ -318,6 +321,7 @@ class c_lpbj extends Controller
             'header' => $dataHeader,
             'detail' => $dataDetail,
         ];
+        // dd($data);
 
         return view('lpbjPage/editLpbj', $data);
     }
@@ -343,10 +347,6 @@ class c_lpbj extends Controller
 
     public function lihatApprove($id)
     {
-        if (!session('iduser')) {
-            return redirect('login')->with('pesan', 'Session anda telah habis, silahkan login kembali.');
-        }
-
         return Redirect('approvedetaillpbj')->with('detailid', $id);
     }
 
@@ -368,8 +368,6 @@ class c_lpbj extends Controller
             'dataHeader' => $dataHeader,
             'title' => 'LPBJ'
         ];
-
-        // dd($data);
 
         return view('lpbjPage/approveDetail', $data);
     }
@@ -445,32 +443,52 @@ class c_lpbj extends Controller
             'doc' => $data[2]
         ]);
 
-        return $this->lpbjEdit();
+        return redirect("lpbjedt/$data[3]");
+    }
+
+    public function tempEditAdd($params)
+    {
+        $data = explode('|', $params);
+
+        session()->forget(['jdl', 'note', 'doc']);
+
+        session([
+            'jdl' => $data[0],
+            'note' => $data[1],
+            'doc' => $data[2]
+        ]);
+
+        return redirect("lpbjedtadd/$data[3]");
+    }
+
+    public function tempDel($params)
+    {
+        $data = explode('|', $params);
+
+        session()->forget(['jdl', 'note', 'doc']);
+
+        session([
+            'jdl' => $data[0],
+            'note' => $data[1],
+            'doc' => $data[2]
+        ]);
+
+        return redirect("lpbjedtdel/$data[3]");
     }
 
     public function lpbjEdt($id)
     {
-        session()->forget(['jdl', 'note', 'doc']);
-
         if (!session('iduser')) {
             return redirect('login')->with('pesan', 'Session anda telah habis, silahkan login kembali.');
         }
 
-        $dataDraft = $this->db->getHistoryDetail($id)->toArray()[0];
-        $dataHeader = $this->db->getHistoryHeader($dataDraft->hdrid)->toArray()[0];
+        $dataDraft = $this->db->getHistoryDetailEdt($id)->toArray()[0];
         $dataArticle = $this->db->getArticle()->toArray();
         $dataSite = $this->db->getSite()->toArray();
         $dataGL = $this->db->getGL()->toArray();
         $dataCC = $this->db->getCC()->toArray();
         $dataOrder = $this->db->getOrder()->toArray();
         $dataAsset = $this->db->getAsset()->toArray();
-
-        session([
-            'jdl' => $dataHeader->description,
-            'note' => $dataHeader->note,
-            'doc' => $dataHeader->note
-        ]);
-
 
         $data = [
             'getArticle' => $dataArticle,
@@ -481,14 +499,144 @@ class c_lpbj extends Controller
             'getAsset' => $dataAsset,
             'getDraft' => $dataDraft,
             'title' => 'LPBJ',
-            'loc' => 'Lihat Draft'
         ];
 
         return view('lpbjPage/editDetailLpbj', $data);
     }
 
-    public function lpbjDel($id)
+    public function lpbjEdtAdd($id)
     {
-        return view();
+        if (!session('iduser')) {
+            return redirect('login')->with('pesan', 'Session anda telah habis, silahkan login kembali.');
+        }
+
+        $dataDraft = $this->db->getHistoryDetail($id)->toArray()[0];
+        $dataArticle = $this->db->getArticle()->toArray();
+        $dataSite = $this->db->getSite()->toArray();
+        $dataGL = $this->db->getGL()->toArray();
+        $dataCC = $this->db->getCC()->toArray();
+        $dataOrder = $this->db->getOrder()->toArray();
+        $dataAsset = $this->db->getAsset()->toArray();
+
+        $data = [
+            'getArticle' => $dataArticle,
+            'getSite' => $dataSite,
+            'getGL' => $dataGL,
+            'getCC' => $dataCC,
+            'getOrder' => $dataOrder,
+            'getAsset' => $dataAsset,
+            'getDraft' => $dataDraft,
+            'title' => 'LPBJ',
+        ];
+
+        return view('lpbjPage/tambahArticleDraft', $data);
+    }
+
+    public function lpbjEdtSave(Request $params)
+    {
+        // dd($params);
+        $dtlid = $params->dtlid;
+        $dataDetail = $this->db->getHistoryDetailEdt($dtlid)->toArray()[0];
+
+        $name = 'noimage.jpg';
+        if ($params->hasFile('imgLPBJ')) {
+            $filename = $params->file('imgLPBJ')->getClientOriginalName();
+            $ext = $params->file('imgLPBJ')->getClientOriginalExtension();
+            $name = 'LPBJ_' . session('iduser') . '_' . $params->artLPBJ;
+            $name = preg_replace('/[^A-Za-z0-9\-]/', '_', $name);
+            $name = preg_replace('/\s+/', '_', $name);
+            $name = $name . '.' . $ext;
+            $filename = $params->file('imgLPBJ')->storeAs('lpbj', $filename);
+            Storage::move($filename, 'lpbj/' . $name);
+        }
+
+        $data = [
+            'dtlid' => $dtlid,
+            'userid' => session('iduser'),
+            'articlecode' => $params->artLPBJ,
+            'remark' => $params->rmkLPBJ,
+            'qty' => $params->qtyLPBJ,
+            'sitecode' => $params->stcodeLPBJ,
+            'accassign' => $params->accLPBJ,
+            'gl' => $params->glLPBJ,
+            'costcenter' => $params->costLPBJ,
+            'order' => $params->orderLPBJ,
+            'asset' => $params->assetLPBJ,
+            'keterangan' => $params->ketLPBJ,
+            'gambar' => $name,
+        ];
+
+        $updateData = $this->db->updateDraftDetail($data);
+
+        if ($updateData) {
+            return redirect("editlpbj/$dataDetail->hdrid");
+        } else {
+            return redirect('pengajuanlpbj')->with('pesan', 'Gagal mengajukan LPBJ, silahkan ulangi kembali');
+        }
+    }
+
+    public function lpbjEdtAddArt(Request $params)
+    {
+        // dd($params);
+        $gl = $params->input('glLPBJ');
+        $cc = $params->input('costLPBJ');
+        $io = $params->input('orderLPBJ');
+        $as = $params->input('assetLPBJ');
+
+        $name = 'noimage.jpg';
+        if ($params->hasFile('imgLPBJ')) {
+            $filename = $params->file('imgLPBJ')->getClientOriginalName();
+            $ext = $params->file('imgLPBJ')->getClientOriginalExtension();
+            $name = 'LPBJ_' . session('iduser') . '_' . $params->input('artLPBJ');
+            $name = preg_replace('/[^A-Za-z0-9\-]/', '_', $name);
+            $name = preg_replace('/\s+/', '_', $name);
+            $name = $name . '.' . $ext;
+            $filename = $params->file('imgLPBJ')->storeAs('lpbj', $filename);
+            Storage::move($filename, 'lpbj/' . $name);
+        }
+
+        if ($params->input('accLPBJ') == 'K') {
+            $as = null;
+        } elseif ($params->input('accLPBJ') == 'A') {
+            $gl = null;
+            $cc = null;
+            $io = null;
+        }
+
+        $data = [
+            'hdrid' => $params->hdrid,
+            'userid' => session('iduser'),
+            'article' => $params->input('artLPBJ'),
+            'remark' => $params->input('rmkLPBJ'),
+            'qty' => $params->input('qtyLPBJ'),
+            'site' => $params->input('stcodeLPBJ'),
+            'assign' => $params->input('accLPBJ'),
+            'gl' => $gl,
+            'cost' => $cc,
+            'order' => $io,
+            'asset' => $as,
+            'ket' => $params->input('ketLPBJ'),
+            'pic' => $name
+        ];
+
+        $insertData = $this->db->insertDraftHistory($data);
+
+        if ($insertData) {
+            return redirect("editlpbj/$params->hdrid");
+        } else {
+            return redirect('tambaharticle')->with('pesan', 'Gagal menambahkan data.');
+        }
+    }
+
+    public function lpbjEdtDel($id)
+    {
+        $dataDraft = $this->db->getHistoryDetailEdt($id)->toArray()[0];
+        $deleteData = $this->db->deleteDtl($id);
+
+        if ($deleteData) {
+            return redirect("editlpbj/$dataDraft->hdrid")->with('pesan', 'Data berhasil dihapus');
+        } else {
+            return redirect('pengajuanlpbj')->with('pesan', 'Gagal menghapus data.');
+        }
     }
 }

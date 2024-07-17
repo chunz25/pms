@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/x-icon" href="{{ asset('img/logo.png') }}">
-    <title>Edit Detail {{ $title }}</title>
+    <title>Tambah Article {{ $title }}</title>
 
     {{-- Style CSS --}}
     {{-- Vendor CSS Files --}}
@@ -74,23 +74,22 @@
                     </div>
                 </div>
                 <br>
-                <form class="form-horizontal form-label-left" action="{{ url('/lpbjedtdetail') }}" method="post"
+                <form class="form-horizontal form-label-left" action="{{ url('/lpbjedtdetailadd') }}" method="post"
                     enctype="multipart/form-data">
                     @csrf
-                    <input value="{{ $getDraft->dtlid }}" type="text" name="dtlid" hidden>
+                    <input value="{{ $getDraft->hdrid }}" type="text" name="hdrid" hidden>
                     <div class="row">
                         <div class="col-sm-4">
                             <label for="artLPBJ">Article :</label>
                             <input class="form-control" type="text" id="artLPBJ" name="artLPBJ"
                                 placeholder="Article Code" required data-bs-toggle="modal"
-                                data-bs-target="#articleModel" autocomplete="off" value="{{ $getDraft->articlecode }}">
+                                data-bs-target="#articleModel" autocomplete="off">
 
                         </div>
                         <div class="col-sm-4">
                             <label for="artdescLPBJ">Article Description :</label>
                             <input class="form-control" type="text" id="artdescLPBJ" name="artdescLPBJ"
-                                placeholder="Article Description" autocomplete="off"
-                                value="{{ $getDraft->articlename }}" disabled>
+                                placeholder="Article Description" autocomplete="off" disabled>
                         </div>
                     </div>
                     <br>
@@ -98,7 +97,7 @@
                         <div class="col-sm-6">
                             <label for="rmkLPBJ">Remark :</label>
                             <input class="form-control" type="text" name="rmkLPBJ" placeholder="Remark"
-                                autocomplete="off" value="{{ $getDraft->remark }}">
+                                autocomplete="off">
                             <br>
                         </div>
                     </div>
@@ -106,13 +105,13 @@
                         <div class="col-sm-2">
                             <label for="qtyLPBJ">Quantity :</label>
                             <input class="form-control" type="number" name="qtyLPBJ" placeholder="Qty"
-                                autocomplete="off" min="1" value="{{ $getDraft->qty }}" required>
+                                autocomplete="off" min="1" required>
                             <br>
                         </div>
                         <div class="col-sm-2">
                             <label for="uomLPBJ">UOM :</label>
                             <input class="form-control" type="text" id="uomLPBJ" id="uomLPBJ" name="uomLPBJ"
-                                placeholder="UOM" value="{{ $getDraft->uom }}" disabled>
+                                placeholder="UOM" disabled>
                             <br>
                         </div>
                     </div>
@@ -121,13 +120,13 @@
                             <label for="stcodeLPBJ">Store :</label>
                             <input class="form-control" type="text" id="stcodeLPBJ" name="stcodeLPBJ"
                                 placeholder="Store Code" data-bs-toggle="modal" data-bs-target="#siteModal"
-                                autocomplete="off" value="{{ $getDraft->sitecode }}" required>
+                                autocomplete="off" required>
                             <br>
                         </div>
                         <div class="col-sm-4">
                             <label for="stnameLPBJ">Store Description :</label>
                             <input class="form-control" type="text" id="stnameLPBJ" name="stnameLPBJ"
-                                placeholder="Store Name" value="{{ $getDraft->sitename }}" disabled>
+                                placeholder="Store Name" disabled>
                             <br>
                         </div>
                     </div>
@@ -135,7 +134,7 @@
                         <div class="col-sm-6">
                             <label for="accLPBJ">Account Assignment :</label>
                             <select class="form-control" name="accLPBJ" id="accLPBJ" required>
-                                <option value="" disabled hidden>Pilih Account Assignment...
+                                <option value="" disabled selected hidden>Pilih Account Assignment...
                                 </option>
                                 <option id="K" value="K">K - COST CENTER</option>
                                 <option id="A" value="A">Y - PRE ASSET</option>
@@ -148,25 +147,25 @@
                             <label for="glLPBJ">GL :</label>
                             <input class="form-control" type="text" id="glLPBJ" name="glLPBJ"
                                 placeholder="GL Number" autocomplete="off" data-bs-toggle="modal"
-                                data-bs-target="#glModal" value="{{ $getDraft->gl }}">
+                                data-bs-target="#glModal">
                         </div>
                         <div class="col-sm-2" id="cc">
                             <label for="costLPBJ">Cost Center :</label>
                             <input class="form-control" type="text" id="costLPBJ" name="costLPBJ"
                                 placeholder="Cost Center" autocomplete="off" data-bs-toggle="modal"
-                                data-bs-target="#ccModal" value="{{ $getDraft->costcenter }}">
+                                data-bs-target="#ccModal">
                         </div>
                         <div class="col-sm-2" id="io">
                             <label for="orderLPBJ">Order :</label>
                             <input class="form-control" type="text" id="orderLPBJ" name="orderLPBJ"
                                 placeholder="Order" autocomplete="off" data-bs-toggle="modal"
-                                data-bs-target="#orderModal" value="{{ $getDraft->order }}">
+                                data-bs-target="#orderModal">
                         </div>
                         <div class="col-sm-2" id="as">
                             <label for="assetLPBJ">Asset :</label>
                             <input class="form-control" type="text" id="assetLPBJ" name="assetLPBJ"
                                 placeholder="Kode Asset" autocomplete="off" data-bs-toggle="modal"
-                                data-bs-target="#assetModal" value="{{ $getDraft->asset }}">
+                                data-bs-target="#assetModal">
                         </div>
                     </div>
                     <br>
@@ -174,19 +173,8 @@
                         <div class="col-sm-6">
                             <label for="ketLPBJ">Keterangan :</label>
                             <textarea class="form-control" name="ketLPBJ" cols="40" rows="5" placeholder="Keterangan"
-                                autocomplete="off">{{ $getDraft->keterangan }}</textarea>
+                                autocomplete="off"></textarea>
                             <br>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-4 mb-2">
-                            <label>Image Before :</label>
-                            <img class="form-control img-thumbnail"
-                                src="{{ asset("uploads/lpbj/$getDraft->gambar") }}">
-                        </div>
-                        <div id="gbr" class="col-sm-4 mb-2" hidden>
-                            <label>Image After :</label>
-                            <img class="form-control img-thumbnail" id="output" name="outputimg" />
                         </div>
                     </div>
                     <div class="row">
@@ -518,22 +506,6 @@
     </script>
 
     <script type="text/javascript">
-        let sess = "{{ $getDraft->accassign }}";
-        document.getElementById(sess).selected = true;
-
-        if (sess == 'A') {
-            $('#gl').prop("hidden", true);
-            $('#cc').prop("hidden", true);
-            $('#io').prop("hidden", true);
-            $('#as').prop("hidden", false);
-        } else if (sess == 'K') {
-            $('#gl').prop("hidden", false);
-            $('#cc').prop("hidden", false);
-            $('#io').prop("hidden", false);
-            $('#as').prop("hidden", true);
-        }
-
-
         $(document).ready(function() {
 
             const tbArticle = new DataTable('#tbArticle', {
@@ -724,10 +696,6 @@
             $('#assetLPBJ').val(c);
         }
 
-        let acc = "{{ $getDraft->accassign }}";
-        document.getElementById(acc).selected = true;
-
-
         function validate(fileName) {
             let a = document.getElementById("imgLPBJ");
             let ext = new Array("jpg", "png", "jpeg", "gif");
@@ -735,28 +703,15 @@
             let fileext = fileName.split('.').pop().toLowerCase();
 
             if (ext.includes(fileext) && a.files[0].size < limit) {
-                $('#gbr').prop("hidden", false);
-                return this.loadFile(event);
+                return true;
             } else if (!ext.includes(fileext)) {
                 a.value = null;
                 alert('Format file tidak sesuai');
-                $('#gbr').prop("hidden", true);
             } else if (a.files[0].size > limit) {
                 a.value = null;
                 alert('Maximum ukuran file 1,5Mb');
-                $('#gbr').prop("hidden", true);
             }
         }
-
-        var loadFile = function(event) {
-            var reader = new FileReader();
-            reader.onload = function() {
-                var output = document.getElementById('output');
-                output.src = reader.result;
-            };
-            reader.readAsDataURL(event.target.files[0]);
-            return true;
-        };
     </script>
 </body>
 

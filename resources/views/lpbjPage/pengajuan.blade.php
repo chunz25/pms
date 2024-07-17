@@ -42,7 +42,7 @@
         <i class="header-toggle d-xl-none bi bi-list"></i>
 
         <div class="profile-img">
-            <img src="{{ asset('img/logo.png') }}" alt="" class="img-fluid rounded-circle">
+            <img src="{{ asset('img/logo.jpg') }}" alt="" class="img-fluid rounded-circle">
         </div>
 
         <a class="logo d-flex align-items-center justify-content-center">
@@ -170,9 +170,11 @@
                                     <td>{{ $d->keterangan }}</td>
                                     <td style="width: 20%">
                                         <a href="{{ url("/cekdraftlpbj/$d->id") }}"
-                                            class="btn btn-outline-success btn-sm">Lihat</a>
+                                            class="btn btn-outline-success btn-sm">
+                                            <i class="bi bi-search"></i></a>
                                         <a href="{{ url("/deldraftlpbj/$d->id") }}"
-                                            class="btn btn-outline-danger btn-sm">Hapus</a>
+                                            class="btn btn-outline-danger btn-sm">
+                                            <i class="bi bi-trash"></i></a>
                                     </td>
                                 </tr>
                             @endforeach

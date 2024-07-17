@@ -55,8 +55,16 @@ route::get('deldraftlpbj/{id}', [c_lpbj::class, 'deleteDraft'])->name('lpbj.dele
 route::get('detaillpbj/{id}', [c_lpbj::class, 'lihatDetail'])->name('lpbj.lihatDetail');
 route::get('detailapprovelpbj/{id}', [c_lpbj::class, 'lihatApprove'])->name('lpbj.lihatApprove');
 
+route::get('tempedit/{p}', [c_lpbj::class, 'tempEdit'])->name('lpbj.tempEdit');
+route::get('tempeditadd/{p}', [c_lpbj::class, 'tempEditAdd'])->name('lpbj.tempEditAdd');
+route::get('tempdel/{p}', [c_lpbj::class, 'tempDel'])->name('lpbj.tempDel');
 route::get('lpbjedt/{id}', [c_lpbj::class, 'lpbjEdt'])->name('lpbj.lpbjEdt');
+route::get('lpbjedtadd/{id}', [c_lpbj::class, 'lpbjEdtAdd'])->name('lpbj.lpbjEdtAdd');
+route::get('lpbjedtdel/{id}', [c_lpbj::class, 'lpbjEdtDel'])->name('lpbj.lpbjEdtDel');
 route::get('lpbjdel/{id}', [c_lpbj::class, 'lpbjDel'])->name('lpbj.lpbjDel');
+
+route::post('lpbjedtdetail', [c_lpbj::class, 'lpbjEdtSave'])->name('lpbj.lpbjEdtSave');
+route::post('lpbjedtdetailadd', [c_lpbj::class, 'lpbjEdtAddArt'])->name('lpbj.lpbjEdtAddArt');
 /* LPBJ */
 
 /* Quotation */

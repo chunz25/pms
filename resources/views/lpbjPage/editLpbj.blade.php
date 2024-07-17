@@ -42,7 +42,7 @@
         <i class="header-toggle d-xl-none bi bi-list"></i>
 
         <div class="profile-img">
-            <img src="{{ asset('img/logo.png') }}" alt="" class="img-fluid rounded-circle">
+            <img src="{{ asset('img/logo.jpg') }}" alt="" class="img-fluid rounded-circle">
         </div>
 
         <a class="logo d-flex align-items-center justify-content-center">
@@ -100,7 +100,7 @@
                 {{-- FormPengajuan --}}
                 <form action="{{ url('/ajukanlpbjedit') }}" method="post">
                     @csrf
-                    <input {{ $hdrid }} type="text" hidden>
+                    <input value="{{ $hdrid }}" type="text" name="hdrid" hidden>
                     <div class="row align-items-end">
                         <div class="col-sm-3 mb-2">
                             <label>Status Dokumen:</label>
@@ -116,7 +116,8 @@
                                 placeholder="Isi Sesuai dengan kebutuhan LPBJ" autocomplete="off" required>
                         </div>
                         <div class="col-sm-4 mb-2">
-                            <button type="button" onclick="tambahData()" class="btn btn-outline-success">
+                            <button type="button" onclick="tambahData({{ $header->hdrid }})"
+                                class="btn btn-outline-success">
                                 Tambah Data
                             </button>
                         </div>
@@ -146,14 +147,14 @@
                                     <td>{{ $d->accassign }}</td>
                                     <td>{{ $d->keterangan }}</td>
                                     <td style="width: 10%">
-                                        <a href="{{ url("/lpbjedt/$d->dtlid") }}"
-                                            class="btn btn-outline-primary btn-sm">
+                                        <button type="button" class="btn btn-outline-primary btn-sm"
+                                            onclick="lpbjEdt({{ $d->dtlid }})">
                                             <i class="bi bi-pencil"></i>
-                                        </a>
-                                        <a href="{{ url("/lpbjdel/$d->dtlid") }}"
+                                        </button>
+                                        <button onclick="lpbjDel({{ $d->dtlid }})" type="button"
                                             class="btn btn-outline-danger btn-sm">
                                             <i class="bi bi-trash"></i>
-                                        </a>
+                                        </button>
                                     </td>
                                 </tr>
                             @endforeach
@@ -220,17 +221,36 @@
         document.getElementById('noteLPBJ').value = sessnote;
         document.getElementById(sessdoc).selected = true;
 
-        function tambahData() {
+        function tambahData(a) {
             let jdl = document.querySelector('#descLPBJ').value;
             let note = document.querySelector('#noteLPBJ').value;
             let doc = document.querySelector('#pilihan').value;
-            let params = jdl + '|' + note + '|' + doc;
+            let params = jdl + '|' + note + '|' + doc + '|' + a;
 
             if (doc == '') {
                 alert('Pilih Status Dokumen terlebih dahulu');
             } else {
-                window.location.href = "{{ url('/tempedit') }}" + "/" + params;
+                window.location.href = "{{ url('/tempeditadd') }}" + "/" + params;
             }
+        }
+
+        function lpbjEdt(a) {
+            let jdl = document.querySelector('#descLPBJ').value;
+            let note = document.querySelector('#noteLPBJ').value;
+            let doc = document.querySelector('#pilihan').value;
+            let params = jdl + '|' + note + '|' + doc + '|' + a;
+
+            window.location.href = "{{ url('/tempedit') }}" + "/" + params;
+
+        }
+
+        function lpbjDel(a) {
+            let jdl = document.querySelector('#descLPBJ').value;
+            let note = document.querySelector('#noteLPBJ').value;
+            let doc = document.querySelector('#pilihan').value;
+            let params = jdl + '|' + note + '|' + doc + '|' + a;
+
+            window.location.href = "{{ url('/tempdel') }}" + "/" + params;
 
         }
     </script>
