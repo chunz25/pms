@@ -4,18 +4,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/x-icon" href="img/logo.png">
+    <link rel="icon" type="image/x-icon" href="{{ asset('img/logo.png') }}">
     <title>Detail {{ $title }}</title>
 
     {{-- Style CSS --}}
     {{-- Vendor CSS Files --}}
-    <link href="css/lpbj/main.css" rel="stylesheet">
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
-    <link href="vendor/aos/aos.css" rel="stylesheet">
-    <link href="vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
-    <link href="vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+    <link href="{{ asset('css/lpbj/main.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('vendor/bootstrap-icons/bootstrap-icons.css') }}" rel="stylesheet">
+    <link href="{{ asset('vendor/aos/aos.css') }}" rel="stylesheet">
+    <link href="{{ asset('vendor/glightbox/css/glightbox.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('vendor/swiper/swiper-bundle.min.css') }}" rel="stylesheet">
 
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.0/dist/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"></script>
@@ -31,28 +31,29 @@
         <i class="header-toggle d-xl-none bi bi-list"></i>
 
         <div class="profile-img">
-            <img src="img/logo.jpg" alt="" class="img-fluid rounded-circle">
+            <img src="{{ asset('img/logo.jpg') }}" alt="" class="img-fluid rounded-circle">
         </div>
 
-        <a href="#" class="logo d-flex align-items-center justify-content-center">
+        <a class="logo d-flex align-items-center justify-content-center">
             <h1 class="sitename">{{ $title }}</h1>
         </a>
 
         <nav id="navmenu" class="navmenu">
             <ul>
                 @if (substr(session('groupname'), 0, 8) != 'APPROVER')
-                    <li><a href="pengajuan{{ strtolower($title) }}">
+                    <li><a href="{{ url('/pengajuanlpbj') }}">
                             <i class="bi bi-clipboard2-plus navicon"></i>
                             Pengajuan</a>
                     </li>
                 @endif
-                <li><a href="history{{ strtolower($title) }}"><i class="bi bi-clock-history navicon"></i>History</a>
+                <li><a href="{{ url('/historylpbj') }}"><i class="bi bi-clock-history navicon"></i>History</a>
                 </li>
                 @if (substr(session('groupname'), 0, 8) == 'APPROVER' || session('groupname') == 'ADMINISTRATOR')
-                    <li><a href="approve{{ strtolower($title) }}" class="active"><i
-                                class="bi bi-file-earmark-check navicon"></i>Approval</a></li>
+                    <li><a href="{{ url('/approvelpbj') }}" class="active"><i
+                                class="bi bi-file-earmark-check navicon"></i>Approval</a>
+                    </li>
                 @endif
-                <li><a href="portal"><i class="bi bi-backspace navicon"></i>Kembali</a></li>
+                <li><a href="{{ url('/portal') }}"><i class="bi bi-backspace navicon"></i>Kembali</a></li>
             </ul>
         </nav>
     </header>
@@ -94,7 +95,7 @@
                 {{-- /DataUser --}}
                 <hr>
                 {{-- FormPengajuan --}}
-                <form action="setujulpbj" method="post">
+                <form action="{{ url('/setujulpbj') }}" method="post">
                     @csrf
                     <input name="hdrid" type="text" value="{{ $dataHeader->hdrid }}" hidden>
                     <input name="status" type="text" value="{{ $dataHeader->statusid }}" hidden>
@@ -183,7 +184,7 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <img src="uploads/lpbj/{{ $dd->gambar }}" class="img-fluid img-thumbnail">
+                        <img src="{{ asset("uploads/lpbj/$dd->gambar") }}" class="img-fluid img-thumbnail">
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kembali</button>
@@ -226,19 +227,18 @@
 
     {{-- VendorJS --}}
     {{-- MainJS --}}
-    <script src="js/lpbj/main.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/bootstrap.bundle.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="vendor/php-email-form/validate.js"></script>
-    <script src="vendor/aos/aos.js"></script>
-    <script src="vendor/typed.js/typed.umd.js"></script>
-    <script src="vendor/purecounter/purecounter_vanilla.js"></script>
-    <script src="vendor/waypoints/noframework.waypoints.js"></script>
-    <script src="vendor/glightbox/js/glightbox.min.js"></script>
-    <script src="vendor/imagesloaded/imagesloaded.pkgd.min.js"></script>
-    <script src="vendor/isotope-layout/isotope.pkgd.min.js"></script>
-    <script src="vendor/swiper/swiper-bundle.min.js"></script>
+    <script src="{{ asset('js/lpbj/main.js') }}"></script>
+    <script src="{{ asset('js/bootstrap.min.js') }}"></script>
+    <script src="{{ asset('vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ asset('vendor/php-email-form/validate.js') }}"></script>
+    <script src="{{ asset('vendor/aos/aos.js') }}"></script>
+    <script src="{{ asset('vendor/typed.js/typed.umd.js') }}"></script>
+    <script src="{{ asset('vendor/purecounter/purecounter_vanilla.js') }}"></script>
+    <script src="{{ asset('vendor/waypoints/noframework.waypoints.js') }}"></script>
+    <script src="{{ asset('vendor/glightbox/js/glightbox.min.js') }}"></script>
+    <script src="{{ asset('vendor/imagesloaded/imagesloaded.pkgd.min.js') }}"></script>
+    <script src="{{ asset('vendor/isotope-layout/isotope.pkgd.min.js') }}"></script>
+    <script src="{{ asset('vendor/swiper/swiper-bundle.min.js') }}"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous">

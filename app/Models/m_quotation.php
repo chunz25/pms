@@ -30,6 +30,15 @@ class m_quotation extends Model
         return $data;
     }
 
+    public function getTax()
+    {
+        $data = DB::table('vw_tax')
+            ->select('*')
+            ->get();
+
+        return $data;
+    }
+
     public function getLpbj($id)
     {
         $data = DB::table('vw_historylpbjdtl')

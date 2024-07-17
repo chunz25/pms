@@ -35,6 +35,7 @@ route::get('portal', [c_portal::class, 'index'])->name('portal.index');
 route::get('logout', [c_login::class, 'logout'])->name('login.logout');
 
 /* LPBJ */
+route::get('tempsess/{p}', [c_lpbj::class, 'tempSess'])->name('lpbj.tempSess');
 route::get('pengajuanlpbj', [c_lpbj::class, 'index'])->name('lpbj.pengajuan');
 route::get('tambaharticle', [c_lpbj::class, 'tambahArticle'])->name('lpbj.tambaharticle');
 route::get('historylpbj', [c_lpbj::class, 'history'])->name('lpbj.history');
@@ -44,14 +45,18 @@ route::get('approvedetaillpbj', [c_lpbj::class, 'approveDetail'])->name('lpbj.ap
 
 route::post('draftlpbj', [c_lpbj::class, 'createDraft'])->name('lpbj.createDraft');
 route::post('ajukanlpbj', [c_lpbj::class, 'ajukan'])->name('lpbj.ajukan');
+route::post('ajukanlpbjedit', [c_lpbj::class, 'ajukanEdit'])->name('lpbj.ajukanEdit');
 route::post('setujulpbj', [c_lpbj::class, 'setuju'])->name('lpbj.setuju');
 route::post('rejectlpbj', [c_lpbj::class, 'reject'])->name('lpbj.reject');
 
-// route::get('rejectlpbj/{id}', [c_lpbj::class, 'reject'])->name('lpbj.reject');
+route::get('editlpbj/{id}', [c_lpbj::class, 'editLpbj'])->name('lpbj.editLpbj');
 route::get('cekdraftlpbj/{id}', [c_lpbj::class, 'lihatDraft'])->name('lpbj.lihatDraft');
 route::get('deldraftlpbj/{id}', [c_lpbj::class, 'deleteDraft'])->name('lpbj.deleteDraft');
 route::get('detaillpbj/{id}', [c_lpbj::class, 'lihatDetail'])->name('lpbj.lihatDetail');
 route::get('detailapprovelpbj/{id}', [c_lpbj::class, 'lihatApprove'])->name('lpbj.lihatApprove');
+
+route::get('lpbjedt/{id}', [c_lpbj::class, 'lpbjEdt'])->name('lpbj.lpbjEdt');
+route::get('lpbjdel/{id}', [c_lpbj::class, 'lpbjDel'])->name('lpbj.lpbjDel');
 /* LPBJ */
 
 /* Quotation */

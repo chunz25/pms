@@ -79,8 +79,8 @@
                     @csrf
                     <div class="row">
                         <div class="col-sm-2">
-                            <input class="form-control" type="text" data-bs-toggle="modal" id="vendorcode"
-                                name="vendorcode" data-bs-target="#vendorModal" autocomplete="off" required
+                            <input class="form-control" type="text" id="vendorcode" name="vendorcode"
+                                data-bs-toggle="modal" data-bs-target="#vendorModal" autocomplete="off" required
                                 placeholder="Pilih Vendor">
                         </div>
                         <div class="col-sm-4">
@@ -118,14 +118,21 @@
                     </div>
                     <br>
                     <div class="row">
-                        <div class="col-sm-5">
+                        <div class="col-sm-3">
                             <label>Delivery Term:</label>
-                            <input class="form-control" type="text" id="term" name="term"
-                                autocomplete="off">
+                            <input class="form-control" type="date" name="term" id="term"
+                                autocomplete="off" min="2024-07-17" onkeydown="return false">
                         </div>
                         <div class="col-sm-2">
                             <label>T.O.P:</label>
                             <input class="form-control" type="text" id="top" name="top"
+                                autocomplete="off">
+                        </div>
+                        <div class="col-sm-1">
+                            <label>Tax:</label>
+                            <input type="text" id="taxamt" name="taxamt" hidden>
+                            <input class="form-control" type="text" id="taxname" name="taxname"
+                                onkeydown="return false" data-bs-toggle="modal" data-bs-target="#taxModal"
                                 autocomplete="off">
                         </div>
                     </div>
@@ -172,10 +179,27 @@
                             <div class="col-sm-3">
                                 <label>Harga Satuan:</label>
                                 <input class="form-control text-right" type="number" id="satuan" name="satuan[]"
-                                    min="1" required>
+                                    min="1" onchange="hitungTotal(this.value)" required>
                             </div>
                         </div>
                         <br>
+                        <div class="row mb-2">
+                            <div class="col-sm-3">
+                                <label>Total:</label>
+                                <input onkeydown="return false" class="form-control text-right" type="number"
+                                    id="total" name="total[]" min="1" readonly>
+                            </div>
+                            <div class="col-sm-3">
+                                <label>Tax:</label>
+                                <input onkeydown="return false" class="form-control text-right" type="number"
+                                    id="pajak" name="pajak[]" min="1" readonly>
+                            </div>
+                            <div class="col-sm-3">
+                                <label>Grand Total:</label>
+                                <input onkeydown="return false" class="form-control text-right" type="number"
+                                    id="gtotal" name="gtotal[]" min="1" readonly>
+                            </div>
+                        </div>
                         <div class="row">
                             <div class="col-sm-5">
                                 <label>Remark QA:</label>
@@ -195,6 +219,49 @@
         </section>
         {{-- /FormPengajuan --}}
     </main>
+
+    {{-- TaxModal --}}
+    <div class="modal fade" id="taxModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">List Vendor</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-bordered datatable" id="tbVendor">
+                        <thead>
+                            <tr>
+                                <th style="width: 10%">No</th>
+                                <th style="width: 20%">Tax Code</th>
+                                <th>Tax Name</th>
+                                <th>Tax Amount</th>
+                                <th class="text-center" style="width: 20%">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($getTax as $t)
+                                <tr>
+                                    <td style="width: 10%"></td>
+                                    <td style="width: 20%">{{ $t->tax_code }}</td>
+                                    <td>{{ $t->tax_name }}</td>
+                                    <td>{{ $t->persen }}</td>
+                                    <td class="text-center" style="width: 20%">
+                                        <button type="button"
+                                            onclick="addTax('{{ $t->persen }}','{{ $t->amt }}')"
+                                            class="btn btn-outline-success btn-sm" data-bs-dismiss="modal">
+                                            Pilih
+                                        </button>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{-- /TaxModal --}}
 
     {{-- VendorModal --}}
     <div class="modal fade" id="vendorModal" tabindex="-1" aria-hidden="true">
@@ -280,7 +347,6 @@
 
     <script type="text/javascript">
         $(document).ready(function() {
-
             const tbVendor = new DataTable('#tbVendor', {
                 columnDefs: [{
                     searchable: false,
@@ -314,6 +380,23 @@
         function addVendor(c, n) {
             $('#vendorcode').val(c);
             $('#vendorname').val(n);
+        }
+
+        function addTax(c, n) {
+            $('#taxname').val(c);
+            $('#taxamt').val(n);
+        }
+
+        function hitungTotal($a) {
+            let qty = $('#qty').val();
+            let pjk = $('#taxamt').val();
+            let total = $a * qty;
+            let pajak = total * pjk;
+            let gtotal = total + pajak;
+
+            $('#total').val(total);
+            $('#pajak').val(pajak);
+            $('#gtotal').val(gtotal);
         }
 
         function validate(fileName) {

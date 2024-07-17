@@ -130,13 +130,27 @@ class m_lpbj extends Model
 
     public function insertHdr($params)
     {
-        // dd($params);
         $userid = $params['userid'];
         $company = $params['companycode'];
         $desc = $params['description'];
         $note = $params['note'];
+        $status = $params['status'];
 
-        $data = DB::statement("CALL sp_addlpbjhdr($userid,'$company','$desc','$note')");
+        $data = DB::statement("CALL sp_addlpbjhdr($userid,'$company','$desc','$note','$status')");
+        $data = DB::table("m_lpbj_hdr")
+            ->max('id');
+        return $data;
+    }
+
+    public function editHdr($params)
+    {
+        $userid = $params['userid'];
+        $company = $params['companycode'];
+        $desc = $params['description'];
+        $note = $params['note'];
+        $status = $params['status'];
+
+        $data = DB::statement("CALL sp_addlpbjhdr($userid,'$company','$desc','$note','$status')");
         $data = DB::table("m_lpbj_hdr")
             ->max('id');
         return $data;

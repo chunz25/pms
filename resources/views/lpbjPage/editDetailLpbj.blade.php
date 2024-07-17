@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/x-icon" href="{{ asset('img/logo.png') }}">
-    <title>Tambah Article {{ $title }}</title>
+    <title>{{ $loc . ' ' . $title }}</title>
 
     {{-- Style CSS --}}
     {{-- Vendor CSS Files --}}
@@ -250,7 +250,9 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <a href="{{ url('/pengajuanlpbj') }}" class="btn btn-secondary mr-2">Kembali</a>
+                        <button type="button" class="btn btn-secondary mr-2"
+                            onclick="history.back()">Kembali</button>
+                        {{-- <a href="{{ url('/pengajuanlpbj') }}" class="btn btn-secondary mr-2">Kembali</a> --}}
                         @if (!$getDraft)
                             <button type="submit" class="btn btn-primary">Simpan</button>
                         @endif

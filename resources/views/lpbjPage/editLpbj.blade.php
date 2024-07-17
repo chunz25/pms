@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/x-icon" href="{{ asset('img/logo.png') }}">
-    <title>Pengajuan {{ $title }}</title>
+    <title>Edit {{ $title }}</title>
 
     {{-- Style CSS --}}
     {{-- Vendor CSS Files --}}
@@ -52,12 +52,13 @@
         <nav id="navmenu" class="navmenu">
             <ul>
                 @if (substr(session('groupname'), 0, 8) != 'APPROVER')
-                    <li><a href="{{ url('/pengajuanlpbj') }}" class="active">
+                    <li><a href="{{ url('/pengajuanlpbj') }}">
                             <i class="bi bi-clipboard2-plus navicon"></i>
                             Pengajuan</a>
                     </li>
                 @endif
-                <li><a href="{{ url('/historylpbj') }}"><i class="bi bi-clock-history navicon"></i>History</a>
+                <li><a href="{{ url('/historylpbj') }}" class="active"><i
+                            class="bi bi-clock-history navicon"></i>History</a>
                 </li>
                 @if (substr(session('groupname'), 0, 8) == 'APPROVER' || session('groupname') == 'ADMINISTRATOR')
                     <li><a href="{{ url('/approvelpbj') }}"><i
@@ -75,35 +76,19 @@
             <div class="container" data-aos="fade-up" data-aos-delay="100">
                 <div class="row gy-4 justify-content-center">
                     <div class="col-lg-12 content">
-                        <h2 class="mb-4">Pengajuan {{ $title }}</h2>
+                        <h2 class="mb-4">Edit {{ $title }}</h2>
                         {{-- DataPegawai --}}
                         <div class="row">
                             <div class="col-lg-6">
                                 <ul>
-                                    <li><i class="bi bi-chevron-right"></i> <strong>NIK :</strong>
-                                        <span>{{ $dataPegawai->nik }}</span>
+                                    <li><i class="bi bi-chevron-right"></i> <strong>No LPBJ :</strong>
+                                        <span>{{ $header->nolpbj }}</span>
                                     </li>
-                                    <li><i class="bi bi-chevron-right"></i> <strong>Nama :</strong>
-                                        <span>{{ $dataPegawai->name }}</span>
+                                    <li><i class="bi bi-chevron-right"></i> <strong>Company Code :</strong>
+                                        <span>{{ $header->companycode }}</span>
                                     </li>
-                                    <li><i class="bi bi-chevron-right"></i> <strong>Jabatan :</strong>
-                                        <span>{{ $dataPegawai->jabatanname }}</span>
-                                    </li>
-                                    <li><i class="bi bi-chevron-right"></i> <strong>User Role :</strong>
-                                        <span>{{ $dataPegawai->userrole }}</span>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="col-lg-6">
-                                <ul>
-                                    <li><i class="bi bi-chevron-right"></i> <strong>Unit Kerja :</strong>
-                                        <span>{{ $dataPegawai->unitname }}</span>
-                                    </li>
-                                    <li><i class="bi bi-chevron-right"></i> <strong>Divisi :</strong>
-                                        <span>{{ $dataPegawai->divname }}</span>
-                                    </li>
-                                    <li><i class="bi bi-chevron-right"></i> <strong>Departemen :</strong>
-                                        <span>{{ $dataPegawai->depname }}</span>
+                                    <li><i class="bi bi-chevron-right"></i> <strong>Tanggal Permintaan :</strong>
+                                        <span>{{ $header->tglpermintaan }}</span>
                                     </li>
                                 </ul>
                             </div>
@@ -113,25 +98,16 @@
                 </div>
                 <hr>
                 {{-- FormPengajuan --}}
-                <form action="{{ url('/ajukanlpbj') }}" method="post">
+                <form action="{{ url('/ajukanlpbjedit') }}" method="post">
                     @csrf
-                    <div class="row">
+                    <input {{ $hdrid }} type="text" hidden>
+                    <div class="row align-items-end">
                         <div class="col-sm-3 mb-2">
+                            <label>Status Dokumen:</label>
                             <select class="form-control" name="pilihan" id="pilihan" required>
                                 <option value="" disabled selected hidden>Pilih Status Dokumen...</option>
                                 <option id="drf" value="drf">Save As Draft</option>
                                 <option id="doc" value="doc">Save As Document</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="row align-items-end">
-                        <div class="col-sm-3 mb-2">
-                            <label>Company Code :</label>
-                            <select class="form-control" name="companyCode" id="companyCode" required>
-                                <option value="" disabled selected hidden>Pilih Company Code...</option>
-                                <option id="EC01" value="EC01">EC01 - Electronic City</option>
-                                <option id="E013" value="E013">E013 - Elang Cakrawala Inti</option>
-                                <option id="G015" value="G015">G015 - Groceries City</option>
                             </select>
                         </div>
                         <div class="col-sm-4 mb-2">
@@ -140,8 +116,9 @@
                                 placeholder="Isi Sesuai dengan kebutuhan LPBJ" autocomplete="off" required>
                         </div>
                         <div class="col-sm-4 mb-2">
-                            <button type="button" onclick="tambahData()" class="btn btn-outline-success">Tambah
-                                Data</button>
+                            <button type="button" onclick="tambahData()" class="btn btn-outline-success">
+                                Tambah Data
+                            </button>
                         </div>
                     </div>
                     <br>
@@ -159,7 +136,7 @@
                             </tr>
                         </thead>
                         <tbody class="text-center">
-                            @foreach ($dataDraft as $d)
+                            @foreach ($detail as $d)
                                 <tr>
                                     <td></td>
                                     <td>{{ $d->articlecode }}</td>
@@ -168,11 +145,15 @@
                                     <td>{{ $d->sitecode }}</td>
                                     <td>{{ $d->accassign }}</td>
                                     <td>{{ $d->keterangan }}</td>
-                                    <td style="width: 20%">
-                                        <a href="{{ url("/cekdraftlpbj/$d->id") }}"
-                                            class="btn btn-outline-success btn-sm">Lihat</a>
-                                        <a href="{{ url("/deldraftlpbj/$d->id") }}"
-                                            class="btn btn-outline-danger btn-sm">Hapus</a>
+                                    <td style="width: 10%">
+                                        <a href="{{ url("/lpbjedt/$d->dtlid") }}"
+                                            class="btn btn-outline-primary btn-sm">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
+                                        <a href="{{ url("/lpbjdel/$d->dtlid") }}"
+                                            class="btn btn-outline-danger btn-sm">
+                                            <i class="bi bi-trash"></i>
+                                        </a>
                                     </td>
                                 </tr>
                             @endforeach
@@ -188,9 +169,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        @if ($dataDraft)
-                            <button class="btn btn-primary" type="submit">Submit</button>
-                        @endif
+                        <button class="btn btn-primary" type="submit">Submit</button>
                     </div>
                 </form>
                 {{-- /FormPengajuan --}}
@@ -233,29 +212,24 @@
     <script src="{{ asset('vendor/swiper/swiper-bundle.min.js') }}"></script>
 
     <script type="text/javascript">
-        let sesscc = "{{ session('cc') }}";
         let sessjdl = "{{ session('jdl') }}";
         let sessnote = "{{ session('note') }}";
         let sessdoc = "{{ session('doc') }}";
 
-        document.getElementById(sesscc).selected = true;
         document.getElementById('descLPBJ').value = sessjdl;
         document.getElementById('noteLPBJ').value = sessnote;
         document.getElementById(sessdoc).selected = true;
 
         function tambahData() {
-            let cc = document.querySelector('#companyCode').value;
             let jdl = document.querySelector('#descLPBJ').value;
             let note = document.querySelector('#noteLPBJ').value;
             let doc = document.querySelector('#pilihan').value;
-            let params = cc + '|' + jdl + '|' + note + '|' + doc;
+            let params = jdl + '|' + note + '|' + doc;
 
             if (doc == '') {
                 alert('Pilih Status Dokumen terlebih dahulu');
-            } else if (cc == '') {
-                alert('Pilih Company Code terlebih dahulu');
             } else {
-                window.location.href = "{{ url('/tempsess') }}" + "/" + params;
+                window.location.href = "{{ url('/tempedit') }}" + "/" + params;
             }
 
         }

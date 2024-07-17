@@ -153,6 +153,7 @@ class c_quotation extends Controller
     {
         $id = $params->dtl;
         $dataVendor = $this->db->getVendor()->toArray();
+        $dataTax = $this->db->getTax()->toArray();
 
         foreach ($id as $a) {
             $dataDtl[] = $this->db->getLpbjDtl($a)->toArray()[0];
@@ -161,6 +162,7 @@ class c_quotation extends Controller
         $data = [
             'title' => 'Quotation',
             'getVendor' => $dataVendor,
+            'getTax' => $dataTax,
             'getDtl' => $dataDtl
         ];
 
