@@ -4,18 +4,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/x-icon" href="img/logo.png">
+    <link rel="icon" type="image/x-icon" href="{{ asset('img/logo.png') }}">
     <title>Pengajuan {{ $title }}</title>
 
     {{-- Style CSS --}}
     {{-- Vendor CSS Files --}}
-    <link href="css/lpbj/main.css" rel="stylesheet">
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
-    <link href="vendor/aos/aos.css" rel="stylesheet">
-    <link href="vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
-    <link href="vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+    <link href="{{ asset('css/lpbj/main.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('vendor/bootstrap-icons/bootstrap-icons.css') }}" rel="stylesheet">
+    <link href="{{ asset('vendor/aos/aos.css') }}" rel="stylesheet">
+    <link href="{{ asset('vendor/glightbox/css/glightbox.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('vendor/swiper/swiper-bundle.min.css') }}" rel="stylesheet">
 
     <link href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" rel="stylesheet">
     <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
@@ -42,28 +42,28 @@
         <i class="header-toggle d-xl-none bi bi-list"></i>
 
         <div class="profile-img">
-            <img src="img/logo.jpg" alt="" class="img-fluid rounded-circle">
+            <img src="{{ asset('img/logo.png') }}" alt="" class="img-fluid rounded-circle">
         </div>
 
-        <a href="#" class="logo d-flex align-items-center justify-content-center">
+        <a class="logo d-flex align-items-center justify-content-center">
             <h1 class="sitename">{{ $title }}</h1>
         </a>
 
         <nav id="navmenu" class="navmenu">
             <ul>
                 @if (substr(session('groupname'), 0, 8) != 'APPROVER')
-                    <li><a href="pengajuan{{ strtolower($title) }}" class="active">
+                    <li><a href="{{ url('/pengajuanlpbj') }}" class="active">
                             <i class="bi bi-clipboard2-plus navicon"></i>
                             Pengajuan</a>
                     </li>
                 @endif
-                <li><a href="history{{ strtolower($title) }}"><i class="bi bi-clock-history navicon"></i>History</a>
+                <li><a href="{{ url('/historylpbj') }}"><i class="bi bi-clock-history navicon"></i>History</a>
                 </li>
                 @if (substr(session('groupname'), 0, 8) == 'APPROVER' || session('groupname') == 'ADMINISTRATOR')
-                    <li><a href="approve{{ strtolower($title) }}"><i
+                    <li><a href="{{ url('/approvelpbj') }}"><i
                                 class="bi bi-file-earmark-check navicon"></i>Approval</a></li>
                 @endif
-                <li><a href="portal"><i class="bi bi-backspace navicon"></i>Kembali</a></li>
+                <li><a href="{{ url('/portal') }}"><i class="bi bi-backspace navicon"></i>Kembali</a></li>
             </ul>
         </nav>
     </header>
@@ -113,11 +113,27 @@
                 </div>
                 <hr>
                 {{-- FormPengajuan --}}
-                <form action="ajukanlpbj" method="post">
+                <form action="{{ url('/ajukanlpbj') }}" method="post">
                     @csrf
                     <div class="row align-items-end">
+                        <div class="col-sm-3 mb-2">
+                            <label for="companyCode">Company Code :</label>
+                            <select class="form-control" name="companyCode" id="companyCode" required>
+                                <option value="" disabled selected hidden>Pilih Company Code...</option>
+                                <option value="EC01">EC01 - Electronic City</option>
+                                <option value="E013">E013 - Elang Cakrawala Inti</option>
+                                <option value="G015">G015 - Groceries City</option>
+                            </select>
+                        </div>
                         <div class="col-sm-4 mb-2">
-                            <a class="btn btn-outline-success" href="tambaharticle">Tambah Data</a>
+                            <label for="descLPBJ">Description :</label>
+                            <input class="form-control" type="text" id="descLPBJ" name="descLPBJ"
+                                placeholder="Isi Sesuai dengan kebutuhan LPBJ" autocomplete="off" required>
+                        </div>
+                        <div class="col-sm-4 mb-2">
+                            {{-- <a class="btn btn-outline-success" href="{{ url('/tambaharticle') }}">Tambah Data</a> --}}
+                            <button type="button" class="btn btn-outline-success" onclick="tambahData()">Tambah
+                                Data</button>
                         </div>
                     </div>
                     <br>
@@ -145,32 +161,15 @@
                                     <td>{{ $d->accassign }}</td>
                                     <td>{{ $d->keterangan }}</td>
                                     <td style="width: 20%">
-                                        <a href="cekdraftlpbj/{{ $d->id }}"
+                                        <a href="{{ url("/cekdraftlpbj/$d->id") }}"
                                             class="btn btn-outline-success btn-sm">Lihat</a>
-                                        <a href="deldraftlpbj/{{ $d->id }}"
+                                        <a href="{{ url("/deldraftlpbj/$d->id") }}"
                                             class="btn btn-outline-danger btn-sm">Hapus</a>
                                     </td>
                                 </tr>
                             @endforeach
                         </tbody>
                     </table>
-                    <br>
-                    <div class="row align-items-end">
-                        <div class="col-sm-3 mb-2">
-                            <label for="companyCode">Company Code :</label>
-                            <select class="form-control" name="companyCode" id="companyCode" required>
-                                <option value="" disabled selected hidden>Pilih Company Code...</option>
-                                <option value="EC01">EC01 - Electronic City</option>
-                                <option value="E013">E013 - Elang Cakrawala Inti</option>
-                                <option value="G015">G015 - Groceries City</option>
-                            </select>
-                        </div>
-                        <div class="col-sm-4 mb-2">
-                            <label for="descLPBJ">Description :</label>
-                            <input class="form-control" type="text" id="descLPBJ" name="descLPBJ"
-                                placeholder="Isi Sesuai dengan kebutuhan LPBJ" autocomplete="off" required>
-                        </div>
-                    </div>
                     <br>
                     <div class="row">
                         <div class="col-sm-12">
@@ -227,6 +226,23 @@
     <script src="vendor/imagesloaded/imagesloaded.pkgd.min.js"></script>
     <script src="vendor/isotope-layout/isotope.pkgd.min.js"></script>
     <script src="vendor/swiper/swiper-bundle.min.js"></script>
+
+    <script type="text/javascript">
+        function tambahData() {
+            let cc = document.querySelector('#companyCode').value;
+            let jdl = document.querySelector('#descLPBJ').value;
+            let note = document.querySelector('#noteLPBJ').value;
+
+            let params = [cc, jdl, note];
+            {{ session([
+                'cc' => cc,
+                'jdl' => jdl,
+                'note' => note,
+            ]) }}
+
+            window.location.href = "{{ url('/tambaharticle') }}";
+        }
+    </script>
 
 </body>
 
