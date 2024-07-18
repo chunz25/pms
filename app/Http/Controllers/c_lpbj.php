@@ -162,9 +162,9 @@ class c_lpbj extends Controller
             'note' => $params->noteLPBJ,
             'status' => $dokumen
         ];
-        
+
         $editHdr = $this->db->editHdr($data);
-        
+
         if ($editHdr) {
             $databody = $this->db->getHistoryHeader($hdrid)->toArray();
             $emailapprove = session('emailapprove');
@@ -435,12 +435,13 @@ class c_lpbj extends Controller
     {
         $data = explode('|', $params);
 
-        session()->forget(['jdl', 'note', 'doc']);
+        session()->forget(['jdl', 'note', 'doc', 'cc']);
 
         session([
             'jdl' => $data[0],
             'note' => $data[1],
-            'doc' => $data[2]
+            'doc' => $data[2],
+            'cc' => $data[4]
         ]);
 
         return redirect("lpbjedt/$data[3]");
@@ -450,12 +451,13 @@ class c_lpbj extends Controller
     {
         $data = explode('|', $params);
 
-        session()->forget(['jdl', 'note', 'doc']);
+        session()->forget(['jdl', 'note', 'doc', 'cc']);
 
         session([
             'jdl' => $data[0],
             'note' => $data[1],
-            'doc' => $data[2]
+            'doc' => $data[2],
+            'cc' => $data[4]
         ]);
 
         return redirect("lpbjedtadd/$data[3]");
@@ -465,12 +467,13 @@ class c_lpbj extends Controller
     {
         $data = explode('|', $params);
 
-        session()->forget(['jdl', 'note', 'doc']);
+        session()->forget(['jdl', 'note', 'doc', 'cc']);
 
         session([
             'jdl' => $data[0],
             'note' => $data[1],
-            'doc' => $data[2]
+            'doc' => $data[2],
+            'cc' => $data[4]
         ]);
 
         return redirect("lpbjedtdel/$data[3]");
@@ -500,6 +503,8 @@ class c_lpbj extends Controller
             'getDraft' => $dataDraft,
             'title' => 'LPBJ',
         ];
+
+        // dd(session()->all());
 
         return view('lpbjPage/editDetailLpbj', $data);
     }

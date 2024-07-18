@@ -50,6 +50,7 @@ class m_lpbj extends Model
     {
         $data = DB::table('api_gl')
             ->select('*')
+            ->where('companycode',session('cc'))
             ->get();
 
         return $data;
@@ -59,6 +60,7 @@ class m_lpbj extends Model
     {
         $data = DB::table('api_costcenter')
             ->select('*')
+            ->where('companycode',session('cc'))
             ->get();
 
         return $data;
@@ -68,6 +70,7 @@ class m_lpbj extends Model
     {
         $data = DB::table('api_order')
             ->select('*')
+            ->where('companycode',session('cc'))
             ->get();
 
         return $data;
@@ -77,6 +80,7 @@ class m_lpbj extends Model
     {
         $data = DB::table('api_asset')
             ->select('*')
+            ->where('companycode',session('cc'))
             ->get();
 
         return $data;

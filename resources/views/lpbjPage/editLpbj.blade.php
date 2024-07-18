@@ -101,6 +101,7 @@
                 <form action="{{ url('/ajukanlpbjedit') }}" method="post">
                     @csrf
                     <input value="{{ $hdrid }}" type="text" name="hdrid" hidden>
+                    <input value="{{ $header->companycode }}" type="text" id="cc" hidden>
                     <div class="row align-items-end">
                         <div class="col-sm-3 mb-2">
                             <label>Status Dokumen:</label>
@@ -223,9 +224,10 @@
 
         function tambahData(a) {
             let jdl = document.querySelector('#descLPBJ').value;
+            let cc = document.querySelector('#cc').value;
             let note = document.querySelector('#noteLPBJ').value;
             let doc = document.querySelector('#pilihan').value;
-            let params = jdl + '|' + note + '|' + doc + '|' + a;
+            let params = jdl + '|' + note + '|' + doc + '|' + a + '|' + cc;
 
             if (doc == '') {
                 alert('Pilih Status Dokumen terlebih dahulu');
@@ -236,9 +238,10 @@
 
         function lpbjEdt(a) {
             let jdl = document.querySelector('#descLPBJ').value;
+            let cc = document.querySelector('#cc').value;
             let note = document.querySelector('#noteLPBJ').value;
             let doc = document.querySelector('#pilihan').value;
-            let params = jdl + '|' + note + '|' + doc + '|' + a;
+            let params = jdl + '|' + note + '|' + doc + '|' + a + '|' + cc;
 
             window.location.href = "{{ url('/tempedit') }}" + "/" + params;
 
@@ -246,9 +249,10 @@
 
         function lpbjDel(a) {
             let jdl = document.querySelector('#descLPBJ').value;
+            let cc = document.querySelector('#cc').value;
             let note = document.querySelector('#noteLPBJ').value;
             let doc = document.querySelector('#pilihan').value;
-            let params = jdl + '|' + note + '|' + doc + '|' + a;
+            let params = jdl + '|' + note + '|' + doc + '|' + a + '|' + cc;
 
             window.location.href = "{{ url('/tempdel') }}" + "/" + params;
 
