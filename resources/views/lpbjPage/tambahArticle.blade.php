@@ -7,22 +7,11 @@
     <link rel="icon" type="image/x-icon" href="{{ asset('img/logo.png') }}">
     <title>Tambah Article {{ $title }}</title>
 
-    {{-- Style CSS --}}
-    {{-- Vendor CSS Files --}}
-    <link href="{{ asset('css/lpbj/main.css') }}" rel="stylesheet">
+    @include('template.style')
+    
     <link href="{{ asset('css/lpbj/articleSearch.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/dataTables.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('vendor/bootstrap-icons/bootstrap-icons.css') }}" rel="stylesheet">
-    <link href="{{ asset('vendor/aos/aos.css') }}" rel="stylesheet">
-    <link href="{{ asset('vendor/glightbox/css/glightbox.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('vendor/swiper/swiper-bundle.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('vendor/boxicons/css/boxicons.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('vendor/quill/quill.snow.css') }}" rel="stylesheet">
-    <link href="{{ asset('vendor/quill/quill.bubble.css') }}" rel="stylesheet">
-    <link href="{{ asset('vendor/remixicon/remixicon.css') }}" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
+    {{-- <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"> --}}
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.0/dist/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"></script>
     <link href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" rel="stylesheet">
@@ -31,37 +20,7 @@
 
 <body class="index-page">
 
-    {{-- NavBar --}}
-    <header id="header" class="header grey-background d-flex flex-column">
-        <i class="header-toggle d-xl-none bi bi-list"></i>
-
-        <div class="profile-img">
-            <img src="{{ asset('img/logo.jpg') }}" alt="" class="img-fluid rounded-circle">
-        </div>
-
-        <a class="logo d-flex align-items-center justify-content-center">
-            <h1 class="sitename">{{ $title }}</h1>
-        </a>
-
-        <nav id="navmenu" class="navmenu">
-            <ul>
-                @if (substr(session('groupname'), 0, 8) != 'APPROVER')
-                    <li><a href="{{ url('/pengajuanlpbj') }}" class="active">
-                            <i class="bi bi-clipboard2-plus navicon"></i>
-                            Pengajuan</a>
-                    </li>
-                @endif
-                <li><a href="{{ url('/historylpbj') }}"><i class="bi bi-clock-history navicon"></i>History</a>
-                </li>
-                @if (substr(session('groupname'), 0, 8) == 'APPROVER' || session('groupname') == 'ADMINISTRATOR')
-                    <li><a href="{{ url('/approvelpbj') }}"><i
-                                class="bi bi-file-earmark-check navicon"></i>Approval</a></li>
-                @endif
-                <li><a href="{{ url('/portal') }}"><i class="bi bi-backspace navicon"></i>Kembali</a></li>
-            </ul>
-        </nav>
-    </header>
-    {{-- /NavBar --}}
+    @include('template.tempLpbj')
 
     <main class="main">
         {{-- FormPengajuan --}}
@@ -81,11 +40,11 @@
                             <label for="artLPBJ">Article :</label>
                             @if ($getDraft)
                                 <input class="form-control" type="text" value="{{ $getDraft->articlecode }}"
-                                    disabled>
+                                    readonly>
                             @else
                                 <input class="form-control" type="text" id="artLPBJ" name="artLPBJ"
                                     placeholder="Article Code" required data-bs-toggle="modal"
-                                    data-bs-target="#articleModel" autocomplete="off">
+                                    data-bs-target="#articleModel" autocomplete="off" onkeydown="return false">
                             @endif
 
                         </div>
@@ -93,10 +52,10 @@
                             <label for="artdescLPBJ">Article Description :</label>
                             @if ($getDraft)
                                 <input class="form-control" type="text" value="{{ $getDraft->articlename }}"
-                                    disabled>
+                                    readonly>
                             @else
                                 <input class="form-control" type="text" id="artdescLPBJ" name="artdescLPBJ"
-                                    placeholder="Article Description" autocomplete="off" disabled>
+                                    placeholder="Article Description" autocomplete="off" readonly>
                             @endif
                         </div>
                     </div>
@@ -105,7 +64,7 @@
                         <div class="col-sm-6">
                             <label for="rmkLPBJ">Remark :</label>
                             @if ($getDraft)
-                                <input class="form-control" type="text" value="{{ $getDraft->remark }}" disabled>
+                                <input class="form-control" type="text" value="{{ $getDraft->remark }}" readonly>
                             @else
                                 <input class="form-control" type="text" name="rmkLPBJ" placeholder="Remark"
                                     autocomplete="off">
@@ -117,7 +76,7 @@
                         <div class="col-sm-2">
                             <label for="qtyLPBJ">Quantity :</label>
                             @if ($getDraft)
-                                <input class="form-control" type="number" value="{{ $getDraft->qty }}" disabled>
+                                <input class="form-control" type="number" value="{{ $getDraft->qty }}" readonly>
                             @else
                                 <input class="form-control" type="number" name="qtyLPBJ" placeholder="Qty"
                                     autocomplete="off" min="1" required>
@@ -127,10 +86,10 @@
                         <div class="col-sm-2">
                             <label for="uomLPBJ">UOM :</label>
                             @if ($getDraft)
-                                <input class="form-control" type="text" value="{{ $getDraft->uom }}" disabled>
+                                <input class="form-control" type="text" value="{{ $getDraft->uom }}" readonly>
                             @else
-                                <input class="form-control" type="text" id="uomLPBJ" id="uomLPBJ"
-                                    name="uomLPBJ" placeholder="UOM" disabled>
+                                <input class="form-control" type="text" id="uomLPBJ" id="uomLPBJ" name="uomLPBJ"
+                                    placeholder="UOM" readonly>
                             @endif
                             <br>
                         </div>
@@ -139,12 +98,11 @@
                         <div class="col-sm-2">
                             <label for="stcodeLPBJ">Store :</label>
                             @if ($getDraft)
-                                <input class="form-control" type="text" value="{{ $getDraft->sitecode }}"
-                                    disabled>
+                                <input class="form-control" type="text" value="{{ $getDraft->sitecode }}" readonly>
                             @else
                                 <input class="form-control" type="text" id="stcodeLPBJ" name="stcodeLPBJ"
                                     placeholder="Store Code" data-bs-toggle="modal" data-bs-target="#siteModal"
-                                    autocomplete="off" required>
+                                    autocomplete="off" required onkeydown="return false">
                             @endif
                             <br>
                         </div>
@@ -152,10 +110,10 @@
                             <label for="stnameLPBJ">Store Description :</label>
                             @if ($getDraft)
                                 <input class="form-control" type="text" value="{{ $getDraft->sitename }}"
-                                    disabled>
+                                    readonly>
                             @else
                                 <input class="form-control" type="text" id="stnameLPBJ" name="stnameLPBJ"
-                                    placeholder="Store Name" disabled>
+                                    placeholder="Store Name" readonly>
                             @endif
                             <br>
                         </div>
@@ -165,7 +123,7 @@
                             <label for="accLPBJ">Account Assignment :</label>
                             @if ($getDraft)
                                 <input class="form-control" type="text" value="{{ $getDraft->accassign }}"
-                                    disabled>
+                                    readonly>
                             @else
                                 <select class="form-control" name="accLPBJ" id="accLPBJ" required>
                                     <option value="" disabled selected hidden>Pilih Account Assignment...
@@ -181,42 +139,42 @@
                         <div class="col-sm-2" id="gl">
                             <label for="glLPBJ">GL :</label>
                             @if ($getDraft)
-                                <input class="form-control" type="text" value="{{ $getDraft->gl }}" disabled>
+                                <input class="form-control" type="text" value="{{ $getDraft->gl }}" readonly>
                             @else
                                 <input class="form-control" type="text" id="glLPBJ" name="glLPBJ"
                                     placeholder="GL Number" autocomplete="off" data-bs-toggle="modal"
-                                    data-bs-target="#glModal">
+                                    data-bs-target="#glModal" onkeydown="return false">
                             @endif
                         </div>
                         <div class="col-sm-2" id="cc">
                             <label for="costLPBJ">Cost Center :</label>
                             @if ($getDraft)
                                 <input class="form-control" type="text" value="{{ $getDraft->costcenter }}"
-                                    disabled>
+                                    readonly>
                             @else
                                 <input class="form-control" type="text" id="costLPBJ" name="costLPBJ"
                                     placeholder="Cost Center" autocomplete="off" data-bs-toggle="modal"
-                                    data-bs-target="#ccModal">
+                                    data-bs-target="#ccModal" onkeydown="return false">
                             @endif
                         </div>
                         <div class="col-sm-2" id="io">
                             <label for="orderLPBJ">Order :</label>
                             @if ($getDraft)
-                                <input class="form-control" type="text" value="{{ $getDraft->order }}" disabled>
+                                <input class="form-control" type="text" value="{{ $getDraft->order }}" readonly>
                             @else
                                 <input class="form-control" type="text" id="orderLPBJ" name="orderLPBJ"
                                     placeholder="Order" autocomplete="off" data-bs-toggle="modal"
-                                    data-bs-target="#orderModal">
+                                    data-bs-target="#orderModal" onkeydown="return false">
                             @endif
                         </div>
                         <div class="col-sm-2" id="as">
                             <label for="assetLPBJ">Asset :</label>
                             @if ($getDraft)
-                                <input class="form-control" type="text" value="{{ $getDraft->asset }}" disabled>
+                                <input class="form-control" type="text" value="{{ $getDraft->asset }}" readonly>
                             @else
                                 <input class="form-control" type="text" id="assetLPBJ" name="assetLPBJ"
                                     placeholder="Kode Asset" autocomplete="off" data-bs-toggle="modal"
-                                    data-bs-target="#assetModal">
+                                    data-bs-target="#assetModal" onkeydown="return false">
                             @endif
                         </div>
                     </div>
@@ -226,7 +184,7 @@
                             <label for="ketLPBJ">Keterangan :</label>
                             @if ($getDraft)
                                 <input class="form-control" type="text" value="{{ $getDraft->keterangan }}"
-                                    disabled>
+                                    readonly>
                             @else
                                 <textarea class="form-control" name="ketLPBJ" cols="40" rows="5" placeholder="Keterangan"
                                     autocomplete="off"></textarea>
@@ -244,7 +202,7 @@
                                 @endif
                             @else
                                 <input class="form-control" type="file" name="imgLPBJ" id="imgLPBJ"
-                                    autocomplete="off" onchange="validate(this.value);">
+                                    autocomplete="off" accept="image/*" onchange="validate(this.value);">
                             @endif
                             <br>
                         </div>
@@ -263,310 +221,265 @@
     </main>
 
     {{-- ArticleModal --}}
-    @if ($getArticle)
-        <div class="modal fade" id="articleModel" tabindex="-1" aria-hidden="true">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">List Store</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                            aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <table class="table table-bordered datatable" id="tbArticle">
-                            <thead>
+    <div class="modal fade" id="articleModel" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">List Article</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-bordered datatable" id="tbArticle">
+                        <thead>
+                            <tr>
+                                <th style="width: 10%">No</th>
+                                <th style="width: 20%">Product Code</th>
+                                <th>Product Name</th>
+                                <th style="width: 10%">UOM</th>
+                                <th class="text-center" style="width: 20%">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($getArticle as $article)
                                 <tr>
-                                    <th style="width: 10%">No</th>
-                                    <th style="width: 20%">Product Code</th>
-                                    <th>Product Name</th>
-                                    <th style="width: 10%">UOM</th>
-                                    <th class="text-center" style="width: 20%">Action</th>
+                                    <td style="width: 10%"></td>
+                                    <td style="width: 20%">{{ $article->productcode }}</td>
+                                    <td>{{ $article->productname }}</td>
+                                    <td style="width: 10%">{{ $article->uom }}</td>
+                                    <td class="text-center" style="width: 20%">
+                                        <button type="button"
+                                            onclick="addArticle('{{ $article->productcode }}','{{ $article->productname }}','{{ $article->uom }}')"
+                                            class="btn btn-outline-success btn-sm" data-bs-dismiss="modal">
+                                            Pilih Article
+                                        </button>
+                                    </td>
                                 </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($getArticle as $article)
-                                    <tr>
-                                        <td style="width: 10%"></td>
-                                        <td style="width: 20%">{{ $article->productcode }}</td>
-                                        <td>{{ $article->productname }}</td>
-                                        <td style="width: 10%">{{ $article->uom }}</td>
-                                        <td class="text-center" style="width: 20%">
-                                            <button type="button"
-                                                onclick="addArticle('{{ $article->productcode }}','{{ $article->productname }}','{{ $article->uom }}')"
-                                                class="btn btn-outline-success btn-sm" data-bs-dismiss="modal">
-                                                Pilih Article
-                                            </button>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
-    @endif
+    </div>
     {{-- /ArticleModal --}}
 
     {{-- SiteModal --}}
-    @if ($getSite)
-        <div class="modal fade" id="siteModal" tabindex="-1" aria-hidden="true">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">List Store</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                            aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <table class="table table-bordered datatable" id="tbSite">
-                            <thead>
+    <div class="modal fade" id="siteModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">List Store</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-bordered datatable" id="tbSite">
+                        <thead>
+                            <tr>
+                                <th style="width: 10%">No</th>
+                                <th style="width: 20%">Store Code</th>
+                                <th>Store Name</th>
+                                <th class="text-center" style="width: 20%">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($getSite as $site)
                                 <tr>
-                                    <th style="width: 10%">No</th>
-                                    <th style="width: 20%">Store Code</th>
-                                    <th>Store Name</th>
-                                    <th class="text-center" style="width: 20%">Action</th>
+                                    <td style="width: 10%"></td>
+                                    <td style="width: 20%">{{ $site->sitecode }}</td>
+                                    <td>{{ $site->name1 }}</td>
+                                    <td class="text-center" style="width: 20%">
+                                        <button type="button"
+                                            onclick="addSite('{{ $site->sitecode }}','{{ $site->name1 }}')"
+                                            class="btn btn-outline-success btn-sm" data-bs-dismiss="modal">
+                                            Pilih Store
+                                        </button>
+                                    </td>
                                 </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($getSite as $site)
-                                    <tr>
-                                        <td style="width: 10%"></td>
-                                        <td style="width: 20%">{{ $site->sitecode }}</td>
-                                        <td>{{ $site->name1 }}</td>
-                                        <td class="text-center" style="width: 20%">
-                                            <button type="button"
-                                                onclick="addSite('{{ $site->sitecode }}','{{ $site->name1 }}')"
-                                                class="btn btn-outline-success btn-sm" data-bs-dismiss="modal">
-                                                Pilih Store
-                                            </button>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
-    @endif
+    </div>
     {{-- /SiteModal --}}
 
     {{-- GLModal --}}
-    @if ($getGL)
-        <div class="modal fade" id="glModal" tabindex="-1" aria-hidden="true">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">List GL</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                            aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <table class="table table-bordered datatable" id="tbGL">
-                            <thead>
+    <div class="modal fade" id="glModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">List GL</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-bordered datatable" id="tbGL">
+                        <thead>
+                            <tr>
+                                <th style="width: 10%">No</th>
+                                <th style="width: 20%">Company Code</th>
+                                <th style="width: 20%">GL Account</th>
+                                <th>Description</th>
+                                <th class="text-center" style="width: 20%">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($getGL as $gl)
                                 <tr>
-                                    <th style="width: 10%">No</th>
-                                    <th style="width: 20%">Company Code</th>
-                                    <th style="width: 20%">GL Account</th>
-                                    <th>Description</th>
-                                    <th class="text-center" style="width: 20%">Action</th>
+                                    <td style="width: 10%"></td>
+                                    <td style="width: 20%">{{ $gl->companycode }}</td>
+                                    <td style="width: 20%">{{ $gl->glaccount }}</td>
+                                    <td>{{ $gl->description }}</td>
+                                    <td class="text-center" style="width: 20%">
+                                        <button type="button" onclick="addGL('{{ $gl->glaccount }}')"
+                                            class="btn btn-outline-success btn-sm" data-bs-dismiss="modal">
+                                            Pilih GL
+                                        </button>
+                                    </td>
                                 </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($getGL as $gl)
-                                    <tr>
-                                        <td style="width: 10%"></td>
-                                        <td style="width: 20%">{{ $gl->companycode }}</td>
-                                        <td style="width: 20%">{{ $gl->glaccount }}</td>
-                                        <td>{{ $gl->description }}</td>
-                                        <td class="text-center" style="width: 20%">
-                                            <button type="button" onclick="addGL('{{ $gl->glaccount }}')"
-                                                class="btn btn-outline-success btn-sm" data-bs-dismiss="modal">
-                                                Pilih GL
-                                            </button>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
-    @endif
+    </div>
     {{-- /GLModal --}}
 
     {{-- CostCenterModal --}}
-    @if ($getCC)
-        <div class="modal fade" id="ccModal" tabindex="-1" aria-hidden="true">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">List Cost Center</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                            aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <table class="table table-bordered datatable" id="tbCC">
-                            <thead>
+    <div class="modal fade" id="ccModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">List Cost Center</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-bordered datatable" id="tbCC">
+                        <thead>
+                            <tr>
+                                <th style="width: 10%">No</th>
+                                <th style="width: 20%">Company Code</th>
+                                <th style="width: 20%">Cost Center</th>
+                                <th>Description</th>
+                                <th class="text-center" style="width: 20%">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($getCC as $cc)
                                 <tr>
-                                    <th style="width: 10%">No</th>
-                                    <th style="width: 20%">Company Code</th>
-                                    <th style="width: 20%">Cost Center</th>
-                                    <th>Description</th>
-                                    <th class="text-center" style="width: 20%">Action</th>
+                                    <td style="width: 10%"></td>
+                                    <td style="width: 20%">{{ $cc->companycode }}</td>
+                                    <td style="width: 20%">{{ $cc->costcenter }}</td>
+                                    <td>{{ $cc->description }}</td>
+                                    <td class="text-center" style="width: 20%">
+                                        <button type="button" onclick="addCC('{{ $cc->costcenter }}')"
+                                            class="btn btn-outline-success btn-sm" data-bs-dismiss="modal">
+                                            Pilih Cost Center
+                                        </button>
+                                    </td>
                                 </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($getCC as $cc)
-                                    <tr>
-                                        <td style="width: 10%"></td>
-                                        <td style="width: 20%">{{ $cc->companycode }}</td>
-                                        <td style="width: 20%">{{ $cc->costcenter }}</td>
-                                        <td>{{ $cc->description }}</td>
-                                        <td class="text-center" style="width: 20%">
-                                            <button type="button" onclick="addCC('{{ $cc->costcenter }}')"
-                                                class="btn btn-outline-success btn-sm" data-bs-dismiss="modal">
-                                                Pilih Cost Center
-                                            </button>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
-    @endif
+    </div>
     {{-- /CostCenterModal --}}
 
     {{-- OrderModal --}}
-    @if ($getOrder)
-        <div class="modal fade" id="orderModal" tabindex="-1" aria-hidden="true">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">List Internal Order</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                            aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <table class="table table-bordered datatable" id="tbOrder">
-                            <thead>
+    <div class="modal fade" id="orderModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">List Internal Order</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-bordered datatable" id="tbOrder">
+                        <thead>
+                            <tr>
+                                <th style="width: 10%">No</th>
+                                <th style="width: 20%">Company Code</th>
+                                <th style="width: 20%">Internal Order</th>
+                                <th>Description</th>
+                                <th class="text-center" style="width: 20%">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($getOrder as $order)
                                 <tr>
-                                    <th style="width: 10%">No</th>
-                                    <th style="width: 20%">Company Code</th>
-                                    <th style="width: 20%">Internal Order</th>
-                                    <th>Description</th>
-                                    <th class="text-center" style="width: 20%">Action</th>
+                                    <td style="width: 10%"></td>
+                                    <td style="width: 20%">{{ $order->companycode }}</td>
+                                    <td style="width: 20%">{{ $order->order }}</td>
+                                    <td>{{ $order->description }}</td>
+                                    <td class="text-center" style="width: 20%">
+                                        <button type="button" onclick="addOrder('{{ $order->order }}')"
+                                            class="btn btn-outline-success btn-sm" data-bs-dismiss="modal">
+                                            Pilih Order
+                                        </button>
+                                    </td>
                                 </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($getOrder as $order)
-                                    <tr>
-                                        <td style="width: 10%"></td>
-                                        <td style="width: 20%">{{ $order->companycode }}</td>
-                                        <td style="width: 20%">{{ $order->order }}</td>
-                                        <td>{{ $order->description }}</td>
-                                        <td class="text-center" style="width: 20%">
-                                            <button type="button" onclick="addOrder('{{ $order->order }}')"
-                                                class="btn btn-outline-success btn-sm" data-bs-dismiss="modal">
-                                                Pilih Order
-                                            </button>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
-    @endif
+    </div>
     {{-- /OrderModal --}}
 
     {{-- AssetModal --}}
-    @if ($getAsset)
-        <div class="modal fade" id="assetModal" tabindex="-1" aria-hidden="true">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">List Asset</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                            aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <table class="table table-bordered datatable" id="tbAsset">
-                            <thead>
+    <div class="modal fade" id="assetModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">List Asset</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-bordered datatable" id="tbAsset">
+                        <thead>
+                            <tr>
+                                <th style="width: 10%">No</th>
+                                <th style="width: 20%">Company Code</th>
+                                <th style="width: 20%">Asset</th>
+                                <th>Description</th>
+                                <th class="text-center" style="width: 20%">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($getAsset as $asset)
                                 <tr>
-                                    <th style="width: 10%">No</th>
-                                    <th style="width: 20%">Company Code</th>
-                                    <th style="width: 20%">Asset</th>
-                                    <th>Description</th>
-                                    <th class="text-center" style="width: 20%">Action</th>
+                                    <td style="width: 10%"></td>
+                                    <td style="width: 20%">{{ $asset->companycode }}</td>
+                                    <td style="width: 20%">{{ $asset->asset }}</td>
+                                    <td>{{ $asset->description }}</td>
+                                    <td class="text-center" style="width: 20%">
+                                        <button type="button" onclick="addAsset('{{ $asset->asset }}')"
+                                            class="btn btn-outline-success btn-sm" data-bs-dismiss="modal">
+                                            Pilih Asset
+                                        </button>
+                                    </td>
                                 </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($getAsset as $asset)
-                                    <tr>
-                                        <td style="width: 10%"></td>
-                                        <td style="width: 20%">{{ $asset->companycode }}</td>
-                                        <td style="width: 20%">{{ $asset->asset }}</td>
-                                        <td>{{ $asset->description }}</td>
-                                        <td class="text-center" style="width: 20%">
-                                            <button type="button" onclick="addAsset('{{ $asset->asset }}')"
-                                                class="btn btn-outline-success btn-sm" data-bs-dismiss="modal">
-                                                Pilih Asset
-                                            </button>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
-    @endif
+    </div>
     {{-- /AssetModal --}}
 
-    <footer id="footer" class="footer position-relative light-background">
-        <div class="container">
-            <div class="copyright text-center ">
-                <p>© <span>Copyright</span> <strong class="px-1 sitename">Procurement Management System</strong>
-                    <span>All Rights
-                        Reserved</span>
-                </p>
-            </div>
-        </div>
-    </footer>
-
-    {{-- ScrollToTop --}}
-    <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i
-            class="bi bi-arrow-up-short"></i></a>
+    @include('template.footer')
 
     {{-- VendorJS --}}
     {{-- MainJS --}}
     <script src="{{ asset('js/lpbj/main.js') }}"></script>
     <script src="{{ asset('js/bootstrap.min.js') }}"></script>
     <script src="{{ asset('vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-    <script src="{{ asset('vendor/php-email-form/validate.js') }}"></script>
     <script src="{{ asset('vendor/aos/aos.js') }}"></script>
-    <script src="{{ asset('vendor/typed.js/typed.umd.js') }}"></script>
-    <script src="{{ asset('vendor/purecounter/purecounter_vanilla.js') }}"></script>
-    <script src="{{ asset('vendor/waypoints/noframework.waypoints.js') }}"></script>
-    <script src="{{ asset('vendor/glightbox/js/glightbox.min.js') }}"></script>
-    <script src="{{ asset('vendor/imagesloaded/imagesloaded.pkgd.min.js') }}"></script>
-    <script src="{{ asset('vendor/isotope-layout/isotope.pkgd.min.js') }}"></script>
-    <script src="{{ asset('vendor/swiper/swiper-bundle.min.js') }}"></script>
-    <script src="{{ asset('vendor/apexcharts/apexcharts.min.js') }}"></script>
-    <script src="{{ asset('vendor/chart.js/chart.umd.js') }}"></script>
-    <script src="{{ asset('vendor/echarts/echarts.min.js') }}"></script>
-    <script src="{{ asset('vendor/quill/quill.js') }}"></script>
-    <script src="{{ asset('vendor/tinymce/tinymce.min.js') }}"></script>
-    <script src="{{ asset('vendor/php-email-form/validate.js') }}"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous">

@@ -31,6 +31,9 @@
                                     <li><i class="bi bi-chevron-right"></i> <strong>Status QE :</strong>
                                         <span>{{ $dataHeader->workflow }}</span>
                                     </li>
+                                    <li><i class="bi bi-chevron-right"></i> <strong>No LPBJ :</strong>
+                                        <span>{{ $dataHeader->nolpbj }}</span>
+                                    </li>
                                     <li><i class="bi bi-chevron-right"></i> <strong>No QE :</strong>
                                         <span>{{ $dataHeader->noqe }}</span>
                                     </li>
@@ -61,15 +64,12 @@
                         @if ($vendor->pilih == 1)
                             <strong class="text-primary">Vendor Pilihan User</strong>
                         @endif
-                        <a href="{{ url("/subdetailqe/$vendor->hdrid,$vendor->vendorcode") }}"
-                            class="btn btn-outline-secondary btn-sm">
-                            <i class="bi bi-search"></i>
-                        </a>
                     </div>
                     <table class="table-responsive-sm table-hover table-bordered col-sm-12 mb-4">
                         <thead class="table-secondary text-center">
                             <tr>
                                 <th>Article</th>
+                                <th>Qty</th>
                                 <th>Satuan</th>
                                 <th>Total</th>
                                 <th>Tax</th>
@@ -81,6 +81,7 @@
                             @foreach ($dataVendorDtl[$i] as $d)
                                 <tr>
                                     <td>{{ $d->articlecode }}</td>
+                                    <td class="text-right">{{ $d->qty }}</td>
                                     <td class="text-right">{{ $d->satuan }}</td>
                                     <td class="text-right">{{ $d->total }}</td>
                                     <td class="text-right">{{ $d->tax }}</td>
@@ -96,11 +97,45 @@
                 @endforeach
                 <br>
                 <div class="modal-footer">
-                    <a href="{{ url('/historyqe') }}" class="btn btn-success">Kembali</a>
+                    <a href="{{ url("/setujuqe/$dataHeader->hdrid") }}" class="btn btn-primary mr-2">Setuju</a>
+                    <button type="button" class="btn btn-danger mr-2" data-bs-toggle="modal"
+                        data-bs-target="#modalReject">Reject</button>
+                    <a href="{{ url('/approveqe') }}" class="btn btn-success">Kembali</a>
                 </div>
             </div>
         </section>
     </main>
+
+    {{-- ModalReject --}}
+    <div class="modal fade" id="modalReject" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Alasan Reject</h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form action="{{ url('/rejectqe') }}" method="post">
+                    @csrf
+                    <div class="modal-body text-center">
+                        <input name="hdrid" type="text" value="{{ $dataHeader->hdrid }}" hidden>
+                        <select name="status" class="form-control mb-2" required>
+                            <option value="" hidden disabled selected>Pilih Alasan Reject...</option>
+                            <option value="0">Reject for Revision</option>
+                            <option value="12">Reject Document</option>
+                        </select>
+                        <textarea name="reason" cols="60" rows="5" required></textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kembali</button>
+                        <button type="submit" class="btn btn-danger">Reject</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    {{-- /ModalReject --}}
 
     @include('template.footer')
 

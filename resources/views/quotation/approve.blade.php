@@ -17,7 +17,7 @@
 
 <body class="index-page">
 
-    @include('template.tempLpbj')
+    @include('template.tempQe')
 
     <main class="main">
         {{-- FormPengajuan --}}
@@ -25,38 +25,40 @@
             <div class="container" data-aos="fade-up" data-aos-delay="100">
                 <div class="row gy-4 justify-content-center">
                     <div class="col-lg-12 content">
-                        <h2 class="mb-1">List Approval {{ $title }}</h2>
+                        <h2 class="mb-1">List {{ $title }}</h2>
                     </div>
                 </div>
                 <br>
-                <table id="tbList" class="table-responsive-sm table-hover datatable">
-                    <thead class="table-primary">
-                        <tr>
-                            <th>No</th>
-                            <th>No LPBJ</th>
-                            <th>Departemen</th>
-                            <th>Tanggal Permintaan</th>
-                            <th>Description</th>
-                            <th>Status</th>
-                            <th>Detail</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($dataApprove as $da)
+                <div class="table-responsive-sm">
+                    <table id="tbList" class="table table-hover datatable">
+                        <thead class="table-primary">
                             <tr>
-                                <td></td>
-                                <td>{{ $da->nolpbj }}</td>
-                                <td>{{ $da->depname }}</td>
-                                <td>{{ $da->tglpermintaan }}</td>
-                                <td>{{ $da->description }}</td>
-                                <td>{{ $da->workflow }}</td>
-                                <td><a href="{{ url("/detailapprovelpbj/$da->hdrid") }}"
-                                        class="btn btn-sm btn-success"><i class="bi bi-search"></i></a>
-                                </td>
+                                <th>No</th>
+                                <th>No Quotation</th>
+                                <th>Departemen</th>
+                                <th>Tanggal Permintaan</th>
+                                <th>Description</th>
+                                <th>Status</th>
+                                <th>Detail</th>
                             </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            @foreach ($dataApprove as $da)
+                                <tr>
+                                    <td></td>
+                                    <td>{{ $da->noqe }}</td>
+                                    <td>{{ $da->depname }}</td>
+                                    <td>{{ $da->tglpermintaan }}</td>
+                                    <td>{{ $da->description }}</td>
+                                    <td>{{ $da->workflow }}</td>
+                                    <td><a href="{{ url("/detailapproveqe/$da->hdrid") }}"
+                                            class="btn btn-sm btn-success"><i class="bi bi-search"></i></a>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
             </div>
             <hr>
         </section>
@@ -70,8 +72,8 @@
     {{-- MainJS --}}
     <script src="{{ asset('js/lpbj/main.js') }}"></script>
     <script src="{{ asset('js/bootstrap.min.js') }}"></script>
-    <script src="{{ asset('vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-    <script src="{{ asset('vendor/aos/aos.js') }}"></script>
+    <script src="{{ asset('vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>\
+    <script src="{{ asset('vendor/aos/aos.js') }}"></script>\
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous">

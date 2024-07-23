@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\mailPMS;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class c_lpbj extends Controller
 {
@@ -23,7 +24,6 @@ class c_lpbj extends Controller
     {
         $data = explode('|', $params);
 
-        // dd($data);
         if (session()->exists('cc')) {
             session()->forget(['cc', 'jdl', 'note', 'doc']);
         }
@@ -35,15 +35,11 @@ class c_lpbj extends Controller
             'doc' => $data[3]
         ]);
 
-        // dd(session()->all());
-
         return redirect('tambaharticle');
     }
 
     public function index()
     {
-        // dd(session()->exists('cc'));
-        // dd(session()->all());
         $role = [1, 3, 4, 8];
         $roleAdmin = [1, 4];
 
@@ -56,8 +52,8 @@ class c_lpbj extends Controller
         }
 
         $userid = session('iduser');
-        $dataPegawai = $this->db->getPegawai($userid)->toArray()[0];
-        $dataDraft = $this->db->getDraft()->toArray();
+        $dataPegawai = $this->db->getPegawai($userid)[0];
+        $dataDraft = $this->db->getDraft();
 
         $data = [
             'dataPegawai' => $dataPegawai,
@@ -74,14 +70,19 @@ class c_lpbj extends Controller
 
     public function tambahArticle()
     {
-        // dd(session());
+        $role = [1, 3, 4, 8];
+
         if (!session('iduser')) {
             return redirect('login')->with('pesan', 'Session anda telah habis, silahkan login kembali.');
         }
 
+        if (!in_array(session('idgroup'), $role)) {
+            return redirect('portal');
+        }
+
         $dataDraft = '';
         if (session('draftid')) {
-            $dataDraft = $this->db->cekDraft(session('draftid'))->toArray()[0];
+            $dataDraft = $this->db->cekDraft(session('draftid'))[0];
         }
 
 
@@ -110,9 +111,10 @@ class c_lpbj extends Controller
     public function ajukan(Request $params)
     {
         $userid = session('iduser');
-        $dokumen = 1;
-        if (session('doc') == 'drf') {
-            $dokumen = 0;
+
+        $dokumen = 0;
+        if ($params->pilihan == 'doc') {
+            $dokumen = 1;
         }
 
         $data = [
@@ -126,7 +128,7 @@ class c_lpbj extends Controller
         $insertHdr = $this->db->insertHdr($data);
 
         if ($insertHdr) {
-            $databody = $this->db->getHistoryHeader($insertHdr)->toArray();
+            $databody = $this->db->getHistoryHeader($insertHdr);
             $emailapprove = session('emailapprove');
 
             $details = [
@@ -148,7 +150,6 @@ class c_lpbj extends Controller
 
     public function ajukanEdit(Request $params)
     {
-        // dd($params);
         $hdrid = $params->hdrid;
         $dokumen = 1;
 
@@ -166,7 +167,7 @@ class c_lpbj extends Controller
         $editHdr = $this->db->editHdr($data);
 
         if ($editHdr) {
-            $databody = $this->db->getHistoryHeader($hdrid)->toArray();
+            $databody = $this->db->getHistoryHeader($hdrid);
             $emailapprove = session('emailapprove');
 
             $details = [
@@ -182,8 +183,7 @@ class c_lpbj extends Controller
             session()->forget(['cc', 'jdl', 'note', 'doc']);
             return redirect('historylpbj');
         } else {
-            echo 'gagal cukk';
-            // return redirect('pengajuanlpbj')->with('pesan', 'Gagal mengajukan LPBJ, silahkan ulangi kembali');
+            return redirect('pengajuanlpbj')->with('pesan', 'Gagal mengajukan LPBJ, silahkan ulangi kembali');
         }
     }
 
@@ -256,11 +256,17 @@ class c_lpbj extends Controller
 
     public function history()
     {
+        $role = [1, 3, 4, 8];
+
         if (!session('iduser')) {
             return redirect('login')->with('pesan', 'Session anda telah habis, silahkan login kembali.');
         }
 
-        $dataHistory = $this->db->getHistory()->toArray();
+        if (!in_array(session('idgroup'), $role)) {
+            return redirect('portal');
+        }
+
+        $dataHistory = $this->db->getHistory();
         $data = [
             'dataHistory' => $dataHistory,
             'title' => 'LPBJ'
@@ -271,21 +277,18 @@ class c_lpbj extends Controller
 
     public function lihatDetail($id)
     {
-        return Redirect('historydetaillpbj')->with('detailid', $id);
-    }
+        $role = [1, 3, 4, 8];
 
-    public function historyDetail()
-    {
         if (!session('iduser')) {
             return redirect('login')->with('pesan', 'Session anda telah habis, silahkan login kembali.');
         }
 
-        if (!session('detailid')) {
-            return redirect('historylpbj');
+        if (!in_array(session('idgroup'), $role)) {
+            return redirect('portal');
         }
 
-        $dataDetail = $this->db->getHistoryDetail(session('detailid'))->toArray();
-        $dataHeader = $this->db->getHistoryHeader(session('detailid'))->toArray()[0];
+        $dataDetail = $this->db->getHistoryDetail($id);
+        $dataHeader = $this->db->getHistoryHeader($id)[0];
 
         $data = [
             'dataDetail' => $dataDetail,
@@ -293,21 +296,25 @@ class c_lpbj extends Controller
             'title' => 'LPBJ'
         ];
 
-        // dd($data);
-
         return view('lpbjPage/historyDetail', $data);
     }
 
     public function editLpbj($id)
     {
+        $role = [1, 3, 4, 8];
+
         if (!session('iduser')) {
             return redirect('login')->with('pesan', 'Session anda telah habis, silahkan login kembali.');
         }
 
+        if (!in_array(session('idgroup'), $role)) {
+            return redirect('portal');
+        }
+
         session()->forget(['jdl', 'note', 'doc']);
 
-        $dataDetail = $this->db->getHistoryDetail($id)->toArray();
-        $dataHeader = $this->db->getHistoryHeader($id)->toArray()[0];
+        $dataDetail = $this->db->getHistoryDetail($id);
+        $dataHeader = $this->db->getHistoryHeader($id)[0];
 
         session([
             'jdl' => $dataHeader->description,
@@ -321,22 +328,28 @@ class c_lpbj extends Controller
             'header' => $dataHeader,
             'detail' => $dataDetail,
         ];
-        // dd($data);
 
         return view('lpbjPage/editLpbj', $data);
     }
 
     public function approve()
     {
+        $role = [1, 3, 4, 8];
+
         if (!session('iduser')) {
             return redirect('login')->with('pesan', 'Session anda telah habis, silahkan login kembali.');
+        }
+
+        if (!in_array(session('idgroup'), $role)) {
+            return redirect('portal');
         }
 
         $status = 1;
         if (session('idgroup') == 8) {
             $status = 2;
         }
-        $dataApprove = $this->db->getApprove($status)->toArray();
+
+        $dataApprove = $this->db->getApprove($status);
         $data = [
             'dataApprove' => $dataApprove,
             'title' => 'LPBJ'
@@ -352,16 +365,22 @@ class c_lpbj extends Controller
 
     public function approveDetail()
     {
+        $role = [1, 3, 4, 8];
+
         if (!session('iduser')) {
             return redirect('login')->with('pesan', 'Session anda telah habis, silahkan login kembali.');
+        }
+
+        if (!in_array(session('idgroup'), $role)) {
+            return redirect('portal');
         }
 
         if (!session('detailid')) {
             return redirect('approvelpbj');
         }
 
-        $dataDetail = $this->db->getHistoryDetail(session('detailid'))->toArray();
-        $dataHeader = $this->db->getHistoryHeader(session('detailid'))->toArray()[0];
+        $dataDetail = $this->db->getHistoryDetail(session('detailid'));
+        $dataHeader = $this->db->getHistoryHeader(session('detailid'))[0];
 
         $data = [
             'dataDetail' => $dataDetail,
@@ -380,7 +399,7 @@ class c_lpbj extends Controller
         $insert = $this->db->insertLpbj($hdrid, $status);
 
         if ($insert) {
-            $databody = $this->db->getHistoryHeader($hdrid)->toArray();
+            $databody = $this->db->getHistoryHeader($hdrid);
             $emailapprove = session('emailapprove');
             $emailpengaju = $databody[0]->emailpengaju;
 
@@ -404,14 +423,12 @@ class c_lpbj extends Controller
     {
         $hdrid = $params->hdrid;
         $reason = $params->reason;
-        $status = 12;
-
-        // dd($params);
+        $status = $params->status;
 
         $reject = $this->db->rejectLpbj($hdrid, $status, $reason);
 
         if ($reject) {
-            $databody = $this->db->getHistoryHeader($hdrid)->toArray();
+            $databody = $this->db->getHistoryHeader($hdrid);
             $emailapprove = session('emailapprove');
             $emailpengaju = $databody[0]->emailpengaju;
 
@@ -481,11 +498,17 @@ class c_lpbj extends Controller
 
     public function lpbjEdt($id)
     {
+        $role = [1, 3, 4, 8];
+
         if (!session('iduser')) {
             return redirect('login')->with('pesan', 'Session anda telah habis, silahkan login kembali.');
         }
 
-        $dataDraft = $this->db->getHistoryDetailEdt($id)->toArray()[0];
+        if (!in_array(session('idgroup'), $role)) {
+            return redirect('portal');
+        }
+
+        $dataDraft = $this->db->getHistoryDetailEdt($id)[0];
         $dataArticle = $this->db->getArticle()->toArray();
         $dataSite = $this->db->getSite()->toArray();
         $dataGL = $this->db->getGL()->toArray();
@@ -504,18 +527,22 @@ class c_lpbj extends Controller
             'title' => 'LPBJ',
         ];
 
-        // dd(session()->all());
-
         return view('lpbjPage/editDetailLpbj', $data);
     }
 
     public function lpbjEdtAdd($id)
     {
+        $role = [1, 3, 4, 8];
+
         if (!session('iduser')) {
             return redirect('login')->with('pesan', 'Session anda telah habis, silahkan login kembali.');
         }
 
-        $dataDraft = $this->db->getHistoryDetail($id)->toArray()[0];
+        if (!in_array(session('idgroup'), $role)) {
+            return redirect('portal');
+        }
+
+        $dataDraft = $this->db->getHistoryDetail($id)[0];
         $dataArticle = $this->db->getArticle()->toArray();
         $dataSite = $this->db->getSite()->toArray();
         $dataGL = $this->db->getGL()->toArray();
@@ -539,9 +566,8 @@ class c_lpbj extends Controller
 
     public function lpbjEdtSave(Request $params)
     {
-        // dd($params);
         $dtlid = $params->dtlid;
-        $dataDetail = $this->db->getHistoryDetailEdt($dtlid)->toArray()[0];
+        $dataDetail = $this->db->getHistoryDetailEdt($dtlid)[0];
 
         $name = 'noimage.jpg';
         if ($params->hasFile('imgLPBJ')) {
@@ -582,7 +608,6 @@ class c_lpbj extends Controller
 
     public function lpbjEdtAddArt(Request $params)
     {
-        // dd($params);
         $gl = $params->input('glLPBJ');
         $cc = $params->input('costLPBJ');
         $io = $params->input('orderLPBJ');
@@ -635,7 +660,7 @@ class c_lpbj extends Controller
 
     public function lpbjEdtDel($id)
     {
-        $dataDraft = $this->db->getHistoryDetailEdt($id)->toArray()[0];
+        $dataDraft = $this->db->getHistoryDetailEdt($id)[0];
         $deleteData = $this->db->deleteDtl($id);
 
         if ($deleteData) {
@@ -643,5 +668,42 @@ class c_lpbj extends Controller
         } else {
             return redirect('pengajuanlpbj')->with('pesan', 'Gagal menghapus data.');
         }
+    }
+
+    public function lihatDoc($id)
+    {
+        if (!session('iduser')) {
+            return redirect('login')->with('pesan', 'Session anda telah habis, silahkan login kembali.');
+        }
+
+        $dataHeader = $this->db->getHistoryHeader($id)[0];
+        $dataDetail = $this->db->getHistoryDetail($id);
+
+        $data = [
+            'title' => 'Quotation',
+            'dataHeader' => $dataHeader,
+            'dataDetail' => $dataDetail,
+        ];
+
+        return view('lpbjPage.lihatDoc', $data);
+    }
+
+    public function cetak($id)
+    {
+        if (!session('iduser')) {
+            return redirect('login')->with('pesan', 'Session anda telah habis, silahkan login kembali.');
+        }
+
+        $dataHeader = $this->db->getHistoryHeader($id)[0];
+        $dataDetail = $this->db->getHistoryDetail($id);
+
+        $data = [
+            'title' => 'Quotation',
+            'dataHeader' => $dataHeader,
+            'dataDetail' => $dataDetail,
+        ];
+
+        $pdf = PDF::loadView('lpbjPage.lihatDoc', $data)->setPaper('a3', 'landscape');
+        return $pdf->stream('PrintLpbj.pdf');
     }
 }

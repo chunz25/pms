@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/x-icon" href="{{ asset('img/logo.png') }}">
-    <title>Tambah Vendor QE</title>
+    <title>Edit Vendor QE</title>
 
     @include('template.style')
 
@@ -28,11 +28,11 @@
             <div class="container" data-aos="fade-up" data-aos-delay="100">
                 <div class="row gy-4 justify-content-center">
                     <div class="col-lg-12 content">
-                        <h2 class="mb-1">Tambah Vendor Qe</h2>
+                        <h2 class="mb-1">Edit Vendor Qe</h2>
                     </div>
                 </div>
                 <br>
-                <form class="form-horizontal form-label-left" action="{{ url('/insertdraftqe') }}" method="post"
+                <form class="form-horizontal form-label-left" action="{{ url('/updatedraftqe') }}" method="post"
                     enctype="multipart/form-data">
                     @csrf
                     <input type="text" name="hdrid" value="{{ $getDtl[0]->hdrid }}" hidden>
@@ -40,17 +40,18 @@
                         <div class="col-sm-2">
                             <input class="form-control" type="text" id="vendorcode" name="vendorcode"
                                 data-bs-toggle="modal" data-bs-target="#vendorModal" autocomplete="off" required
-                                placeholder="Pilih Vendor">
+                                value="{{ $getDtl[0]->vendorcode }}" readonly>
                         </div>
                         <div class="col-sm-4">
                             <input class="form-control" type="text" id="vendorname" name="vendorname"
-                                autocomplete="off" required placeholder="Vendor Description" disabled>
+                                autocomplete="off" required placeholder="Vendor Description"
+                                value="{{ $getDtl[0]->vendorname }}" readonly>
                         </div>
                     </div>
                     <br>
                     <div class="form-check form-switch mb-2">
                         <input class="form-check-input" type="checkbox" role="switch" id="pilih" name="pilih"
-                            value="1">
+                            value="{{ $getDtl[0]->ispilih }}">
                         <label class="form-check-label" for="pilih">Vendor Pilihan</label>
                     </div>
                     <div class="row mb-2">
@@ -63,15 +64,15 @@
                     <div class="row">
                         <div class="col-sm-5">
                             <label>Franco:</label>
-                            <input class="form-control" type="text" id="franco" name="franco" autocomplete="off"
-                                required>
+                            <input class="form-control" type="text" id="franco" name="franco"
+                                autocomplete="off" value="{{ $getDtl[0]->franco }}" required>
                         </div>
                         <div class="col-sm-4">
                             <label>PKP / Non PKP:</label>
                             <select class="form-control" name="pkp" id="pkp" required>
-                                <option value="" disabled selected hidden>Pilih Salah Satu</option>
-                                <option value="1">PKP</option>
-                                <option value="0">Non PKP</option>
+                                <option value="" disabled hidden>Pilih Salah Satu</option>
+                                <option id="pkpyes" value="1">PKP</option>
+                                <option id="pkpno" value="0">Non PKP</option>
                             </select>
                         </div>
                     </div>
@@ -79,19 +80,24 @@
                     <div class="row">
                         <div class="col-sm-3">
                             <label>Delivery Term:</label>
-                            <input class="form-control" type="date" name="term" id="term" autocomplete="off"
-                                min="{{ date('Y-m-d') }}" onkeydown="return false" required>
+                            <input class="form-control" type="date" name="term" id="term"
+                                autocomplete="off" min="{{ date('Y-m-d') }}" value="{{ $getDtl[0]->term }}"
+                                onkeydown="return false" required>
                         </div>
                         <div class="col-sm-2">
                             <label>T.O.P:</label>
-                            <input class="form-control" type="text" id="top" name="top" autocomplete="off">
+                            <input class="form-control" type="text" id="top" name="top"
+                                autocomplete="off" value="{{ $getDtl[0]->top }}">
                         </div>
                         <div class="col-sm-1">
                             <label>Tax:</label>
-                            <input type="text" id="taxamt" name="taxamt" hidden>
+                            <input type="text" id="taxamt" name="taxamt" value="{{ $getDtl[0]->taxamt }}"
+                                hidden>
+                            <input type="text" id="taxcode" name="taxcode" value="{{ $getDtl[0]->taxcode }}"
+                                hidden>
                             <input class="form-control" type="text" id="taxname" name="taxname"
-                                onkeydown="return false" data-bs-toggle="modal" data-bs-target="#taxModal"
-                                autocomplete="off" required>
+                                value="{{ $getDtl[0]->persen }}" onkeydown="return false" data-bs-toggle="modal"
+                                data-bs-target="#taxModal" autocomplete="off" required>
                         </div>
                     </div>
                     <br>
@@ -99,19 +105,19 @@
                         <div class="col-sm-5">
                             <label>Contact Person:</label>
                             <input class="form-control" type="text" id="person" name="person"
-                                autocomplete="off">
+                                value="{{ $getDtl[0]->contactperson }}" autocomplete="off">
                         </div>
                         <div class="col-sm-5">
                             <label>Phone Number:</label>
                             <input class="form-control" type="text" id="telp" name="telp"
-                                autocomplete="off">
+                                value="{{ $getDtl[0]->notelp }}" autocomplete="off">
                         </div>
                     </div>
                     <br>
                     <div class="row">
                         <div class="col-sm-5">
                             <label>Remark:</label>
-                            <textarea class="form-control" id="remark" name="remark" autocomplete="off" cols="50" rows="4"></textarea>
+                            <textarea class="form-control" id="remark" name="remark" autocomplete="off" cols="50" rows="4">{{ $getDtl[0]->remark }}</textarea>
                         </div>
                     </div>
                     <hr>
@@ -134,7 +140,7 @@
                             <div class="col-sm-3">
                                 <label>Harga Satuan:</label>
                                 <input class="form-control text-right" type="number" id="satuan{{ $d->dtlid }}"
-                                    name="satuan[]" min="1"
+                                    name="satuan[]" min="1" value="{{ $d->satuan }}"
                                     onkeyup="hitungTotal{{ $d->dtlid }}(this.value)" required>
                             </div>
                         </div>
@@ -143,23 +149,27 @@
                             <div class="col-sm-3">
                                 <label>Total:</label>
                                 <input onkeydown="return false" class="form-control text-right" type="number"
-                                    id="total{{ $d->dtlid }}" name="total[]" min="1" readonly>
+                                    id="total{{ $d->dtlid }}" name="total[]" min="1"
+                                    value="{{ $d->total }}" readonly>
                             </div>
                             <div class="col-sm-3">
                                 <label>Tax:</label>
                                 <input onkeydown="return false" class="form-control text-right" type="number"
-                                    id="pajak{{ $d->dtlid }}" name="pajak[]" min="1" readonly>
+                                    id="pajak{{ $d->dtlid }}" name="pajak[]" min="1"
+                                    value="{{ $d->tax }}" readonly>
                             </div>
                             <div class="col-sm-3">
                                 <label>Grand Total:</label>
                                 <input onkeydown="return false" class="form-control text-right" type="number"
-                                    id="gtotal{{ $d->dtlid }}" name="gtotal[]" min="1" readonly>
+                                    id="gtotal{{ $d->dtlid }}" name="gtotal[]" min="1"
+                                    value="{{ $d->gtotal }}" readonly>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-sm-5">
                                 <label>Remark QA:</label>
-                                <input class="form-control" type="text" name="remarkqa[]" autocomplete="off">
+                                <input class="form-control" type="text" name="remarkqa[]"
+                                    value="{{ $d->remarkqa }}" autocomplete="off">
                             </div>
                         </div>
                         <br>
@@ -273,6 +283,30 @@
     </script>
 
     <script type="text/javascript">
+        let pilih = "{{ $getDtl[0]->ispilih }}";
+        let pkp = "{{ $getDtl[0]->ispkp }}";
+        let a = document.getElementById("attach");
+        let z = '';
+        let attach = new File(['test'], "{{ $getDtl[0]->attachment }}", {
+            type: 'application/pdf'
+        });
+
+        const dataTransfer = new DataTransfer();
+        dataTransfer.items.add(attach);
+        a.files = dataTransfer.files;
+
+        if (pilih == 1) {
+            $('#pilih').prop('checked', true);
+        }
+
+        if (pkp == 1) {
+            let z = 'pkpyes';
+            document.getElementById(z).selected = true;
+        } else {
+            let z = 'pkpno';
+            document.getElementById(z).selected = true;
+        }
+
         $(document).ready(function() {
 
             const tbVendor = new DataTable('#tbVendor', {

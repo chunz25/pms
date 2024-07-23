@@ -4,19 +4,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/x-icon" href="img/logo.png">
+    <link rel="icon" type="image/x-icon" href="{{ asset('img/logo.png') }}">
     <title>Portal PMS ECI</title>
 
     {{-- Style CSS --}}
-    <link rel="stylesheet" href="css/portal/portalStyle.css">
-    <link href="css/main.css" rel="stylesheet">
+    <link href="{{ asset('css/portal/portalStyle.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/main.css') }}" rel="stylesheet">
 
     {{-- Vendor CSS Files --}}
-    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
-    <link href="vendor/aos/aos.css" rel="stylesheet">
-    <link href="vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
-    <link href="vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+    <link href="{{ asset('vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('vendor/bootstrap-icons/bootstrap-icons.css') }}" rel="stylesheet">
+    <link href="{{ asset('vendor/aos/aos.css') }}" rel="stylesheet">
 </head>
 
 <body class="index-page">
@@ -26,7 +24,7 @@
         <div class="container-fluid container-xl position-relative d-flex align-items-center">
 
             <a href="" class="logo d-flex align-items-center me-auto">
-                <img src="img/logo.png" alt="">
+                <img src="{{ asset('img/logo.png') }}" alt="">
             </a>
 
             <nav id="navmenu" class="navmenu">
@@ -64,7 +62,7 @@
                                 <i class="{{ $m->icon }}"></i>
                                 <h3>{{ $m->menuname }}</h3>
                                 <p>{{ $m->deskripsi }}</p>
-                                <a href="{{ $m->linkhref }}"
+                                <a href="{{ url("/$m->linkhref") }}"
                                     class="read-more stretched-link"><span>{{ 'Link ' . $m->menuname }}</span> <i
                                         class="bi bi-arrow-right"></i></a>
                             </div>
@@ -82,17 +80,11 @@
             class="bi bi-arrow-up-short"></i></a>
 
     <!-- Vendor JS Files -->
-    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="vendor/php-email-form/validate.js"></script>
-    <script src="vendor/aos/aos.js"></script>
-    <script src="vendor/glightbox/js/glightbox.min.js"></script>
-    <script src="vendor/purecounter/purecounter_vanilla.js"></script>
-    <script src="vendor/imagesloaded/imagesloaded.pkgd.min.js"></script>
-    <script src="vendor/isotope-layout/isotope.pkgd.min.js"></script>
-    <script src="vendor/swiper/swiper-bundle.min.js"></script>
+    <script src="{{ asset('vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ asset('vendor/aos/aos.js') }}"></script>
 
     <!-- Main JS File -->
-    <script src="js/main.js"></script>
+    <script src="{{ asset('js/main.js') }}"></script>
 
 </body>
 

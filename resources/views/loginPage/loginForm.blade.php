@@ -4,10 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/login/loginStyle.css">
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-    <script src="js/bootstrap.min.js"></script>
-    <link rel="icon" type="image/x-icon" href="img/logo.png">
+    <link href="{{ asset('css/login/loginStyle.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
+    <script src="{{ asset('js/bootstrap.min.js') }}"></script>
+    <link rel="icon" type="image/x-icon" href="{{ asset('img/logo.png') }}">
     <title>Login PMS ECI</title>
 </head>
 
@@ -17,14 +17,14 @@
             <div class="row d-flex justify-content-center align-items-center h-100">
 
                 <div class="col-md-9 col-lg-6 col-xl-5">
-                    <img src="img/logo.png" class="img-fluid" alt="Sample image">
+                    <img src="{{ asset('img/logo.png') }}" class="img-fluid" alt="Sample image">
                 </div>
 
                 <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
                     <h1 class="text-secondary mb-4">
                         Procurement Management System
                     </h1>
-                    <form method="post" action="/cekLogin">
+                    <form method="post" action="{{ url('/cekLogin') }}">
                         @csrf
                         <!-- Username input -->
                         <div data-mdb-input-init class="form-outline mb-4">
@@ -40,7 +40,6 @@
                             <label class="form-label">Password</label>
                         </div>
 
-                        {{-- <span class="text-danger">{{ $pesan }}</span> --}}
                         @if (Session::has('pesan'))
                             <p class="text-danger">
                                 {{ Session::get('pesan') }}</p>
@@ -50,7 +49,7 @@
                             <button type="submit" data-mdb-button-init data-mdb-ripple-init
                                 class="btn btn-primary btn-lg"
                                 style="padding-left: 2.5rem; padding-right: 2.5rem;">Login</button>
-                            <a href="forgotPass" class="btn btn-secondary btn-lg">Forgot password?</a>
+                            {{-- <a href="{{ url('/forgotPass') }}" class="btn btn-secondary btn-lg">Forgot password?</a> --}}
                         </div>
                     </form>
                 </div>

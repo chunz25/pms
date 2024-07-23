@@ -5,17 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/x-icon" href="{{ asset('img/logo.png') }}">
-    <title>Detail {{ $title }}</title>
+    <title>History Detail {{ $title }}</title>
 
-    {{-- Style CSS --}}
-    {{-- Vendor CSS Files --}}
-    <link href="{{ asset('css/lpbj/main.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('vendor/bootstrap-icons/bootstrap-icons.css') }}" rel="stylesheet">
-    <link href="{{ asset('vendor/aos/aos.css') }}" rel="stylesheet">
-    <link href="{{ asset('vendor/glightbox/css/glightbox.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('vendor/swiper/swiper-bundle.min.css') }}" rel="stylesheet">
+    @include('template.style')
 
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.0/dist/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"></script>
@@ -26,38 +18,7 @@
 
 <body class="index-page">
 
-    {{-- NavBar --}}
-    <header id="header" class="header grey-background d-flex flex-column">
-        <i class="header-toggle d-xl-none bi bi-list"></i>
-
-        <div class="profile-img">
-            <img src="{{ asset('img/logo.jpg') }}" alt="" class="img-fluid rounded-circle">
-        </div>
-
-        <a class="logo d-flex align-items-center justify-content-center">
-            <h1 class="sitename">{{ $title }}</h1>
-        </a>
-
-        <nav id="navmenu" class="navmenu">
-            <ul>
-                @if (substr(session('groupname'), 0, 8) != 'APPROVER')
-                    <li><a href="{{ url('/pengajuanlpbj') }}">
-                            <i class="bi bi-clipboard2-plus navicon"></i>
-                            Pengajuan</a>
-                    </li>
-                @endif
-                <li><a href="{{ url('/historylpbj') }}" class="active"><i
-                            class="bi bi-clock-history navicon"></i>History</a>
-                </li>
-                @if (substr(session('groupname'), 0, 8) == 'APPROVER' || session('groupname') == 'ADMINISTRATOR')
-                    <li><a href="{{ url('/approvelpbj') }}"><i
-                                class="bi bi-file-earmark-check navicon"></i>Approval</a></li>
-                @endif
-                <li><a href="{{ url('/portal') }}"><i class="bi bi-backspace navicon"></i>Kembali</a></li>
-            </ul>
-        </nav>
-    </header>
-    {{-- /NavBar --}}
+    @include('template.tempLpbj')
 
     <main class="main">
         <section class="about section">
@@ -65,26 +26,38 @@
                 {{-- DataUser --}}
                 <div class="row gy-4 justify-content-center">
                     <div class="col-lg-12 content">
-                        <h2 class="mb-4">Detail {{ $title }}</h2>
+                        <h2 class="mb-4">History Detail {{ $title }}</h2>
                         <div class="row">
                             <div class="col-lg-6">
                                 <ul>
-                                    <li><i class="bi bi-chevron-right"></i> <strong>Status LPBJ :</strong>
+                                    <li>
+                                        <i class="bi bi-chevron-right"></i>
+                                        <strong>Status LPBJ :</strong>
                                         <span>{{ $dataHeader->workflow }}</span>
                                     </li>
-                                    <li><i class="bi bi-chevron-right"></i> <strong>No LPBJ :</strong>
+                                    <li>
+                                        <i class="bi bi-chevron-right"></i>
+                                        <strong>No LPBJ :</strong>
                                         <span>{{ $dataHeader->nolpbj }}</span>
                                     </li>
-                                    <li><i class="bi bi-chevron-right"></i> <strong>Company :</strong>
+                                    <li>
+                                        <i class="bi bi-chevron-right"></i>
+                                        <strong>Company :</strong>
                                         <span>{{ $dataHeader->companycode }}</span>
                                     </li>
-                                    <li><i class="bi bi-chevron-right"></i> <strong>Departemen :</strong>
+                                    <li>
+                                        <i class="bi bi-chevron-right"></i>
+                                        <strong>Departemen :</strong>
                                         <span>{{ $dataHeader->depname }}</span>
                                     </li>
-                                    <li><i class="bi bi-chevron-right"></i> <strong>Tanggal Permintaan :</strong>
+                                    <li>
+                                        <i class="bi bi-chevron-right"></i>
+                                        <strong>Tanggal Permintaan :</strong>
                                         <span>{{ $dataHeader->tglpermintaan }}</span>
                                     </li>
-                                    <li><i class="bi bi-chevron-right"></i> <strong>Description :</strong>
+                                    <li>
+                                        <i class="bi bi-chevron-right"></i>
+                                        <strong>Description :</strong>
                                         <span>{{ $dataHeader->description }}</span>
                                     </li>
                                     @if ($dataHeader->reason != '')
@@ -92,6 +65,14 @@
                                             <span>{{ $dataHeader->reason }}</span>
                                         </li>
                                     @endif
+                                    <a class="btn btn-outline-primary btn-sm"
+                                        href="{{ url("/lihatlpbjdoc/$dataHeader->hdrid") }}">
+                                        <i class="bi bi-filetype-pdf"></i> Lihat Dokumen
+                                    </a>
+                                    <a class="btn btn-outline-danger btn-sm"
+                                        href="{{ url("/cetaklpbjdoc/$dataHeader->hdrid") }}">
+                                        <i class="bi bi-filetype-pdf"></i> Print Dokumen
+                                    </a>
                                 </ul>
                             </div>
                         </div>
@@ -99,45 +80,47 @@
                 </div>
                 {{-- /DataUser --}}
                 <hr>
-                <table id="tbhistory" class="table-responsive table-hover datatable">
-                    <thead class="table-primary">
-                        <tr class="text-center">
-                            <th>No</th>
-                            <th>Article</th>
-                            <th>Remark</th>
-                            <th>Qty</th>
-                            <th>UoM</th>
-                            <th>Store</th>
-                            <th>Acc Assignment</th>
-                            <th>GL</th>
-                            <th>Cost Center</th>
-                            <th>Order</th>
-                            <th>Asset</th>
-                            <th>Keterangan</th>
-                            <th class="text-center">Gambar</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($dataDetail as $dd)
-                            <tr>
-                                <td></td>
-                                <td>{{ $dd->articlecode }}</td>
-                                <td>{{ $dd->remark }}</td>
-                                <td>{{ $dd->qty }}</td>
-                                <td>{{ $dd->uom }}</td>
-                                <td>{{ $dd->sitecode }}</td>
-                                <td>{{ $dd->accassign }}</td>
-                                <td>{{ $dd->gl }}</td>
-                                <td>{{ $dd->costcenter }}</td>
-                                <td>{{ $dd->order }}</td>
-                                <td>{{ $dd->asset }}</td>
-                                <td>{{ $dd->keterangan }}</td>
-                                <td><a class="text-blue" type="button" data-bs-toggle="modal"
-                                        data-bs-target="#modal{{ $dd->gambar }}">Lihat Gambar</a></td>
+                <div class="col-sm-12">
+                    <table id="tbhistory" class="table table-responsive table-hover datatable">
+                        <thead class="table-primary">
+                            <tr class="text-center">
+                                <th>No</th>
+                                <th>Article</th>
+                                <th>Remark</th>
+                                <th>Qty</th>
+                                <th>UoM</th>
+                                <th>Store</th>
+                                <th>Acc Assignment</th>
+                                <th>GL</th>
+                                <th>Cost Center</th>
+                                <th>Order</th>
+                                <th>Asset</th>
+                                <th>Keterangan</th>
+                                <th class="text-center">Gambar</th>
                             </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            @foreach ($dataDetail as $dd)
+                                <tr>
+                                    <td></td>
+                                    <td>{{ $dd->articlecode }}</td>
+                                    <td>{{ $dd->remark }}</td>
+                                    <td>{{ $dd->qty }}</td>
+                                    <td>{{ $dd->uom }}</td>
+                                    <td>{{ $dd->sitecode }}</td>
+                                    <td>{{ $dd->accassign }}</td>
+                                    <td>{{ $dd->gl }}</td>
+                                    <td>{{ $dd->costcenter }}</td>
+                                    <td>{{ $dd->order }}</td>
+                                    <td>{{ $dd->asset }}</td>
+                                    <td>{{ $dd->keterangan }}</td>
+                                    <td><a class="text-blue" type="button" data-bs-toggle="modal"
+                                            data-bs-target="#modal{{ $dd->gambar }}">Lihat Gambar</a></td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
                 <br>
                 <div class="row">
                     <div class="col-sm-12">
@@ -148,24 +131,11 @@
                 </div>
 
                 <div class="modal-footer">
-                    <a href="historylpbj" class="btn btn-success">Kembali</a>
+                    <a href="{{ url('/historylpbj') }}" class="btn btn-success">Kembali</a>
                 </div>
             </div>
         </section>
     </main>
-
-    <footer id="footer" class="footer position-relative light-background">
-
-        <div class="container">
-            <div class="copyright text-center ">
-                <p>© <span>Copyright</span> <strong class="px-1 sitename">Procurement Management System</strong>
-                    <span>All Rights
-                        Reserved</span>
-                </p>
-            </div>
-        </div>
-
-    </footer>
 
     {{-- ModalTampilGambar --}}
     @foreach ($dataDetail as $dd)
@@ -190,24 +160,14 @@
     @endforeach
     {{-- /ModalTampilGambar --}}
 
-    {{-- ScrollToTop --}}
-    <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i
-            class="bi bi-arrow-up-short"></i></a>
+    @include('template.footer')
 
     {{-- VendorJS --}}
     {{-- MainJS --}}
     <script src="{{ asset('js/lpbj/main.js') }}"></script>
     <script src="{{ asset('js/bootstrap.min.js') }}"></script>
     <script src="{{ asset('vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-    <script src="{{ asset('vendor/php-email-form/validate.js') }}"></script>
     <script src="{{ asset('vendor/aos/aos.js') }}"></script>
-    <script src="{{ asset('vendor/typed.js/typed.umd.js') }}"></script>
-    <script src="{{ asset('vendor/purecounter/purecounter_vanilla.js') }}"></script>
-    <script src="{{ asset('vendor/waypoints/noframework.waypoints.js') }}"></script>
-    <script src="{{ asset('vendor/glightbox/js/glightbox.min.js') }}"></script>
-    <script src="{{ asset('vendor/imagesloaded/imagesloaded.pkgd.min.js') }}"></script>
-    <script src="{{ asset('vendor/isotope-layout/isotope.pkgd.min.js') }}"></script>
-    <script src="{{ asset('vendor/swiper/swiper-bundle.min.js') }}"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous">

@@ -10,20 +10,65 @@ class m_lpbj extends Model
 {
     public function getPegawai($userid)
     {
-        $data = DB::table('vw_getpegawai')
-            ->select('*')
-            ->where('userid', '=', $userid)
-            ->get();
+        $data = DB::select('
+            SELECT DISTINCT
+                a.id AS pegawaiid,
+                a.userid,
+                a.satkerid,
+                f.username AS nik,
+                a.nama AS name,
+                c.name AS jabatanname,
+                b3.name as unitname,
+                b2.name as divname,
+                b1.name as depname,
+                h.usergroupname AS userrole,
+                f.email 
+            FROM m_pegawai a
+                LEFT JOIN m_subseksi b ON b.id = a.satkerid
+                LEFT JOIN m_department b1 ON b1.id = b.departmentid
+                LEFT JOIN m_divisi b2 ON b2.id = b.divisiid
+                LEFT JOIN m_unitkerja b3 ON b3.id = b.unitkerjaid
+                LEFT JOIN m_jabatan c ON c.id = a.jabatanid
+                LEFT JOIN m_level d ON d.id = a.levelid
+                LEFT JOIN m_lokasi e ON e.id = a.lokasiid
+                LEFT JOIN m_users f ON f.id = a.userid
+                LEFT JOIN m_usergroup g ON g.iduser = f.id
+                LEFT JOIN m_group h ON h.id = g.idgroup
+            WHERE a.userid = :userid
+        ', ['userid' => $userid]);
 
         return $data;
     }
 
     public function getDraft()
     {
-        $data = DB::table('vw_getdraftlpbj')
-            ->select('*')
-            ->where('userid', '=', session('iduser'))
-            ->get();
+        $userid = session('iduser');
+        $data = DB::select("
+            SELECT
+                a.id,
+                a.userid,
+                a.articlecode,
+                b.productname AS articlename,
+                a.remark,
+                a.qty,
+                b.uom,
+                a.sitecode,
+                c.name1 AS sitename,
+                CASE WHEN a.accassign = 'K' THEN 'K - COST CENTER' 
+                     WHEN a.accassign = 'A' THEN 'Y - ASSET' 
+                END AS accassign,
+                a.gl,
+                a.costcenter,
+                a.order,
+                a.asset,
+                a.keterangan,
+                a.gambar
+            FROM s_draftlpbj a
+                LEFT JOIN api_article b ON b.productcode = a.articlecode
+                LEFT JOIN api_site c ON c.sitecode = a.sitecode 
+            WHERE a.isdeleted = 0
+                AND a.userid = :userid
+        ", ['userid' => $userid]);
 
         return $data;
     }
@@ -50,7 +95,7 @@ class m_lpbj extends Model
     {
         $data = DB::table('api_gl')
             ->select('*')
-            ->where('companycode',session('cc'))
+            ->where('companycode', session('cc'))
             ->get();
 
         return $data;
@@ -60,7 +105,7 @@ class m_lpbj extends Model
     {
         $data = DB::table('api_costcenter')
             ->select('*')
-            ->where('companycode',session('cc'))
+            ->where('companycode', session('cc'))
             ->get();
 
         return $data;
@@ -70,7 +115,7 @@ class m_lpbj extends Model
     {
         $data = DB::table('api_order')
             ->select('*')
-            ->where('companycode',session('cc'))
+            ->where('companycode', session('cc'))
             ->get();
 
         return $data;
@@ -80,7 +125,8 @@ class m_lpbj extends Model
     {
         $data = DB::table('api_asset')
             ->select('*')
-            ->where('companycode',session('cc'))
+            ->where('companycode', session('cc'))
+            ->where('change_date', '>=', '2024-01-01')
             ->get();
 
         return $data;
@@ -136,10 +182,32 @@ class m_lpbj extends Model
 
     public function cekDraft($id)
     {
-        $data = DB::table('vw_getdraftlpbj')
-            ->select('*')
-            ->where('id', '=', $id)
-            ->get();
+        $data = DB::select("
+            SELECT
+                a.id,
+                a.userid,
+                a.articlecode,
+                b.productname AS articlename,
+                a.remark,
+                a.qty,
+                b.uom,
+                a.sitecode,
+                c.name1 AS sitename,
+                CASE WHEN a.accassign = 'K' THEN 'K - COST CENTER' 
+                    WHEN a.accassign = 'A' THEN 'Y - ASSET' 
+                END AS accassign,
+                a.gl,
+                a.costcenter,
+                a.order,
+                a.asset,
+                a.keterangan,
+                a.gambar 
+            FROM s_draftlpbj a
+                LEFT JOIN api_article b ON b.productcode = a.articlecode
+                LEFT JOIN api_site c ON c.sitecode = a.sitecode 
+            WHERE a.isdeleted = 0
+                AND a.id = :id
+        ", ['id' => $id]);
 
         return $data;
     }
@@ -167,6 +235,8 @@ class m_lpbj extends Model
                 'status' => $params['status'],
                 'description' => $params['description'],
                 'note' => $params['note'],
+                'workflow' => 'Pengajuan_LPBJ_Revisi_by_' . session('name'),
+                'reason' => null,
                 'modified_by' => session('iduser')
             ]);
 
@@ -175,58 +245,225 @@ class m_lpbj extends Model
 
     public function getHistory()
     {
-        $data = DB::table('vw_historylpbj')
-            ->select('*')
-            ->where('divname', session('divname'))
-            ->get();
+        $divname = session('divname');
+        $data = DB::select("
+            SELECT DISTINCT
+                a.id AS hdrid,
+                a.userid,
+                a.status AS statusid,
+                c3.name as divname,
+                d.name AS status,
+                a.nolpbj,
+                a.companycode,
+                c2.name as depname,
+                date_format( cast( a.created_at AS DATE ), '%W, %d-%m-%Y' ) AS tglpermintaan,
+                a.description,
+                a.note,
+                a.isqe,
+                CASE WHEN a.workflow IS NULL THEN d.name 
+                    WHEN a.status = 0 THEN d.name
+                    ELSE REPLACE ( a.workflow, '_', ' ' ) 
+                END workflow,
+                a.reason,
+                e.email AS emailpengaju,
+                c.nama AS namapengaju 
+            FROM m_lpbj_hdr a
+                LEFT JOIN m_lpbj_dtl b ON b.hdrid = a.id
+                LEFT JOIN m_pegawai c ON c.userid = a.userid
+                LEFT JOIN m_subseksi c1 ON c1.id = c.satkerid
+                LEFT JOIN m_department c2 ON c2.id = c1.departmentid
+                LEFT JOIN m_divisi c3 ON c3.id = c1.divisiid
+                LEFT JOIN m_status d ON d.id = a.status 
+                left join m_users e on e.id = c.userid
+            WHERE a.isdeleted = 0 
+                AND b.isdeleted = 0
+                AND c3.name = :divname
+            ", ['divname' => $divname]);
 
         return $data;
     }
 
     public function getHistoryHeader($id)
     {
-        $data = DB::table('vw_historylpbj')
-            ->select('*')
-            ->where('hdrid', '=', $id)
-            ->get();
+        $data = DB::select("
+            SELECT DISTINCT
+                a.id AS hdrid,
+                a.userid,
+                a.status AS statusid,
+                h.name as divname,
+                d.name AS status,
+                a.nolpbj,
+                a.companycode,
+                f.name as depname,
+                date_format( cast( a.created_at AS DATE ), '%W, %d-%m-%Y' ) AS tglpermintaan,
+                a.description,
+                a.note,
+                a.isqe,
+                CASE WHEN a.workflow IS NULL THEN d.name 
+                    ELSE REPLACE(a.workflow,'_',' ')
+                END workflow,
+                a.reason,
+                g.email AS emailpengaju,
+                c.nama AS namapengaju ,
+                i1.nama as approval1,
+                j1.nama as approval2
+            FROM m_lpbj_hdr a
+                LEFT JOIN m_lpbj_dtl b ON b.hdrid = a.id
+                LEFT JOIN m_pegawai c ON c.userid = a.userid
+                LEFT JOIN m_status d ON d.id = a.status 
+                left join m_subseksi e on e.id = c.satkerid
+                left join m_department f on f.id = e.departmentid
+                left join m_users g on g.id = c.userid
+                left join m_divisi h on h.id = e.divisiid
+                left join m_approver i on i.userid = c.userid
+                left join m_pegawai i1 on i1.userid = i.approveid
+                left join m_approver j on j.userid = i.approveid
+                left join m_pegawai j1 on j1.userid = j.approveid
+            WHERE a.isdeleted = 0 
+                AND b.isdeleted = 0
+                AND a.id = :hdrid
+            ", ['hdrid' => $id]);
 
         return $data;
     }
 
     public function getApprove($status)
     {
-        $data = DB::table('vw_historylpbj')
-            ->select('*')
-            ->where('depname', '=', session('depname'))
-            ->where('statusid', $status)
-            ->get();
+        $depname = session('depname');
+        $a = session('idgroup');
+        $data = DB::select(
+            "
+            SELECT DISTINCT
+                a.id AS hdrid,
+                a.userid,
+                a.status AS statusid,
+                h.name as divname,
+                d.name AS status,
+                a.nolpbj,
+                a.companycode,
+                f.name as depname,
+                date_format( cast( a.created_at AS DATE ), '%W, %d-%m-%Y' ) AS tglpermintaan,
+                a.description,
+                a.note,
+                a.isqe,
+                CASE WHEN a.workflow IS NULL THEN d.name 
+                    ELSE REPLACE(a.workflow,'_',' ')
+                END workflow,
+                a.reason,
+                g.email AS emailpengaju,
+                c.nama AS namapengaju 
+            FROM
+                m_lpbj_hdr a
+                LEFT JOIN m_lpbj_dtl b ON b.hdrid = a.id
+                LEFT JOIN m_pegawai c ON c.userid = a.userid
+                LEFT JOIN m_status d ON d.id = a.status 
+                left join m_subseksi e on e.id = c.satkerid
+                left join m_department f on f.id = e.departmentid
+                left join m_users g on g.id = c.userid
+                left join m_divisi h on h.id = e.divisiid
+            WHERE a.isdeleted = 0 
+                AND b.isdeleted = 0
+            AND CASE WHEN :a = 1 THEN f.name LIKE '%'
+            ELSE f.name = :depname
+            END
+            AND CASE WHEN :a1 = 1 THEN a.status < 3
+            ELSE a.status = :status
+            END ",
+            [
+                'a' => $a,
+                'a1' => $a,
+                'depname' => $depname,
+                'status' => $status
+            ]
+        );
 
         return $data;
     }
 
     public function getHistoryDetail($id)
     {
-        $data = DB::table('vw_historylpbjdtl')
-            ->select('*')
-            ->where('hdrid', '=', $id)
-            ->get();
+        $data = DB::select("
+            SELECT
+                a.id AS hdrid,
+                b.id AS dtlid,
+                a.nolpbj,
+                a.companycode,
+                g.name as depname,
+                date_format( cast( a.created_at AS DATE ), '%W, %d-%m-%Y' ) AS tglpermintaan,
+                a.description,
+                b.articlecode,
+                d.productname,
+                b.remark,
+                b.qty,
+                d.uom,
+                b.sitecode,
+                e.name1 AS sitename,
+                b.accassign,
+                b.gl,
+                b.costcenter,
+                b.order,
+                b.asset,
+                b.keterangan,
+                b.gambar,
+                b.isqe 
+            FROM m_lpbj_hdr a
+                LEFT JOIN m_lpbj_dtl b ON b.hdrid = a.id
+                LEFT JOIN m_pegawai c ON c.userid = a.userid
+                LEFT JOIN api_article d ON d.productcode = b.articlecode
+                LEFT JOIN api_site e ON e.sitecode = b.sitecode 
+                left join m_subseksi f on f.id = c.satkerid
+                left join m_department g on g.id = f.departmentid
+            WHERE a.isdeleted = 0 
+                AND b.isdeleted = 0
+                AND a.id = :hdrid
+        ", ['hdrid' => $id]);
 
         return $data;
     }
 
     public function getHistoryDetailEdt($id)
     {
-        $data = DB::table('vw_historylpbjdtl')
-            ->select('*')
-            ->where('dtlid', '=', $id)
-            ->get();
+        $data = DB::select("
+            SELECT
+                a.id AS hdrid,
+                b.id AS dtlid,
+                a.nolpbj,
+                a.companycode,
+                g.name as depname,
+                date_format( cast( a.created_at AS DATE ), '%W, %d-%m-%Y' ) AS tglpermintaan,
+                a.description,
+                b.articlecode,
+                d.productname articlename,
+                b.remark,
+                b.qty,
+                d.uom,
+                b.sitecode,
+                e.name1 AS sitename,
+                b.accassign,
+                b.gl,
+                b.costcenter,
+                b.order,
+                b.asset,
+                b.keterangan,
+                b.gambar,
+                b.isqe 
+            FROM m_lpbj_hdr a
+                LEFT JOIN m_lpbj_dtl b ON b.hdrid = a.id
+                LEFT JOIN m_pegawai c ON c.userid = a.userid
+                LEFT JOIN api_article d ON d.productcode = b.articlecode
+                LEFT JOIN api_site e ON e.sitecode = b.sitecode 
+                left join m_subseksi f on f.id = c.satkerid
+                left join m_department g on g.id = f.departmentid
+            WHERE a.isdeleted = 0 
+                AND b.isdeleted = 0
+                AND b.id = :dtlid
+        ", ['dtlid' => $id]);
 
         return $data;
     }
 
     public function insertLpbj($id, $status)
     {
-        // dd($status);
         $data = DB::table('m_lpbj_hdr')
             ->where('id', $id)
             ->update([
@@ -240,7 +477,6 @@ class m_lpbj extends Model
 
     public function updateDraftDetail($params)
     {
-        // dd($status);
         $data = DB::table('m_lpbj_dtl')
             ->where('id', $params['dtlid'])
             ->update([

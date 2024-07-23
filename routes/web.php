@@ -39,7 +39,7 @@ route::get('tempsess/{p}', [c_lpbj::class, 'tempSess'])->name('lpbj.tempSess');
 route::get('pengajuanlpbj', [c_lpbj::class, 'index'])->name('lpbj.pengajuan');
 route::get('tambaharticle', [c_lpbj::class, 'tambahArticle'])->name('lpbj.tambaharticle');
 route::get('historylpbj', [c_lpbj::class, 'history'])->name('lpbj.history');
-route::get('historydetaillpbj', [c_lpbj::class, 'historyDetail'])->name('lpbj.historyDetail');
+// route::get('historydetaillpbj', [c_lpbj::class, 'historyDetail'])->name('lpbj.historyDetail');
 route::get('approvelpbj', [c_lpbj::class, 'approve'])->name('lpbj.approval');
 route::get('approvedetaillpbj', [c_lpbj::class, 'approveDetail'])->name('lpbj.approvalDetail');
 
@@ -63,6 +63,9 @@ route::get('lpbjedtadd/{id}', [c_lpbj::class, 'lpbjEdtAdd'])->name('lpbj.lpbjEdt
 route::get('lpbjedtdel/{id}', [c_lpbj::class, 'lpbjEdtDel'])->name('lpbj.lpbjEdtDel');
 route::get('lpbjdel/{id}', [c_lpbj::class, 'lpbjDel'])->name('lpbj.lpbjDel');
 
+route::get('lihatlpbjdoc/{id}', [c_lpbj::class, 'lihatDoc'])->name('lpbj.lihatDoc');
+route::get('cetaklpbjdoc/{id}', [c_lpbj::class, 'cetak'])->name('lpbj.cetak');
+
 route::post('lpbjedtdetail', [c_lpbj::class, 'lpbjEdtSave'])->name('lpbj.lpbjEdtSave');
 route::post('lpbjedtdetailadd', [c_lpbj::class, 'lpbjEdtAddArt'])->name('lpbj.lpbjEdtAddArt');
 /* LPBJ */
@@ -70,37 +73,51 @@ route::post('lpbjedtdetailadd', [c_lpbj::class, 'lpbjEdtAddArt'])->name('lpbj.lp
 /* Quotation */
 route::get('pengajuanqe', [c_quotation::class, 'index'])->name('quotation.pengajuan');
 route::get('historyqe', [c_quotation::class, 'history'])->name('quotation.history');
-route::get('detailqe/{id}', [c_quotation::class, 'historyDetail'])->name('quotation.lihatDetail');
-route::get('historydetailqe', [c_quotation::class, 'historyDetail'])->name('quotation.historyDetail');
-route::get('detailhistoryqe/{id}', [c_quotation::class, 'detailHistoryQe'])->name('quotation.detailHistoryQe');
-route::get('detailhistoryqe', [c_quotation::class, 'detailHistoryQe'])->name('quotation.detailHistoryQe');
+route::get('detailqe/{id}', [c_quotation::class, 'historyDetail'])->name('quotation.historyDetail');
+route::get('subdetailqe/{id}', [c_quotation::class, 'historySubdetail'])->name('quotation.historySubdetail');
 route::get('tambahqe/{id}', [c_quotation::class, 'lihatQe'])->name('quotation.lihatQe');
-route::get('tambahqe', [c_quotation::class, 'tambahQe'])->name('quotation.tambahQe');
+route::get('approveqe', [c_quotation::class, 'approveQe'])->name('quotation.approveQe');
+route::get('detailapproveqe/{id}', [c_quotation::class, 'approveQeDetail'])->name('quotation.approveQeDetail');
+route::get('setujuqe/{id}', [c_quotation::class, 'setujuQe'])->name('quotation.setujuQe');
+
 Route::get('pdf/{id}', function ($id) {
     $filename = public_path('uploads/quotation/') . $id;
     return response()->file($filename);
 });
 
-route::post('draftqe', [c_quotation::class, 'draftQe'])->name('quotation.draftQe');
+route::get('tempdraft/{id}', [c_quotation::class, 'draftQe'])->name('quotation.draftQe');
+route::get('editdraftqe/{id}', [c_quotation::class, 'draftQeEdit'])->name('quotation.draftQe');
+route::get('deletedraftqe/{id}', [c_quotation::class, 'draftQeDel'])->name('quotation.draftQe');
+route::get('lihatqedoc/{id}', [c_quotation::class, 'lihatQeDoc'])->name('quotation.lihatQeDoc');
+route::get('cetakqedoc/{id}', [c_quotation::class, 'cetak'])->name('quotation.cetak');
+
 route::post('tambahvendor', [c_quotation::class, 'tambahVendor'])->name('quotation.tambahVendor');
-route::get('deletedraftqe/{id}', [c_quotation::class, 'deleteVendor'])->name('quotation.deleteVendor');
 route::post('insertdraftqe', [c_quotation::class, 'insertDraft'])->name('quotation.insertDraft');
+route::post('updatedraftqe', [c_quotation::class, 'updateDraftQe'])->name('quotation.updateDraftQe');
 route::post('ajukanqe', [c_quotation::class, 'ajukanQe'])->name('quotation.ajukanQe');
+route::post('rejectqe', [c_quotation::class, 'reject'])->name('lpbj.reject');
 /* Quotation */
 
 
-Route::get('sendmail', function () {
-    $data = [
-        'subject' => 'Test NJINK!',
-        'dataBody' => 'Test NJINK!',
-        'aksi' => 'TestEmail'
-    ];
+// Route::get('sendmail', function () {
+//     $data = [
+//         'subject' => 'Test NJINK!',
+//         'dataBody' => 'Test NJINK!',
+//         'aksi' => 'TestEmail'
+//     ];
 
-    Mail::to('mochamad.seliratno@electronic-city.co.id')->send(new mailPMS($data));
+//     Mail::to('mochamad.seliratno@electronic-city.co.id')->send(new mailPMS($data));
 
-    dd("Email Berhasil dikirim.");
-});
+//     dd("Email Berhasil dikirim.");
+// });
 
 // route::get('email', function(){
 //     return view('mail.testemail');
 // });
+
+// route::get('esign', function () {
+//     return view('_notUsed.esign');
+// });
+route::get('cek', function () {
+    return view('lpbjPage.lihatDoc');
+});

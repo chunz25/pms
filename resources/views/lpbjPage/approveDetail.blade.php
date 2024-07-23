@@ -7,15 +7,7 @@
     <link rel="icon" type="image/x-icon" href="{{ asset('img/logo.png') }}">
     <title>Detail {{ $title }}</title>
 
-    {{-- Style CSS --}}
-    {{-- Vendor CSS Files --}}
-    <link href="{{ asset('css/lpbj/main.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('vendor/bootstrap-icons/bootstrap-icons.css') }}" rel="stylesheet">
-    <link href="{{ asset('vendor/aos/aos.css') }}" rel="stylesheet">
-    <link href="{{ asset('vendor/glightbox/css/glightbox.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('vendor/swiper/swiper-bundle.min.css') }}" rel="stylesheet">
+    @include('template.style')
 
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.0/dist/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"></script>
@@ -26,38 +18,7 @@
 
 <body class="index-page">
 
-    {{-- NavBar --}}
-    <header id="header" class="header grey-background d-flex flex-column">
-        <i class="header-toggle d-xl-none bi bi-list"></i>
-
-        <div class="profile-img">
-            <img src="{{ asset('img/logo.jpg') }}" alt="" class="img-fluid rounded-circle">
-        </div>
-
-        <a class="logo d-flex align-items-center justify-content-center">
-            <h1 class="sitename">{{ $title }}</h1>
-        </a>
-
-        <nav id="navmenu" class="navmenu">
-            <ul>
-                @if (substr(session('groupname'), 0, 8) != 'APPROVER')
-                    <li><a href="{{ url('/pengajuanlpbj') }}">
-                            <i class="bi bi-clipboard2-plus navicon"></i>
-                            Pengajuan</a>
-                    </li>
-                @endif
-                <li><a href="{{ url('/historylpbj') }}"><i class="bi bi-clock-history navicon"></i>History</a>
-                </li>
-                @if (substr(session('groupname'), 0, 8) == 'APPROVER' || session('groupname') == 'ADMINISTRATOR')
-                    <li><a href="{{ url('/approvelpbj') }}" class="active"><i
-                                class="bi bi-file-earmark-check navicon"></i>Approval</a>
-                    </li>
-                @endif
-                <li><a href="{{ url('/portal') }}"><i class="bi bi-backspace navicon"></i>Kembali</a></li>
-            </ul>
-        </nav>
-    </header>
-    {{-- /NavBar --}}
+    @include('template.tempLpbj')
 
     <main class="main">
         <section class="about section">
@@ -70,7 +31,7 @@
                             <div class="col-lg-6">
                                 <ul>
                                     <li><i class="bi bi-chevron-right"></i> <strong>Status LPBJ :</strong>
-                                        <span>{{ $dataHeader->status }}</span>
+                                        <span>{{ $dataHeader->workflow }}</span>
                                     </li>
                                     <li><i class="bi bi-chevron-right"></i> <strong>No LPBJ :</strong>
                                         <span>{{ $dataHeader->nolpbj }}</span>
@@ -159,19 +120,6 @@
         </section>
     </main>
 
-    <footer id="footer" class="footer position-relative light-background">
-
-        <div class="container">
-            <div class="copyright text-center ">
-                <p>© <span>Copyright</span> <strong class="px-1 sitename">Procurement Management System</strong>
-                    <span>All Rights
-                        Reserved</span>
-                </p>
-            </div>
-        </div>
-
-    </footer>
-
     {{-- ModalTampilGambar --}}
     @foreach ($dataDetail as $dd)
         <div class="modal fade" id="modal{{ $dd->gambar }}" tabindex="-1" aria-hidden="true">
@@ -205,10 +153,15 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form action="rejectlpbj" method="post">
+                <form action="{{ url('/rejectlpbj') }}" method="post">
                     @csrf
                     <div class="modal-body text-center">
                         <input name="hdrid" type="text" value="{{ $dataHeader->hdrid }}" hidden>
+                        <select name="status" class="form-control mb-2" required>
+                            <option value="" hidden disabled selected>Pilih Alasan Reject...</option>
+                            <option value="0">Reject for Revision</option>
+                            <option value="12">Reject Document</option>
+                        </select>
                         <textarea name="reason" cols="60" rows="5" required></textarea>
                     </div>
                     <div class="modal-footer">
@@ -221,9 +174,7 @@
     </div>
     {{-- /ModalReject --}}
 
-    {{-- ScrollToTop --}}
-    <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i
-            class="bi bi-arrow-up-short"></i></a>
+    @include('template.footer')
 
     {{-- VendorJS --}}
     {{-- MainJS --}}

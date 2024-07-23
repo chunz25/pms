@@ -1,3 +1,7 @@
+@php
+    $user = [session('iduser'), 1];
+@endphp
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -7,15 +11,7 @@
     <link rel="icon" type="image/x-icon" href="{{ asset('img/logo.png') }}">
     <title>List History {{ $title }}</title>
 
-    {{-- Style CSS --}}
-    {{-- Vendor CSS Files --}}
-    <link href="{{ asset('css/lpbj/main.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('vendor/bootstrap-icons/bootstrap-icons.css') }}" rel="stylesheet">
-    <link href="{{ asset('vendor/aos/aos.css') }}" rel="stylesheet">
-    <link href="{{ asset('vendor/glightbox/css/glightbox.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('vendor/swiper/swiper-bundle.min.css') }}" rel="stylesheet">
+    @include('template.style')
 
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.0/dist/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"></script>
@@ -25,38 +21,7 @@
 
 <body class="index-page">
 
-    {{-- NavBar --}}
-    <header id="header" class="header grey-background d-flex flex-column">
-        <i class="header-toggle d-xl-none bi bi-list"></i>
-
-        <div class="profile-img">
-            <img src="{{ asset('img/logo.jpg') }}" alt="" class="img-fluid rounded-circle">
-        </div>
-
-        <a class="logo d-flex align-items-center justify-content-center">
-            <h1 class="sitename">{{ $title }}</h1>
-        </a>
-
-        <nav id="navmenu" class="navmenu">
-            <ul>
-                @if (substr(session('groupname'), 0, 8) != 'APPROVER')
-                    <li><a href="{{ url('/pengajuanlpbj') }}">
-                            <i class="bi bi-clipboard2-plus navicon"></i>
-                            Pengajuan</a>
-                    </li>
-                @endif
-                <li><a href="{{ url('/historylpbj') }}" class="active"><i
-                            class="bi bi-clock-history navicon"></i>History</a>
-                </li>
-                @if (substr(session('groupname'), 0, 8) == 'APPROVER' || session('groupname') == 'ADMINISTRATOR')
-                    <li><a href="{{ url('/approvelpbj') }}"><i
-                                class="bi bi-file-earmark-check navicon"></i>Approval</a></li>
-                @endif
-                <li><a href="{{ url('/portal') }}"><i class="bi bi-backspace navicon"></i>Kembali</a></li>
-            </ul>
-        </nav>
-    </header>
-    {{-- /NavBar --}}
+    @include('template.tempLpbj')
 
     <main class="main">
         {{-- FormPengajuan --}}
@@ -93,7 +58,7 @@
                                 <td>{{ $dh->reason }}</td>
                                 <td style="width: 10%"><a href="{{ url("/detaillpbj/$dh->hdrid") }}"
                                         class="btn btn-sm btn-success"><i class="bi bi-search"></i></a>
-                                    @if ($dh->status == 'Draft' && $dh->userid == session('iduser'))
+                                    @if ($dh->status == 'Draft' && in_array($dh->userid, $user))
                                         <a href="{{ url("/editlpbj/$dh->hdrid") }}" class="btn btn-sm btn-primary"><i
                                                 class="bi bi-pencil"></i></a>
                                     @endif
@@ -109,38 +74,14 @@
 
     </main>
 
-    <footer id="footer" class="footer position-relative light-background">
-
-        <div class="container">
-            <div class="copyright text-center ">
-                <p>© <span>Copyright</span> <strong class="px-1 sitename">Procurement Management System</strong>
-                    <span>All Rights
-                        Reserved</span>
-                </p>
-            </div>
-        </div>
-
-    </footer>
-
-    {{-- ScrollToTop --}}
-    <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i
-            class="bi bi-arrow-up-short"></i></a>
+    @include('template.footer')
 
     {{-- VendorJS --}}
     {{-- MainJS --}}
     <script src="{{ asset('js/lpbj/main.js') }}"></script>
     <script src="{{ asset('js/bootstrap.min.js') }}"></script>
-    <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-    <script src="{{ asset('vendor/php-email-form/validate.js') }}"></script>
     <script src="{{ asset('vendor/aos/aos.js') }}"></script>
-    <script src="{{ asset('vendor/typed.js/typed.umd.js') }}"></script>
-    <script src="{{ asset('vendor/purecounter/purecounter_vanilla.js') }}"></script>
-    <script src="{{ asset('vendor/waypoints/noframework.waypoints.js') }}"></script>
-    <script src="{{ asset('vendor/glightbox/js/glightbox.min.js') }}"></script>
-    <script src="{{ asset('vendor/imagesloaded/imagesloaded.pkgd.min.js') }}"></script>
-    <script src="{{ asset('vendor/isotope-layout/isotope.pkgd.min.js') }}"></script>
-    <script src="{{ asset('vendor/swiper/swiper-bundle.min.js') }}"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous">

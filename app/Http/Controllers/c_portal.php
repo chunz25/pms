@@ -14,13 +14,16 @@ class c_portal extends Controller
     }
 
     public function index()
+
     {
         if (!session('iduser')) {
             return redirect('login')->with('pesan', 'Session anda telah habis, silahkan login kembali.');
         }
 
-        $menu = $this->db->getMenu(session('iduser'))->toArray();
-        // dd($menu);
+        session()->forget(['cc', 'jdl', 'note', 'doc']);
+
+        $menu = $this->db->getMenu(session('iduser'));
+
         $data = [
             'user' => session('username'),
             'nama' => session('name'),
