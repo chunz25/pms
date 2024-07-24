@@ -89,6 +89,8 @@
     </script>
 
     <script type="text/javascript">
+        $("#pengajuan").addClass("active");
+
         $(document).ready(function() {
 
             const tbArticle = new DataTable('#tbArticle', {

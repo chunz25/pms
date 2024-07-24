@@ -58,6 +58,16 @@ class m_quotation extends Model
         return $data;
     }
 
+    public function getPilih($id)
+    {
+        $data = DB::table('s_draftqe')
+            ->select('ispilih')
+            ->where('id', $id)
+            ->get();
+
+        return $data;
+    }
+
     public function getVendor()
     {
         $data = DB::table('api_vendor')
@@ -150,7 +160,7 @@ class m_quotation extends Model
                 b.asset AS asset,
                 b.keterangan AS keterangan,
                 b.gambar AS gambar,
-                b.isqe AS isqe 
+                b.isqe AS isqe
             FROM m_lpbj_hdr a
                 LEFT JOIN m_lpbj_dtl b ON b.hdrid = a.id
                 LEFT JOIN m_pegawai c ON c.userid = a.userid
@@ -326,7 +336,7 @@ class m_quotation extends Model
                 a.vendorcode AS vendorcode
             FROM s_draftqe a
                 LEFT JOIN m_lpbj_dtl b ON b.id = a.dtlid
-                LEFT JOIN api_vendor c ON c.suppliercode = a.vendorcode 
+                LEFT JOIN api_vendor c ON c.suppliercode = a.vendorcode
             WHERE a.isdeleted = 0 
             AND a.dtlid = :dtlid
             AND a.vendorcode = :vendor
@@ -469,7 +479,9 @@ class m_quotation extends Model
                     ELSE REPLACE ( a.workflow, '_', ' ' ) 
                 END AS workflow ,
                 f.name as depname ,
-                c.created_by as userlpbj
+                c.created_by as userlpbj ,
+                h.pono ,
+                h.prno
             FROM m_qe_hdr a
                 LEFT JOIN m_status b ON b.id = a.`status`
                 LEFT JOIN m_lpbj_hdr c ON c.id = a.lpbjid
@@ -477,6 +489,7 @@ class m_quotation extends Model
                 LEFT JOIN m_subseksi e on e.id = d.satkerid
                 LEFT JOIN m_department f on f.id = e.departmentid
                 LEFT JOIN m_direktorat g on g.id = e.direktoratid
+                LEFT JOIN api_returnprpo h on h.qeid = a.id
             WHERE 
                 CASE WHEN :group = 12 THEN c.created_by = :userid
                      WHEN :group2 IN (13,14) THEN f.name = :depname
@@ -529,7 +542,9 @@ class m_quotation extends Model
                 g.nama as namacreated,
                 CASE WHEN a.workflow IS NULL THEN b.`name` 
                     ELSE REPLACE ( a.workflow, '_', ' ' ) 
-                END AS workflow 
+                END AS workflow ,
+                j.email as emailpengaju,
+                a.reason
             FROM m_qe_hdr a
                 LEFT JOIN m_status b ON b.id = a.`status`
                 LEFT JOIN m_qe_dtl c ON hdrid = a.id
@@ -539,6 +554,7 @@ class m_quotation extends Model
                 LEFT JOIN m_pegawai g on g.userid = d.created_by
                 LEFT JOIN m_subseksi h on h.id = g.satkerid
                 left join m_department i on i.id = h.departmentid
+                left join m_users j on j.id = g.userid
             WHERE a.id = :hdrid
         ", ['hdrid' => $id]);
 
@@ -569,8 +585,9 @@ class m_quotation extends Model
             FROM s_draftqe a
                 LEFT JOIN m_qe_dtl b ON b.draftid = a.id
                 LEFT JOIN m_qe_hdr c ON c.id = b.hdrid
-                LEFT JOIN api_vendor d ON d.suppliercode = a.vendorcode 
                 left join m_lpbj_dtl e on e.id = a.dtlid
+                left join m_lpbj_hdr f on f.id = e.hdrid
+                LEFT JOIN api_vendor d ON d.suppliercode = a.vendorcode AND d.companyCode = f.companycode
             WHERE c.id = :hdrid
             AND d.companycode = :compcode
             GROUP BY 
@@ -654,7 +671,7 @@ class m_quotation extends Model
                 left join m_lpbj_dtl h on h.id = a.dtlid
                 left join m_lpbj_hdr i on i.id = h.hdrid
             WHERE b.isdeleted = 0
-            and CASE WHEN :a = 1 THEN c.status >= 0
+            and CASE WHEN :a = 1 THEN c.status < 15
             ELSE c.status = :status
             END
             ",
@@ -727,7 +744,7 @@ class m_quotation extends Model
     public function rejectQe($id, $status, $reason)
     {
         // dd($status);
-        $data = DB::table('m_lpbj_hdr')
+        $data = DB::table('m_qe_hdr')
             ->where('id', $id)
             ->update([
                 'status' => $status,

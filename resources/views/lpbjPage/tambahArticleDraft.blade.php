@@ -437,6 +437,8 @@
     </script>
 
     <script type="text/javascript">
+        $("#history").addClass("active");
+
         $(document).ready(function() {
 
             const tbArticle = new DataTable('#tbArticle', {

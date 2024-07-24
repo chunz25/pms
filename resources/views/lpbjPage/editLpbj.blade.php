@@ -9,6 +9,7 @@
 
     @include('template.style')
 
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.0/dist/jquery.min.js"></script>
     <link href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" rel="stylesheet">
     <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
 
@@ -153,6 +154,8 @@
     <script src="{{ asset('vendor/aos/aos.js') }}"></script>
 
     <script type="text/javascript">
+        $("#history").addClass("active");
+
         let sessjdl = "{{ session('jdl') }}";
         let sessnote = "{{ session('note') }}";
         let sessdoc = "{{ session('doc') }}";

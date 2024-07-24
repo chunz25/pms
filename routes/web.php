@@ -6,8 +6,11 @@ use App\Http\Controllers\c_login;
 use App\Http\Controllers\c_portal;
 use App\Http\Controllers\c_lpbj;
 use App\Http\Controllers\c_quotation;
+use App\Http\Controllers\c_apisap;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\mailPMS;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 
 /*
 |--------------------------------------------------------------------------
@@ -98,6 +101,10 @@ route::post('ajukanqe', [c_quotation::class, 'ajukanQe'])->name('quotation.ajuka
 route::post('rejectqe', [c_quotation::class, 'reject'])->name('lpbj.reject');
 /* Quotation */
 
+route::get('kirimdata/{id}', [c_apisap::class, 'cekapi']);
+// route::post('kirimdata', [c_apisap::class, 'kirimData']);
+// route::get('cekapi/{id}', [c_apisap::class, 'cekapi']);
+
 
 // Route::get('sendmail', function () {
 //     $data = [
@@ -118,6 +125,6 @@ route::post('rejectqe', [c_quotation::class, 'reject'])->name('lpbj.reject');
 // route::get('esign', function () {
 //     return view('_notUsed.esign');
 // });
-route::get('cek', function () {
-    return view('lpbjPage.lihatDoc');
-});
+// route::get('cek', function () {
+//     return view('lpbjPage.lihatDoc');
+// });

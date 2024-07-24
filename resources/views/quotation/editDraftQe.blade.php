@@ -283,6 +283,8 @@
     </script>
 
     <script type="text/javascript">
+        $("#pengajuan").addClass("active");
+
         let pilih = "{{ $getDtl[0]->ispilih }}";
         let pkp = "{{ $getDtl[0]->ispkp }}";
         let a = document.getElementById("attach");

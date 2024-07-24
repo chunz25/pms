@@ -199,6 +199,8 @@
     </script>
 
     <script type="text/javascript">
+        $("#history").addClass("active");
+
         let pilih = "{{ $getDtl[0]->ispilih }}";
         let pkp = "{{ $getDtl[0]->ispkp }}";
         let z = '';

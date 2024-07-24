@@ -33,7 +33,7 @@
                     </div>
                 </div>
                 <br>
-                <table id="tbList" class="table-responsive-sm table-hover datatable">
+                <table id="tbList" class="table table-responsive table-hover datatable">
                     <thead class="table-primary">
                         <tr>
                             <th>No</th>
@@ -43,6 +43,7 @@
                             <th>Description</th>
                             <th>Status</th>
                             <th>Reject Reason</th>
+                            <th>No PR</th>
                             <th>Detail</th>
                         </tr>
                     </thead>
@@ -56,6 +57,7 @@
                                 <td>{{ $dh->description }}</td>
                                 <td>{{ $dh->workflow }}</td>
                                 <td>{{ $dh->reason }}</td>
+                                <td>{{ $dh->prno }}</td>
                                 <td style="width: 10%"><a href="{{ url("/detaillpbj/$dh->hdrid") }}"
                                         class="btn btn-sm btn-success"><i class="bi bi-search"></i></a>
                                     @if ($dh->status == 'Draft' && in_array($dh->userid, $user))
@@ -88,6 +90,8 @@
     </script>
 
     <script type="text/javascript">
+        $("#history").addClass("active");
+
         $(document).ready(function() {
 
             const tbList = new DataTable('#tbList', {

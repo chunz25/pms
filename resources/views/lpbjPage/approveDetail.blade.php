@@ -196,6 +196,8 @@
     </script>
 
     <script type="text/javascript">
+        $("#approval").addClass("active");
+
         $(document).ready(function() {
 
             const tbhistory = new DataTable('#tbhistory', {

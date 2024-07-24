@@ -175,6 +175,8 @@
             alert("{{ Session::get('pesan') }}");
         @endif
 
+        $("#pengajuan").addClass("active");
+
         let sesscc = "{{ session('cc') }}";
         let sessjdl = "{{ session('jdl') }}";
         let sessnote = "{{ session('note') }}";
@@ -200,8 +202,6 @@
                 window.location.href = "{{ url('/tempsess') }}" + "/" + params;
             }
         }
-
-
     </script>
 
 </body>

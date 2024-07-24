@@ -40,8 +40,8 @@ class c_lpbj extends Controller
 
     public function index()
     {
-        $role = [1, 3, 4, 8];
-        $roleAdmin = [1, 4];
+        $role = [1, 3, 4, 8, 12, 13, 14];
+        $roleAdmin = [1, 4, 12];
 
         if (!session('iduser')) {
             return redirect('login')->with('pesan', 'Session anda telah habis, silahkan login kembali.');
@@ -70,7 +70,7 @@ class c_lpbj extends Controller
 
     public function tambahArticle()
     {
-        $role = [1, 3, 4, 8];
+        $role = [1, 3, 4, 8, 12, 13, 14];
 
         if (!session('iduser')) {
             return redirect('login')->with('pesan', 'Session anda telah habis, silahkan login kembali.');
@@ -256,7 +256,7 @@ class c_lpbj extends Controller
 
     public function history()
     {
-        $role = [1, 3, 4, 8];
+        $role = [1, 3, 4, 8, 12, 13, 14];
 
         if (!session('iduser')) {
             return redirect('login')->with('pesan', 'Session anda telah habis, silahkan login kembali.');
@@ -277,7 +277,7 @@ class c_lpbj extends Controller
 
     public function lihatDetail($id)
     {
-        $role = [1, 3, 4, 8];
+        $role = [1, 3, 4, 8, 12, 13, 14];
 
         if (!session('iduser')) {
             return redirect('login')->with('pesan', 'Session anda telah habis, silahkan login kembali.');
@@ -301,7 +301,7 @@ class c_lpbj extends Controller
 
     public function editLpbj($id)
     {
-        $role = [1, 3, 4, 8];
+        $role = [1, 3, 4, 8, 12, 13, 14];
 
         if (!session('iduser')) {
             return redirect('login')->with('pesan', 'Session anda telah habis, silahkan login kembali.');
@@ -334,7 +334,7 @@ class c_lpbj extends Controller
 
     public function approve()
     {
-        $role = [1, 3, 4, 8];
+        $role = [1, 3, 4, 8, 12, 13, 14];
 
         if (!session('iduser')) {
             return redirect('login')->with('pesan', 'Session anda telah habis, silahkan login kembali.');
@@ -345,7 +345,8 @@ class c_lpbj extends Controller
         }
 
         $status = 1;
-        if (session('idgroup') == 8) {
+        $arr = [8, 14];
+        if (in_array(session('idgroup'), $arr)) {
             $status = 2;
         }
 
@@ -365,7 +366,7 @@ class c_lpbj extends Controller
 
     public function approveDetail()
     {
-        $role = [1, 3, 4, 8];
+        $role = [1, 3, 4, 8, 12, 13, 14];
 
         if (!session('iduser')) {
             return redirect('login')->with('pesan', 'Session anda telah habis, silahkan login kembali.');
@@ -498,7 +499,7 @@ class c_lpbj extends Controller
 
     public function lpbjEdt($id)
     {
-        $role = [1, 3, 4, 8];
+        $role = [1, 3, 4, 8, 12, 13, 14];
 
         if (!session('iduser')) {
             return redirect('login')->with('pesan', 'Session anda telah habis, silahkan login kembali.');
@@ -532,7 +533,7 @@ class c_lpbj extends Controller
 
     public function lpbjEdtAdd($id)
     {
-        $role = [1, 3, 4, 8];
+        $role = [1, 3, 4, 8, 12, 13, 14];
 
         if (!session('iduser')) {
             return redirect('login')->with('pesan', 'Session anda telah habis, silahkan login kembali.');

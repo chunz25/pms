@@ -463,6 +463,8 @@
     </script>
 
     <script type="text/javascript">
+        $("#history").addClass("active");
+
         let sess = "{{ $getDraft->accassign }}";
         document.getElementById(sess).selected = true;
 

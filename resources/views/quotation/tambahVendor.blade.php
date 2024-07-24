@@ -89,6 +89,7 @@
                         <div class="col-sm-1">
                             <label>Tax:</label>
                             <input type="text" id="taxamt" name="taxamt" hidden>
+                            <input type="text" id="taxcode" name="taxcode" hidden>
                             <input class="form-control" type="text" id="taxname" name="taxname"
                                 onkeydown="return false" data-bs-toggle="modal" data-bs-target="#taxModal"
                                 autocomplete="off" required>
@@ -203,7 +204,7 @@
                                     <td>{{ $t->persen }}</td>
                                     <td class="text-center" style="width: 20%">
                                         <button type="button"
-                                            onclick="addTax('{{ $t->persen }}','{{ $t->amt }}')"
+                                            onclick="addTax('{{ $t->persen }}','{{ $t->amt }}','{{ $t->tax_code }}')"
                                             class="btn btn-outline-success btn-sm" data-bs-dismiss="modal">
                                             Pilih
                                         </button>
@@ -273,6 +274,13 @@
     </script>
 
     <script type="text/javascript">
+        $("#pengajuan").addClass("active");
+
+        let x = 0;
+            if (x == 1) {
+                $("#pilih").attr('disabled', true);
+            }
+
         $(document).ready(function() {
 
             const tbVendor = new DataTable('#tbVendor', {
@@ -332,9 +340,10 @@
             $('#vendorname').val(n);
         }
 
-        function addTax(c, n) {
+        function addTax(c, n, y) {
             $('#taxname').val(c);
             $('#taxamt').val(n);
+            $('#taxcode').val(y);
 
             @foreach ($getDtl as $d)
                 $("#satuan{{ $d->dtlid }}").val('');

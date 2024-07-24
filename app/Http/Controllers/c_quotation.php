@@ -153,6 +153,15 @@ class c_quotation extends Controller
             }
         }
 
+        $ispilih = null;
+        if ($dataDraft) {
+            foreach ($dataVendor as $v) {
+                $ispilih[] = $v->ispilih;
+            }
+
+            $ispilih = array_sum($ispilih);
+        }
+
         $data = [
             'title' => 'Quotation',
             'getLpbj' => $dataLpbj,
@@ -160,7 +169,10 @@ class c_quotation extends Controller
             'dataDraft' => $dataDraft,
             'dataVendor' => $dataVendor,
             'iddtl' => $data,
+            'sumVendor' => $ispilih
         ];
+
+        // dd($data);
 
         return view('quotation.draftQe', $data);
     }
@@ -292,7 +304,9 @@ class c_quotation extends Controller
 
         foreach ($id as $a) {
             $dataDtl[] = $this->db->getLpbjDtl($a)[0];
+            $dataPilih[] = $this->db->getpilih($a)[0];
         }
+        // dd($dataPilih);
 
         $data = [
             'title' => 'Quotation',
@@ -348,7 +362,7 @@ class c_quotation extends Controller
                 'pajak' => $params->pajak[$i],
                 'gtotal' => $params->gtotal[$i],
                 'total' => $params->total[$i],
-                'taxcode' => $params->total[$i],
+                'taxcode' => $params->taxcode,
             ];
 
             $insertData = $this->db->insertDraft($data);
@@ -406,7 +420,7 @@ class c_quotation extends Controller
         if (session('idgroup') == 17) {
             $status = 9;
         }
-        if (session('idgroup') == 18) {
+        if (session('idgroup') == 18 || session('idgroup') == 15) {
             $status = 10;
         }
 
@@ -457,7 +471,15 @@ class c_quotation extends Controller
         $status = $dataHeader->statusid;
         $dataHeader = $this->db->setujuQe($id, $status);
 
-        return redirect('approveqe')->with('pesan', 'Berhasil Approve Quotation.');
+        if ($dataHeader) {
+            if ($status == 10) {
+                return redirect("kirimdata/$id");
+            } else {
+                return redirect('approveqe')->with('pesan', 'Berhasil Approve Quotation.');
+            }
+        } else {
+            return redirect('approveqe')->with('pesan', 'Gagal Approve Quotation.');
+        }
     }
 
     public function lihatqedoc($id)
@@ -539,20 +561,19 @@ class c_quotation extends Controller
         //     $emailpengaju = $databody[0]->emailpengaju;
 
         //     $details = [
-        //         'subject' => 'Reject LPBJ',
+        //         'subject' => 'Reject QE',
         //         'dataBody' => $databody,
-        //         'aksi' => 'RejectLPBJ',
+        //         'aksi' => 'RejectQe',
         //     ];
 
         //     Mail::to($emailapprove)
         //         ->to($emailpengaju)
         //         ->send(new mailPMS($details));
 
-        //     return redirect('approveqe')->with('pesan', 'Sukses Reject LPBJ');
+        //     return redirect('approveqe')->with('pesan', 'Sukses Reject QE');
         // } else {
-        //     return redirect('approveqe')->with('pesan', 'Gagal Reject LPBJ');
+        //     return redirect('approveqe')->with('pesan', 'Gagal Reject QE');
         // }
-
-        return redirect('approveqe')->with('pesan', 'Sukses Reject LPBJ');
+        return redirect('approveqe')->with('pesan', 'Sukses Reject QE');
     }
 }

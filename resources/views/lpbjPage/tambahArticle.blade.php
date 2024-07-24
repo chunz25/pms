@@ -11,7 +11,7 @@
     
     <link href="{{ asset('css/lpbj/articleSearch.css') }}" rel="stylesheet">
 
-    {{-- <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"> --}}
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.0/dist/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"></script>
     <link href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" rel="stylesheet">
@@ -486,6 +486,8 @@
     </script>
 
     <script type="text/javascript">
+        $("#pengajuan").addClass("active");
+
         $(document).ready(function() {
 
             const tbArticle = new DataTable('#tbArticle', {

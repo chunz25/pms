@@ -19,21 +19,21 @@
         <ul>
             @if (in_array($usergroup, $usercek))
                 <li>
-                    <a href="{{ url('/pengajuanqe') }}">
+                    <a id="pengajuan" href="{{ url('/pengajuanqe') }}">
                         <i class="bi bi-clipboard2-plus navicon"></i>
                         Pengajuan
                     </a>
                 </li>
             @endif
             <li>
-                <a href="{{ url('/historyqe') }}">
+                <a id="history" href="{{ url('/historyqe') }}">
                     <i class="bi bi-clock-history navicon"></i>
                     History
                 </a>
             </li>
             @if ($usergroup != 5)
                 <li>
-                    <a href="{{ url('/approveqe') }}">
+                    <a id="approval" href="{{ url('/approveqe') }}">
                         <i class="bi bi-file-earmark-check navicon"></i>
                         Approval
                     </a>

@@ -78,6 +78,8 @@
     </script>
 
     <script type="text/javascript">
+        $("#approval").addClass("active");
+
         $(document).ready(function() {
 
             const tbList = new DataTable('#tbList', {

@@ -29,8 +29,8 @@
                     </div>
                 </div>
                 <br>
-                <div class="table-responsive-sm">
-                    <table id="tbList" class="table table-hover datatable">
+                <div class="col-sm-12">
+                    <table id="tbList" class="table table-responsive table-hover datatable">
                         <thead class="table-primary">
                             <tr>
                                 <th>No</th>
@@ -39,6 +39,7 @@
                                 <th>No QE</th>
                                 <th>Status</th>
                                 <th>Tanggal Permintaan</th>
+                                <th>No PO</th>
                                 <th>Detail</th>
                             </tr>
                         </thead>
@@ -51,6 +52,7 @@
                                     <td>{{ $dh->noqe }}</td>
                                     <td>{{ $dh->statusname }}</td>
                                     <td>{{ $dh->created_at }}</td>
+                                    <td>{{ $dh->pono }}</td>
                                     <td>
                                         <a href="{{ url("/detailqe/$dh->hdrid") }}" class="btn btn-sm btn-success">
                                             <i class="bi bi-search"></i>
@@ -82,6 +84,8 @@
     </script>
 
     <script type="text/javascript">
+        $("#history").addClass("active");
+
         $(document).ready(function() {
 
             const tbList = new DataTable('#tbList', {

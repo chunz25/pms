@@ -174,6 +174,8 @@
     </script>
 
     <script type="text/javascript">
+        $("#history").addClass("active");
+
         $(document).ready(function() {
 
             const tbhistory = new DataTable('#tbhistory', {

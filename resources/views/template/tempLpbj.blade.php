@@ -1,5 +1,5 @@
 @php
-    $approver = ['APPROVER 1 LPBJ', 'APPROVER 2 LPBJ'];
+    $approver = ['APPROVER 1 LPBJ', 'APPROVER 2 LPBJ', 'APPROVER 5 QE', 'APPROVER 6 QE'];
     $usergroup = session('groupname');
 @endphp
 
@@ -19,21 +19,21 @@
         <ul>
             @if (!in_array($usergroup, $approver))
                 <li>
-                    <a href="{{ url('/pengajuanlpbj') }}">
+                    <a id="pengajuan" href="{{ url('/pengajuanlpbj') }}">
                         <i class="bi bi-clipboard2-plus navicon"></i>
                         Pengajuan
                     </a>
                 </li>
             @endif
             <li>
-                <a href="{{ url('/historylpbj') }}">
+                <a id="history" href="{{ url('/historylpbj') }}">
                     <i class="bi bi-clock-history navicon"></i>
                     History
                 </a>
             </li>
             @if (in_array($usergroup, $approver) || $usergroup == 'ADMINISTRATOR')
                 <li>
-                    <a href="{{ url('/approvelpbj') }}">
+                    <a id="approval" href="{{ url('/approvelpbj') }}">
                         <i class="bi bi-file-earmark-check navicon"></i>
                         Approval
                     </a>

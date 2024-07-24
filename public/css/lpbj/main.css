@@ -291,7 +291,7 @@ h6 {
 .navmenu a .navicon,
 .navmenu a:focus .navicon {
   font-size: 20px;
-  margin-right: 10px;
+  margin-right: 5px;
 }
 
 .navmenu a .toggle-dropdown,

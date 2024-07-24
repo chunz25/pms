@@ -37,7 +37,7 @@ class c_login extends Controller
         $cekLogin = $this->users->getUser($data);
 
         if (count($cekLogin) > 0) {
-            $sess = $cekLogin[0];
+            $sess = end($cekLogin);
 
             session([
                 'iduser' => $sess->iduser,

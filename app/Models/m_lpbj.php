@@ -266,7 +266,9 @@ class m_lpbj extends Model
                 END workflow,
                 a.reason,
                 e.email AS emailpengaju,
-                c.nama AS namapengaju 
+                c.nama AS namapengaju ,
+                f.pono,
+                f.prno
             FROM m_lpbj_hdr a
                 LEFT JOIN m_lpbj_dtl b ON b.hdrid = a.id
                 LEFT JOIN m_pegawai c ON c.userid = a.userid
@@ -275,6 +277,7 @@ class m_lpbj extends Model
                 LEFT JOIN m_divisi c3 ON c3.id = c1.divisiid
                 LEFT JOIN m_status d ON d.id = a.status 
                 left join m_users e on e.id = c.userid
+                left join api_returnprpo f on f.lpbjid = a.id
             WHERE a.isdeleted = 0 
                 AND b.isdeleted = 0
                 AND c3.name = :divname
@@ -305,8 +308,12 @@ class m_lpbj extends Model
                 a.reason,
                 g.email AS emailpengaju,
                 c.nama AS namapengaju ,
-                i1.nama as approval1,
-                j1.nama as approval2
+                CASE WHEN a.status > 1 THEN i1.nama 
+                ELSE null 
+                END as approval1,
+                CASE WHEN a.status > 2 THEN j1.nama
+                ELSE null
+                END as approval2
             FROM m_lpbj_hdr a
                 LEFT JOIN m_lpbj_dtl b ON b.hdrid = a.id
                 LEFT JOIN m_pegawai c ON c.userid = a.userid

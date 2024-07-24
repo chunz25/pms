@@ -29,7 +29,7 @@
                     </div>
                 </div>
                 <br>
-                <div class="table-responsive-sm">
+                <div class="table-responsive col-sm-12">
                     <table id="tbList" class="table table-hover datatable">
                         <thead class="table-primary">
                             <tr>
@@ -80,6 +80,12 @@
     </script>
 
     <script type="text/javascript">
+        $("#approval").addClass("active");
+
+        @if (Session::has('pesan'))
+            alert("{{ Session::get('pesan') }}");
+        @endif
+        
         $(document).ready(function() {
 
             const tbList = new DataTable('#tbList', {

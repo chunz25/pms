@@ -61,9 +61,8 @@ class m_users extends Model
     public function getMenu($id)
     {
         $users = DB::select("
-            select 
+            select DISTINCT
                 a.id as userid ,
-                b.idgroup ,
                 c.id as menuid ,
                 a.username ,
                 c.`name` as menuname ,

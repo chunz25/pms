@@ -11,6 +11,8 @@
 
     <link href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" rel="stylesheet">
     <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.0/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"></script>
 
     <style>
         table {
@@ -69,7 +71,7 @@
                 </div>
 
                 {{-- FormPengajuan --}}
-                <form action="{{ url('/ajukanqe') }}" method="post">
+                <form onsubmit="return validasi()" action="{{ url('/ajukanqe') }}" method="post">
                     @csrf
                     @foreach ($iddtl as $c)
                         <input type="text" name="dtl[]" value="{{ $c }}" hidden>
@@ -136,7 +138,7 @@
 
                     <hr>
                     <div class="modal-footer">
-                        <a href="{{ url('/tambahqe') }}" class="btn btn-secondary mr-2">Kembali</a>
+                        <a href="javascript: window.history.back()" class="btn btn-secondary mr-2">Kembali</a>
                         @if ($dataDraft)
                             <button class="btn btn-primary" type="submit">Ajukan</button>
                         @endif
@@ -179,10 +181,30 @@
     <script src="{{ asset('vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('vendor/aos/aos.js') }}"></script>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous">
+    </script>
+
     <script type="text/javascript">
+        $("#pengajuan").addClass("active");
+
         @if (Session::has('pesan'))
             alert("{{ Session::get('pesan') }}");
         @endif
+
+        function validasi() {
+            let sumPilih = {{ $sumVendor }};
+
+            if (sumPilih > 1) {
+                alert('Vendor pilihan hanya bisa 1');
+                return false
+            } else if (sumPilih < 1) {
+                alert('Vendor pilihan harus ada');
+                return false
+            } else {
+                return true
+            }
+        }
     </script>
 
 </body>

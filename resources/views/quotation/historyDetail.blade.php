@@ -37,6 +37,11 @@
                                     <li><i class="bi bi-chevron-right"></i> <strong>Tanggal Permintaan :</strong>
                                         <span>{{ $dataHeader->created_at }}</span>
                                     </li>
+                                    @if ($dataHeader->reason != '')
+                                        <li><i class="bi bi-chevron-right"></i> <strong>Alasan Reject :</strong>
+                                            <span>{{ $dataHeader->reason }}</span>
+                                        </li>
+                                    @endif
                                     <a class="btn btn-outline-primary btn-sm"
                                         href="{{ url("/lihatqedoc/$dataHeader->hdrid") }}">
                                         <i class="bi bi-filetype-pdf"></i> Lihat Dokumen
@@ -113,6 +118,10 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous">
+    </script>
+
+    <script type="text/javascript">
+        $("#history").addClass("active");
     </script>
 
 </body>
