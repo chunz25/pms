@@ -22,8 +22,9 @@ class c_lpbj extends Controller
 
     public function tempSess($params)
     {
-        $data = explode('|', $params);
+        $data = explode(',|,', $params);
 
+        // dd($data);
         if (session()->exists('cc')) {
             session()->forget(['cc', 'jdl', 'note', 'doc']);
         }
@@ -34,6 +35,8 @@ class c_lpbj extends Controller
             'note' => $data[2],
             'doc' => $data[3]
         ]);
+
+        // dd(session()->all());
 
         return redirect('tambaharticle');
     }
@@ -71,6 +74,8 @@ class c_lpbj extends Controller
     public function tambahArticle()
     {
         $role = [1, 3, 4, 8, 12, 13, 14];
+
+        // dd(session()->all());
 
         if (!session('iduser')) {
             return redirect('login')->with('pesan', 'Session anda telah habis, silahkan login kembali.');
@@ -120,8 +125,8 @@ class c_lpbj extends Controller
         $data = [
             'userid' => $userid,
             'companycode' => $params->companyCode,
-            'description' => $params->descLPBJ,
-            'note' => $params->noteLPBJ,
+            'description' => htmlspecialchars($params->descLPBJ),
+            'note' => htmlspecialchars($params->noteLPBJ),
             'status' => $dokumen
         ];
 

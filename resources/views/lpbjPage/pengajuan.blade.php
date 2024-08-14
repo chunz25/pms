@@ -128,10 +128,10 @@
                                         <td>{{ $d->sitecode }}</td>
                                         <td>{{ $d->accassign }}</td>
                                         <td>{{ $d->keterangan }}</td>
-                                        <td style="width: 20%">
-                                            <a href="{{ url("/cekdraftlpbj/$d->id") }}"
+                                        <td style="width: 10%">
+                                            {{-- <a href="{{ url("/cekdraftlpbj/$d->id") }}"
                                                 class="btn btn-outline-success btn-sm">
-                                                <i class="bi bi-search"></i></a>
+                                                <i class="bi bi-search"></i></a> --}}
                                             <a href="{{ url("/deldraftlpbj/$d->id") }}"
                                                 class="btn btn-outline-danger btn-sm">
                                                 <i class="bi bi-trash"></i></a>
@@ -177,9 +177,20 @@
 
         $("#pengajuan").addClass("active");
 
+        let map = {
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&quot;',
+            "'": '&#039;'
+        };
         let sesscc = "{{ session('cc') }}";
-        let sessjdl = "{{ session('jdl') }}";
-        let sessnote = "{{ session('note') }}";
+        let xx = "{{ session('jdl') }}";
+        let sessjdl = xx.replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&quot;/g,
+            '"').replace(/&#039;/g, "'");
+        let x = "{{ session('note') }}";
+        let sessnote = x.replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&quot;/g,
+            '"').replace(/&#039;/g, "'");
         let sessdoc = "{{ session('doc') }}";
 
         document.getElementById(sesscc).selected = true;
@@ -192,7 +203,7 @@
             let jdl = document.querySelector("#descLPBJ").value;
             let note = document.querySelector("#noteLPBJ").value;
             let doc = document.querySelector("#pilihan").value;
-            let params = cc + "|" + jdl + "|" + note + "|" + doc;
+            let params = cc + ",|," + jdl + ",|," + note + ",|," + doc;
 
             if (doc == "") {
                 alert("Pilih Status Dokumen terlebih dahulu");
@@ -202,6 +213,7 @@
                 window.location.href = "{{ url('/tempsess') }}" + "/" + params;
             }
         }
+
     </script>
 
 </body>

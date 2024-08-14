@@ -1236,6 +1236,23 @@ section,
   background: #f3268c;
 }
 
+.services .service-item.item-grey {
+  border-bottom: 3px solid #a5a5a5;
+}
+
+.services .service-item.item-grey .icon {
+  color: #a5a5a5;
+  background: rgba(243, 38, 140, 0.1);
+}
+
+.services .service-item.item-grey .read-more {
+  color: #a5a5a5;
+}
+
+.services .service-item.item-grey:hover {
+  background: #d1d1d1;
+}
+
 .services .service-item:hover h3,
 .services .service-item:hover p,
 .services .service-item:hover .read-more {

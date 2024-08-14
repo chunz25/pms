@@ -33,6 +33,9 @@ Route::get('/', function () {
 
 route::get('login', [c_login::class, 'index'])->name('login.index');
 route::post('cekLogin', [c_login::class, 'cekLogin'])->name('login.cekLogin');
+route::get('cpassword', [c_login::class, 'gantiPass'])->name('login.gantiPass');
+route::post('cpass', [c_login::class, 'cPass'])->name('login.cPass');
+route::get('reset/{id}', [c_login::class, 'resetPass'])->name('login.resetPass');
 
 route::get('portal', [c_portal::class, 'index'])->name('portal.index');
 route::get('logout', [c_login::class, 'logout'])->name('login.logout');
@@ -42,7 +45,6 @@ route::get('tempsess/{p}', [c_lpbj::class, 'tempSess'])->name('lpbj.tempSess');
 route::get('pengajuanlpbj', [c_lpbj::class, 'index'])->name('lpbj.pengajuan');
 route::get('tambaharticle', [c_lpbj::class, 'tambahArticle'])->name('lpbj.tambaharticle');
 route::get('historylpbj', [c_lpbj::class, 'history'])->name('lpbj.history');
-// route::get('historydetaillpbj', [c_lpbj::class, 'historyDetail'])->name('lpbj.historyDetail');
 route::get('approvelpbj', [c_lpbj::class, 'approve'])->name('lpbj.approval');
 route::get('approvedetaillpbj', [c_lpbj::class, 'approveDetail'])->name('lpbj.approvalDetail');
 
@@ -89,6 +91,7 @@ Route::get('pdf/{id}', function ($id) {
 });
 
 route::get('tempdraft/{id}', [c_quotation::class, 'draftQe'])->name('quotation.draftQe');
+route::get('editqe/{id}', [c_quotation::class, 'editQe'])->name('quotation.editQe');
 route::get('editdraftqe/{id}', [c_quotation::class, 'draftQeEdit'])->name('quotation.draftQe');
 route::get('deletedraftqe/{id}', [c_quotation::class, 'draftQeDel'])->name('quotation.draftQe');
 route::get('lihatqedoc/{id}', [c_quotation::class, 'lihatQeDoc'])->name('quotation.lihatQeDoc');
@@ -119,12 +122,12 @@ route::get('kirimdata/{id}', [c_apisap::class, 'cekapi']);
 // });
 
 // route::get('email', function(){
-//     return view('mail.testemail');
+//     return view('mail.resetpass');
 // });
 
-// route::get('esign', function () {
-//     return view('_notUsed.esign');
-// });
+route::get('esign', function () {
+    return view('_notUsed.esign');
+});
 // route::get('cek', function () {
 //     return view('lpbjPage.lihatDoc');
 // });

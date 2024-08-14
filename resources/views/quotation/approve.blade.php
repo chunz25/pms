@@ -83,9 +83,19 @@
         $("#approval").addClass("active");
 
         @if (Session::has('pesan'))
-            alert("{{ Session::get('pesan') }}");
+            let map = {
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#039;'
+            };
+            let xx = "{{ Session::get('pesan') }}";
+            let pesan = xx.replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&quot;/g,
+                '"').replace(/&#039;/g, "'");
+            alert(pesan);
         @endif
-        
+
         $(document).ready(function() {
 
             const tbList = new DataTable('#tbList', {

@@ -97,11 +97,28 @@ class c_apisap extends Controller
     {
         // dd($id);
         $endpoint = 'http://10.140.3.6:8000/sap/ws/pms/prpo?sap-client=400';
-        $param1 = $this->db->param1($id)[0];
+        $param1 = $this->db->param1($id);
         $param2 = $this->db->param2($id);
+        $param3 = $this->db->getPR($id)->isNotEmpty();
         $preqitem = 10;
         $seq = 1;
         $asset = [];
+        $jsonid = '';
+
+        if (count($param1) == 0) {
+            return redirect('approveqe')->with('pesan', 'Nomor Quotation tidak dikenali sistem!');
+        } else {
+            $param1 = $param1[0];
+        }
+
+        if ($param3) {
+            $param3 = $this->db->getPR($id)->first()->prno;
+            $jsonid = $this->db->getPR($id)->first()->id;
+        } else {
+            $param3 = '';
+        }
+
+        // dd($param1);
 
         foreach ($param2 as $x) {
 
@@ -156,8 +173,6 @@ class c_apisap extends Controller
             $i++;
         }
 
-        // dd($txthdr);
-
         $data = [
             'doc_type' => 'ZG',
             'company_code' => $param1->company_code,
@@ -165,52 +180,72 @@ class c_apisap extends Controller
             'doc_date' => $param1->doc_date,
             'ref_1' => $param1->ref_1,
             'created_by' => $param1->created_by,
-            'text_header' => [
-                $txthdr
-            ],
+            'pr_number' => $param3,
+            'text_header' => $txthdr,
             'item' => $item,
         ];
 
         // dd($data);
 
+        // $response = Http::timeout(300)->withBasicAuth('defa', '123123123')->post($endpoint, $data);
         $response = Http::withBasicAuth('defa', '123123123')->post($endpoint, $data);
         // dd($response);
 
         $apiResponse = $response->json();
         // dd($apiResponse);
 
+        $msg1 = [];
+        $msg2 = [];
+
+        if ($apiResponse['returnpr'] != '') {
+            foreach ($apiResponse['returnpr'] as $x) {
+                $msg1[] = $x['message'];
+            }
+        }
+
+        if ($apiResponse['returnpo'] != '') {
+            foreach ($apiResponse['returnpo'] as $x) {
+                $msg2[] = $x['message'];
+            }
+        }
+
         // return response()->json($apiResponse)->content();
         // dd($apiResponse['returnpr'][0]['message']);
 
-        foreach ($apiResponse['returnpr'] as $x) {
-            $msg[] = $x['message'];
-        }
-
         // dd($msg);
-        $m = implode(" || ", $msg);
+        $m1 = implode(" || ", $msg1);
+        $m2 = implode(" || ", $msg2);
         $prno = $apiResponse['prno'];
         $pono = $apiResponse['pono'];
         $json = response()->json($apiResponse)->content();
         $data = [
-            'qeid' => $param1->ref_1,
-            'lpbjid' => $param1->ref_2,
             'prno' => $prno,
             'pono' => $pono,
+            'qeid' => $param1->qeid,
+            'lpbjid' => $param1->lpbjid,
             'json' => $json,
+            'param3' => $param3,
+            'id' => $jsonid
         ];
 
-        $insert = $this->db->insertjson($data);
-
-        if ($insert === 'S') {
-            $qeid = $param1->ref_1;
-            $lpbjid = $param1->ref_2;
-
-            $this->db->popr($qeid, $lpbjid);
-
-            return redirect('approveqe')->with('pesan', "Data berhasil Create PO dengan PO Number: $prno");
-        } else {
+        if ($pono == '') {
+            $insert = $this->db->insertjson($data);
             $this->db->statusQe($id);
-            return redirect('approveqe')->with('pesan', "Data gagal untuk dibuat PO dengan keterangan: $m");
+            return redirect('approveqe')->with('pesan', "Create PO gagal, silahkan ulangi kembali.");
+        } else {
+            $insert = $this->db->insertjson($data);
+
+            if ($insert == 'S') {
+                $qeid = $param1->qeid;
+                $lpbjid = $param1->lpbjid;
+
+                $this->db->popr($qeid, $lpbjid);
+
+                return redirect('approveqe')->with('pesan', "Data berhasil Create PO dengan PR Number: $prno & PO Number : $pono");
+            } else {
+                $this->db->statusQe($id);
+                return redirect('approveqe')->with('pesan', "error returnpr : $m1 , returnpo : $m2");
+            }
         }
     }
 }

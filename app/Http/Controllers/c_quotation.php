@@ -51,6 +51,9 @@ class c_quotation extends Controller
             'dataHistory' => $dataHistory
         ];
 
+        // dd($data);
+        // dd(session('iduser'));
+
         return view('quotation.history', $data);
     }
 
@@ -125,6 +128,33 @@ class c_quotation extends Controller
         return view('quotation.tambahQe', $data);
     }
 
+    // public function editQe($id)
+    // {
+    //     if (!session('iduser')) {
+    //         return redirect('login')->with('pesan', 'Session anda telah habis, silahkan login kembali.');
+    //     }
+
+    //     $idDraft = $this->db->idDraft($id);
+
+    //     if ($idDraft) {
+    //         $draft = [];
+
+    //         foreach ($idDraft as $a) {
+    //             array_push($draft, $a->dtlid);
+    //         }
+
+    //         $x = implode(',', $draft);
+
+    //         session([
+    //             'sts' => 0
+    //         ]);
+
+    //         return redirect("tempdraft/$x");
+    //     } else {
+    //         return redirect('historyqe')->with('pesan', 'Gagal ambil data, silahkan ulangi kembali');
+    //     }
+    // }
+
     public function draftQe($id)
     {
         if (!session('iduser')) {
@@ -137,9 +167,12 @@ class c_quotation extends Controller
             $dataLpbj[] = $this->db->getLpbjDtl($j)[0];
         }
 
+        // dd($dataLpbj);
         $hdrid = $dataLpbj[0]->hdrid;
         $dataVendor = $this->db->getVDraft($dataLpbj[0]->dtlid);
         $dataLpbj = $this->db->getLpbj($hdrid)[0];
+
+        // dd($dataLpbj);
 
         $dataDraft = null;
         foreach ($data as $a) {
@@ -150,8 +183,16 @@ class c_quotation extends Controller
                 for ($i = 0; $i < count($cekData); $i++) {
                     $dataDraft[] = $this->db->getDraft($a)[$i];
                 }
+
+                // if ($dataDraft[0]->statusdoc == 1) {
+                //     session([
+                //         'sts' => 0
+                //     ]);
+                // }
             }
         }
+
+        // dd($dataDraft);
 
         $ispilih = null;
         if ($dataDraft) {
@@ -162,7 +203,7 @@ class c_quotation extends Controller
             $ispilih = array_sum($ispilih);
         }
 
-        $data = [
+        $data1 = [
             'title' => 'Quotation',
             'getLpbj' => $dataLpbj,
             'dataDtl' => $dataDtl,
@@ -172,9 +213,7 @@ class c_quotation extends Controller
             'sumVendor' => $ispilih
         ];
 
-        // dd($data);
-
-        return view('quotation.draftQe', $data);
+        return view('quotation.draftQe', $data1);
     }
 
     public function draftQeEdit($id)
@@ -304,7 +343,7 @@ class c_quotation extends Controller
 
         foreach ($id as $a) {
             $dataDtl[] = $this->db->getLpbjDtl($a)[0];
-            $dataPilih[] = $this->db->getpilih($a)[0];
+            // $dataPilih[] = $this->db->getpilih($a);
         }
         // dd($dataPilih);
 
@@ -377,16 +416,60 @@ class c_quotation extends Controller
 
     public function ajukanQe(Request $params)
     {
-        // dd($params);
         $dtlid = $params->dtl;
-        $this->db->ajukanQe($dtlid[0]);
+        $stat = $params->statusdoc;
 
-        foreach ($dtlid as $i) {
-            $this->db->ajukanQeDetail($i);
-            $this->db->updateQe($i);
+        // dd($params);
+        // dd(session()->all());
+        if ($stat === 0) {
+            // dd('kesini');
+            $d = $this->db->updateQeRev($dtlid[0]);
+            // dd($d[0]->hdrid);
+            $databody = $this->db->getHistoryHeader($d[0]->hdrid);
+            $emailapprove = session('emailapprove');
+            $emailpengaju = $databody[0]->emailpengaju;
+
+            $details = [
+                'subject' => 'Pengajuan Baru QE Revisi',
+                'dataBody' => $databody,
+                'aksi' => 'SubmitQE',
+            ];
+
+            // dd($details);
+
+            Mail::to($emailapprove)
+                ->to($emailpengaju)
+                ->send(new mailPMS($details));
+
+            // session()->forget(['sts']);
+            return redirect('historyqe');
+        } else {
+            // dd('kesono');
+            $ajukan = $this->db->ajukanQe($dtlid[0]);
+
+            foreach ($dtlid as $i) {
+                $this->db->ajukanQeDetail($i);
+                $this->db->updateQe($i);
+            }
+
+            $databody = $this->db->getHistoryHeader($ajukan);
+            $emailapprove = session('emailapprove');
+            $emailpengaju = $databody[0]->emailpengaju;
+
+            $details = [
+                'subject' => 'Pengajuan Baru QE',
+                'dataBody' => $databody,
+                'aksi' => 'SubmitQE',
+            ];
+
+            // dd($details);
+
+            Mail::to($emailapprove)
+                ->to($emailpengaju)
+                ->send(new mailPMS($details));
+
+            return redirect('historyqe');
         }
-
-        return redirect('historyqe');
     }
 
     public function approveQe()
@@ -395,33 +478,33 @@ class c_quotation extends Controller
             return redirect('login')->with('pesan', 'Session anda telah habis, silahkan login kembali.');
         }
 
-        $status = 1;
+        $status = [1];
+        if (session('idgroup') == 1) {
+            $status = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+        }
         if (session('idgroup') == 10) {
-            $status = 2;
+            $status = [2];
         }
-        if (session('idgroup') == 11) {
-            $status = 3;
+        if (session('idgroup') == 11) { // Parameter dengan userid karena hanya beliau BOD Procurement
+            $status = [3];
         }
-        if (session('idgroup') == 12 || session('idgroup') == 4) {
-            $status = 4;
+        if (in_array(session('idgroup'), [4, 12])) {
+            $status = [4];
         }
-        if (session('idgroup') == 13 || session('idgroup') == 3) {
-            $status = 5;
+        if (in_array(session('idgroup'), [3, 13])) {
+            $status = [5];
         }
-        if (session('idgroup') == 14 || session('idgroup') == 8) {
-            $status = 6;
+        if (in_array(session('idgroup'), [8, 14])) {
+            $status = [6];
         }
-        if (session('idgroup') == 15) {
-            $status = 7;
+        if (in_array(session('idgroup'), [15, 18])) { // Group ID untuk BOD
+            $status = [7, 10];
         }
         if (session('idgroup') == 16) {
-            $status = 8;
+            $status = [8];
         }
         if (session('idgroup') == 17) {
-            $status = 9;
-        }
-        if (session('idgroup') == 18 || session('idgroup') == 15) {
-            $status = 10;
+            $status = [9];
         }
 
         $dataApprove = $this->db->getApprove($status);
@@ -461,6 +544,8 @@ class c_quotation extends Controller
             'dataVendorDtl' => $dataVendorDtl
         ];
 
+        // dd($data);
+
         return view('quotation/approveDetail', $data);
     }
 
@@ -475,6 +560,19 @@ class c_quotation extends Controller
             if ($status == 10) {
                 return redirect("kirimdata/$id");
             } else {
+                $databody = $this->db->getHistoryHeader($id);
+                $emailapprove = session('emailapprove');
+                $emailpengaju = $databody[0]->emailpengaju;
+
+                $details = [
+                    'subject' => 'Approve QE',
+                    'dataBody' => $databody,
+                    'aksi' => 'ApproveQE',
+                ];
+
+                Mail::to($emailapprove)
+                    ->to($emailpengaju)
+                    ->send(new mailPMS($details));
                 return redirect('approveqe')->with('pesan', 'Berhasil Approve Quotation.');
             }
         } else {
@@ -555,25 +653,26 @@ class c_quotation extends Controller
 
         $reject = $this->db->rejectQe($hdrid, $status, $reason);
 
-        // if ($reject) {
-        //     $databody = $this->db->getHistoryHeader($hdrid);
-        //     $emailapprove = session('emailapprove');
-        //     $emailpengaju = $databody[0]->emailpengaju;
+        if ($reject) {
+            $databody = $this->db->getHistoryHeader($hdrid);
+            $emailapprove = session('emailapprove');
+            $emailpengaju = $databody[0]->emailpengaju;
 
-        //     $details = [
-        //         'subject' => 'Reject QE',
-        //         'dataBody' => $databody,
-        //         'aksi' => 'RejectQe',
-        //     ];
+            $details = [
+                'subject' => 'Reject QE',
+                'dataBody' => $databody,
+                'aksi' => 'RejectQE',
+            ];
 
-        //     Mail::to($emailapprove)
-        //         ->to($emailpengaju)
-        //         ->send(new mailPMS($details));
+            Mail::to($emailapprove)
+                ->to($emailpengaju)
+                ->send(new mailPMS($details));
 
-        //     return redirect('approveqe')->with('pesan', 'Sukses Reject QE');
-        // } else {
-        //     return redirect('approveqe')->with('pesan', 'Gagal Reject QE');
-        // }
+            return redirect('approveqe')->with('pesan', 'Sukses Reject QE');
+        } else {
+            return redirect('approveqe')->with('pesan', 'Gagal Reject QE');
+        }
+
         return redirect('approveqe')->with('pesan', 'Sukses Reject QE');
     }
 }

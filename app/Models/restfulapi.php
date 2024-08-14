@@ -17,9 +17,11 @@ class restfulapi extends Model
                 d.companycode as company_code ,
                 c.vendorcode as vendor ,
                 DATE_FORMAT(a.modified_at,'%Y-%m-%d') as doc_date ,
-                a.id as ref_1 ,
-                d.id as ref_2 ,
-                g.username as created_by,
+                a.noqe as ref_1 ,
+                d.nolpbj as ref_2 ,
+                a.id qeid ,
+                d.id lpbjid ,
+                g.usersap as created_by,
                 d.description ,
                 d.note
             FROM m_qe_hdr a
@@ -39,6 +41,7 @@ class restfulapi extends Model
 
         return $data;
     }
+
     public function param2($id)
     {
         $data = DB::select(
@@ -46,7 +49,7 @@ class restfulapi extends Model
             SELECT DISTINCT
                 0 as preq_item,
                 'G01' as pur_group,
-                g1.username as preq_name,
+                g1.usersap as preq_name,
                 e.remark as short_text,
                 e.articlecode as material,
                 e.sitecode as plant,
@@ -60,7 +63,7 @@ class restfulapi extends Model
                 e.costcenter as costcenter,
                 e.`order` as orderid,
                 c.taxcode as tax_code,
-                d.id as trackingno,
+                d.nolpbj as trackingno,
                 '01' as assetseq,
                 e.asset as assetno,
                 1 as assetqty,
@@ -84,10 +87,69 @@ class restfulapi extends Model
         return $data;
     }
 
+    public function getPR($qeid)
+    {
+        $getPR  = DB::table('api_returnprpo')
+            ->select('id', 'prno')
+            ->where([
+                'qeid' => $qeid,
+                'isdeleted' => 0,
+                'pono' => '',
+            ])->get();
+
+        return $getPR;
+    }
+
     public function insertJson($param)
     {
+        $xx = DB::table('api_returnprpo')
+            ->select('id')
+            ->where([
+                'lpbjid' => $param['lpbjid'],
+                'qeid' => $param['qeid']
+            ])
+            ->get();
+
+        // dd($xx);
+        if (count($xx) > 0) {
+            foreach ($xx as $x) {
+                DB::table('api_returnprpo')
+                    ->where('id', $x->id)
+                    ->update([
+                        'modified_by' => session('iduser'),
+                        'isdeleted' => 1,
+                    ]);
+            }
+        }
+
         if ($param['prno'] == '') {
-            return "E";
+            DB::table('api_returnprpo')
+                ->insert([
+                    'prno' => $param['prno'],
+                    'pono' => $param['pono'],
+                    'lpbjid' => $param['lpbjid'],
+                    'qeid' => $param['qeid'],
+                    'json' => $param['json'],
+                    'created_by' => session('iduser'),
+                ]);
+            return false;
+        } else if ($param['param3'] != '') {
+            DB::table('api_returnprpo')
+                ->where('id', $param['id'])
+                ->update([
+                    'modified_by' => session('iduser'),
+                    'isdeleted' => 1,
+                ]);
+            DB::table('api_returnprpo')
+                ->insert([
+                    'prno' => $param['prno'],
+                    'pono' => $param['pono'],
+                    'lpbjid' => $param['lpbjid'],
+                    'qeid' => $param['qeid'],
+                    'json' => $param['json'],
+                    'created_by' => session('iduser'),
+                ]);
+            return true;
         } else {
             DB::table('api_returnprpo')
                 ->insert([
@@ -98,7 +160,7 @@ class restfulapi extends Model
                     'json' => $param['json'],
                     'created_by' => session('iduser'),
                 ]);
-            return "S";
+            return true;
         }
     }
 
@@ -121,7 +183,7 @@ class restfulapi extends Model
                     'approve_by' => session('iduser'),
                     'approve_at' => $date,
                     'modified_by' => session('iduser'),
-                    'workflow' => 'Approved_by_' . session('name')
+                    'workflow' => 'Gagal_Create_PO'
                 ]);
         }
 

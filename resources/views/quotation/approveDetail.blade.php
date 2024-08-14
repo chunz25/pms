@@ -62,13 +62,14 @@
                     <div class="col-sm-12 align-middle mb-2">
                         <span><strong>{{ $vendor->vendorname }}</strong></span>
                         @if ($vendor->pilih == 1)
-                            <strong class="text-primary">Vendor Pilihan User</strong>
+                            <strong class="text-primary">Vendor Pilihan</strong>
                         @endif
                     </div>
                     <table class="table-responsive-sm table-hover table-bordered col-sm-12 mb-4">
                         <thead class="table-secondary text-center">
                             <tr>
                                 <th>Article</th>
+                                <th>Article Remark</th>
                                 <th>Qty</th>
                                 <th>Satuan</th>
                                 <th>Total</th>
@@ -81,6 +82,7 @@
                             @foreach ($dataVendorDtl[$i] as $d)
                                 <tr>
                                     <td>{{ $d->articlecode }}</td>
+                                    <td>{{ $d->remark }}</td>
                                     <td class="text-right">{{ $d->qty }}</td>
                                     <td class="text-right">{{ $d->satuan }}</td>
                                     <td class="text-right">{{ $d->total }}</td>
@@ -120,12 +122,12 @@
                     @csrf
                     <div class="modal-body text-center">
                         <input name="hdrid" type="text" value="{{ $dataHeader->hdrid }}" hidden>
-                        <input name="status" type="text" value="12" hidden>
-                        {{-- <select name="status" class="form-control mb-2" required>
+                        {{-- <input name="status" type="text" value="12" hidden> --}}
+                        <select name="status" class="form-control mb-2" required>
                             <option value="" hidden disabled selected>Pilih Alasan Reject...</option>
                             <option value="0">Reject for Revision</option>
                             <option value="12">Reject Document</option>
-                        </select> --}}
+                        </select>
                         <textarea name="reason" cols="60" rows="5" required></textarea>
                     </div>
                     <div class="modal-footer">
@@ -152,7 +154,7 @@
     </script>
 
     <script type="text/javascript">
-        $("#history").addClass("active");
+        $("#approval").addClass("active");
     </script>
 
 </body>

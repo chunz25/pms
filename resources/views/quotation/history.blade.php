@@ -1,3 +1,7 @@
+@php
+    $user = [session('iduser')];
+@endphp
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -50,13 +54,15 @@
                                     <td>{{ $dh->nolpbj }}</td>
                                     <td>{{ $dh->description }}</td>
                                     <td>{{ $dh->noqe }}</td>
-                                    <td>{{ $dh->statusname }}</td>
+                                    <td>{{ $dh->workflow }}</td>
                                     <td>{{ $dh->created_at }}</td>
                                     <td>{{ $dh->pono }}</td>
-                                    <td>
-                                        <a href="{{ url("/detailqe/$dh->hdrid") }}" class="btn btn-sm btn-success">
-                                            <i class="bi bi-search"></i>
-                                        </a>
+                                    <td style="width: 20%"><a href="{{ url("/detailqe/$dh->hdrid") }}"
+                                            class="btn btn-sm btn-success"><i class="bi bi-search"></i></a>
+                                        {{-- @if ($dh->status == 'Draft' && in_array($dh->userid, $user))
+                                            <a href="{{ url("/editqe/$dh->hdrid") }}" class="btn btn-sm btn-primary"><i
+                                                    class="bi bi-pencil"></i></a>
+                                        @endif --}}
                                     </td>
                                 </tr>
                             @endforeach

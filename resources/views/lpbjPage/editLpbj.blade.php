@@ -156,9 +156,23 @@
     <script type="text/javascript">
         $("#history").addClass("active");
 
-        let sessjdl = "{{ session('jdl') }}";
-        let sessnote = "{{ session('note') }}";
+        let map = {
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&quot;',
+            "'": '&#039;'
+        };
+
+        let xx = "{{ session('jdl') }}";
+        let sessjdl = xx.replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&quot;/g,
+            '"').replace(/&#039;/g, "'");
+        let x = "{{ session('note') }}";
+        let sessnote = x.replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&quot;/g,
+            '"').replace(/&#039;/g, "'");
+
         let sessdoc = "{{ session('doc') }}";
+        let sesscc = "{{ session('cc') }}";
 
         document.getElementById('descLPBJ').value = sessjdl;
         document.getElementById('noteLPBJ').value = sessnote;

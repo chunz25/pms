@@ -8,7 +8,7 @@
     <title>Tambah Article {{ $title }}</title>
 
     @include('template.style')
-    
+
     <link href="{{ asset('css/lpbj/articleSearch.css') }}" rel="stylesheet">
 
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -78,8 +78,8 @@
                             @if ($getDraft)
                                 <input class="form-control" type="number" value="{{ $getDraft->qty }}" readonly>
                             @else
-                                <input class="form-control" type="number" name="qtyLPBJ" placeholder="Qty"
-                                    autocomplete="off" min="1" required>
+                                <input class="form-control" type="number" name="qtyLPBJ" id="qtyLPBJ"
+                                    placeholder="Qty" autocomplete="off" min="1" required>
                             @endif
                             <br>
                         </div>
@@ -210,7 +210,8 @@
                     <div class="modal-footer">
                         <a href="{{ url('/pengajuanlpbj') }}" class="btn btn-secondary mr-2">Kembali</a>
                         @if (!$getDraft)
-                            <button type="submit" class="btn btn-primary">Simpan</button>
+                            <button type="submit" onclick="return validasiAsset();"
+                                class="btn btn-primary">Simpan</button>
                         @endif
                     </div>
                 </form>
@@ -692,6 +693,18 @@
             } else if (a.files[0].size > limit) {
                 a.value = null;
                 alert('Maximum ukuran file 1,5Mb');
+            }
+        }
+
+        function validasiAsset() {
+            let a = document.querySelector("#accLPBJ").value;
+            let q = document.querySelector("#qtyLPBJ").value;
+
+            if (a == 'A' && q > 1) {
+                alert('Jika pilih Asset, pastikan Qty hanya 1');
+                return false;
+            } else {
+                return true;
             }
         }
     </script>

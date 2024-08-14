@@ -14,7 +14,6 @@ class c_portal extends Controller
     }
 
     public function index()
-
     {
         if (!session('iduser')) {
             return redirect('login')->with('pesan', 'Session anda telah habis, silahkan login kembali.');

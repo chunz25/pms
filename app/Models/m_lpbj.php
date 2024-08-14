@@ -126,7 +126,7 @@ class m_lpbj extends Model
         $data = DB::table('api_asset')
             ->select('*')
             ->where('companycode', session('cc'))
-            ->where('change_date', '>=', '2024-01-01')
+            ->where('create_date', '>=', '2024-01-01')
             ->get();
 
         return $data;
@@ -149,7 +149,6 @@ class m_lpbj extends Model
             'asset' => $params['asset'],
             'keterangan' => $params['ket'],
             'gambar' => $params['pic'],
-            'created_at' => $date,
             'created_by' => $params['userid'],
         ]);
 
@@ -229,13 +228,18 @@ class m_lpbj extends Model
     public function editHdr($params)
     {
         // dd($params);
+        $doc = 'Draft';
+        if ($params['status'] == '1') {
+            $doc = 'Pengajuan_LPBJ_Revisi_by_' . session('name');
+        }
+
         $data = DB::table('m_lpbj_hdr')
             ->where('id', $params['hdrid'])
             ->update([
                 'status' => $params['status'],
                 'description' => $params['description'],
                 'note' => $params['note'],
-                'workflow' => 'Pengajuan_LPBJ_Revisi_by_' . session('name'),
+                'workflow' => $doc,
                 'reason' => null,
                 'modified_by' => session('iduser')
             ]);
@@ -261,7 +265,7 @@ class m_lpbj extends Model
                 a.note,
                 a.isqe,
                 CASE WHEN a.workflow IS NULL THEN d.name 
-                    WHEN a.status = 0 THEN d.name
+                    -- WHEN a.status = 0 THEN d.name
                     ELSE REPLACE ( a.workflow, '_', ' ' ) 
                 END workflow,
                 a.reason,
@@ -277,7 +281,7 @@ class m_lpbj extends Model
                 LEFT JOIN m_divisi c3 ON c3.id = c1.divisiid
                 LEFT JOIN m_status d ON d.id = a.status 
                 left join m_users e on e.id = c.userid
-                left join api_returnprpo f on f.lpbjid = a.id
+                left join api_returnprpo f on f.lpbjid = a.id AND f.isdeleted = 0
             WHERE a.isdeleted = 0 
                 AND b.isdeleted = 0
                 AND c3.name = :divname
@@ -521,7 +525,6 @@ class m_lpbj extends Model
             'asset' => $params['asset'],
             'keterangan' => $params['ket'],
             'gambar' => $params['pic'],
-            'created_at' => $date,
             'created_by' => $params['userid'],
         ]);
 
@@ -530,7 +533,6 @@ class m_lpbj extends Model
 
     public function rejectLpbj($id, $status, $reason)
     {
-        // dd($status);
         $data = DB::table('m_lpbj_hdr')
             ->where('id', $id)
             ->update([
@@ -539,6 +541,17 @@ class m_lpbj extends Model
                 'workflow' => 'Reject_by_' . session('name'),
                 'modified_by' => session('iduser')
             ]);
+
+        if ($status == 0) {
+            $nolpbj = DB::table('m_lpbj_hdr')->select('nolpbj')->where('id', $id)->get();
+            // dd($nolpbj[0]->nolpbj);
+            $data = DB::table('m_rejection')->insert([
+                'nolpbj' => $nolpbj[0]->nolpbj,
+                'statusname' => 'Reject_by_' . session('name'),
+                'reason' => $reason,
+                'created_by' => session('iduser'),
+            ]);
+        }
 
         return $data;
     }

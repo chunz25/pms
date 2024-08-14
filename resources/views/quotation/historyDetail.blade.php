@@ -64,7 +64,7 @@
                     <div class="col-sm-12 align-middle mb-2">
                         <span><strong>{{ $vendor->vendorname }}</strong></span>
                         @if ($vendor->pilih == 1)
-                            <strong class="text-primary">Vendor Pilihan User</strong>
+                            <strong class="text-primary">Vendor Pilihan</strong>
                         @endif
                         <a href="{{ url("/subdetailqe/$vendor->hdrid,$vendor->vendorcode") }}"
                             class="btn btn-outline-secondary btn-sm">
@@ -75,6 +75,7 @@
                         <thead class="table-secondary text-center">
                             <tr>
                                 <th>Article</th>
+                                <th>Article Remark</th>
                                 <th>Satuan</th>
                                 <th>Total</th>
                                 <th>Tax</th>
@@ -86,6 +87,7 @@
                             @foreach ($dataVendorDtl[$i] as $d)
                                 <tr>
                                     <td>{{ $d->articlecode }}</td>
+                                    <td>{{ $d->remark }}</td>
                                     <td class="text-right">{{ $d->satuan }}</td>
                                     <td class="text-right">{{ $d->total }}</td>
                                     <td class="text-right">{{ $d->tax }}</td>

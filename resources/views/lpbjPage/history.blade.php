@@ -1,5 +1,5 @@
 @php
-    $user = [session('iduser'), 1];
+    $user = [session('iduser')];
 @endphp
 
 <!DOCTYPE html>

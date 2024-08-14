@@ -77,6 +77,7 @@
                         <input type="text" name="dtl[]" value="{{ $c }}" hidden>
                     @endforeach
                     @if ($dataDraft)
+                        <input type="text" name="statusdoc" value="{{ $dataDraft[0]->statusdoc }}" hidden>
                         @foreach ($dataVendor as $v)
                             <div class="row mb-2">
                                 <div class="col-sm-10">
@@ -107,6 +108,7 @@
                                     <tr>
                                         <th>No</th>
                                         <th>Article</th>
+                                        <th>Article Remark</th>
                                         <th>Qty</th>
                                         <th>Harga Satuan</th>
                                         <th>Harga Total</th>
@@ -121,6 +123,7 @@
                                             <tr>
                                                 <td></td>
                                                 <td>{{ $d->articlecode }}</td>
+                                                <td>{{ $d->remark }}</td>
                                                 <td>{{ $d->qty }}</td>
                                                 <td>{{ $d->satuan }}</td>
                                                 <td>{{ $d->total }}</td>

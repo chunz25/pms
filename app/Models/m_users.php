@@ -20,7 +20,6 @@ class m_users extends Model
                 d.id AS idpegawai,
                 a.username,
                 a.password,
-                md5( 'chunz' ) AS password2,
                 d.nama AS name,
                 a.isaktif AS isaktif,
                 c.usergroupname AS usergroupname,
@@ -28,7 +27,8 @@ class m_users extends Model
                 e2.name AS divname,
                 e3.name as dirname,
                 a.email,
-                g.email AS emailapprove 
+                g.email AS emailapprove,
+                a.isreset 
             FROM m_users a
                 LEFT JOIN m_usergroup b ON b.iduser = a.id
                 LEFT JOIN m_group c ON c.id = b.idgroup
@@ -56,6 +56,33 @@ class m_users extends Model
         );
 
         return $users;
+    }
+
+    public function cekUser($username)
+    {
+        $user = DB::table('m_users')
+            ->select('username', 'password', 'email')
+            ->where('username', $username)
+            ->get();
+
+        return $user;
+    }
+
+    public function updPass($data)
+    {
+        $user = $data['user'];
+        $new = $data['new'];
+        $isreset = $data['isreset'];
+
+        $uPass = DB::table('m_users')
+            ->where('username', $user)
+            ->update([
+                'password' => $new,
+                'isreset' => $isreset,
+                'modified_by' => session('iduser')
+            ]);
+
+        return $uPass;
     }
 
     public function getMenu($id)

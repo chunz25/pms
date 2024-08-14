@@ -190,7 +190,7 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">List Vendor</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">List Pajak</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -254,7 +254,7 @@
                                     <td>{{ $v->name }}</td>
                                     <td class="text-center" style="width: 20%">
                                         <button type="button"
-                                            onclick="addVendor('{{ $v->supplierCode }}','{{ $v->name }}')"
+                                            onclick="addVendor('{{ $v->supplierCode }}','{{ $v->name }}','{{ $v->paymentTerm }}')"
                                             class="btn btn-outline-success btn-sm" data-bs-dismiss="modal">
                                             Pilih Vendor
                                         </button>
@@ -363,9 +363,10 @@
 
         });
 
-        function addVendor(c, n) {
+        function addVendor(c, n, t) {
             $('#vendorcode').val(c);
             $('#vendorname').val(n);
+            $('#top').val(t);
         }
 
         function addTax(c, n) {

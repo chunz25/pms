@@ -164,7 +164,7 @@
                 @endforeach
             </tr>
             <tr>
-                <th class="merged-cell" colspan="10">PPN 11%</th>
+                <th class="merged-cell" colspan="10">PPN</th>
                 @foreach ($dataVendorHdr as $x)
                     <td style="text-align: center" colspan="3">{{ $x->ppn }}</td>
                 @endforeach
@@ -213,7 +213,7 @@
                 @endforeach
             </tr>
             <tr>
-                <th class="merged-cell" colspan="10">Vendor yang dipilih oleh User</th>
+                <th class="merged-cell" colspan="10">Vendor Terpilih</th>
                 @foreach ($dataVendorHdr as $x)
                     <td style="text-align: center" colspan="3"><strong>{{ $x->ispilih }}</strong></td>
                 @endforeach
@@ -248,7 +248,7 @@
         </thead>
         <thead>
             <tr>
-                <th>{{ $dataHeader->namacreated }}</th>
+                <th>{{ $dataHeader->namacreated1 }}</th>
                 <th>{{ $lacak->approval1 }}</th>
                 <th>{{ $lacak->approval2 }}</th>
                 <th>{{ $lacak->approval3 }}</th>

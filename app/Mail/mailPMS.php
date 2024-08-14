@@ -38,16 +38,44 @@ class mailPMS extends Mailable
             'dataBody' => $this->data['dataBody']
         ];
 
+        // dd($aksi);
+
         if ($aksi == 'SubmitLPBJ') {
             return $this->subject($subject)
                 ->view('mail.lpbj', $body);
-        } else if ($aksi == 'ApproveLPBJ') {
+        }
+
+        if ($aksi == 'ApproveLPBJ') {
             return $this->subject($subject)
                 ->view('mail.applpbj', $body);
-        } else if ($aksi == 'RejectLPBJ') {
+        }
+
+        if ($aksi == 'RejectLPBJ') {
             return $this->subject($subject)
                 ->view('mail.rjklpbj', $body);
-        } else if ($aksi == 'TestEmail') {
+        }
+
+        if ($aksi == 'SubmitQE') {
+            return $this->subject($subject)
+                ->view('mail.pengajuanqe', $body);
+        }
+
+        if ($aksi == 'ApproveQE') {
+            return $this->subject($subject)
+                ->view('mail.appqe', $body);
+        }
+
+        if ($aksi == 'RejectQE') {
+            return $this->subject($subject)
+                ->view('mail.rjkqe', $body);
+        }
+
+        if ($aksi == 'ResetPass') {
+            return $this->subject($subject)
+                ->view('mail.resetpass', $body);
+        }
+
+        if ($aksi == 'TestEmail') {
             return $this->subject($subject)
                 ->view('mail.testemail');
         }
