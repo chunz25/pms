@@ -340,7 +340,7 @@ class m_lpbj extends Model
 
     public function getApprove($status)
     {
-        $depname = session('depname');
+        $divname = session('divname');
         $a = session('idgroup');
         $data = DB::select(
             "
@@ -375,7 +375,7 @@ class m_lpbj extends Model
             WHERE a.isdeleted = 0 
                 AND b.isdeleted = 0
             AND CASE WHEN :a = 1 THEN f.name LIKE '%'
-            ELSE f.name = :depname
+            ELSE h.name = :divname
             END
             AND CASE WHEN :a1 = 1 THEN a.status < 3
             ELSE a.status = :status
@@ -383,7 +383,7 @@ class m_lpbj extends Model
             [
                 'a' => $a,
                 'a1' => $a,
-                'depname' => $depname,
+                'divname' => $divname,
                 'status' => $status
             ]
         );

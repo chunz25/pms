@@ -249,7 +249,7 @@
                                     <td style="width: 10%">{{ $article->uom }}</td>
                                     <td class="text-center" style="width: 20%">
                                         <button type="button"
-                                            onclick="addArticle('{{ $article->productcode }}','{{ $article->productname }}','{{ $article->uom }}')"
+                                            onclick="addArticle(`{{ $article->productcode }}`,`{{ $article->productname }}`,`{{ $article->uom }}`)"
                                             class="btn btn-outline-success btn-sm" data-bs-dismiss="modal">
                                             Pilih Article
                                         </button>
