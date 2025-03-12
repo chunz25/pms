@@ -18,9 +18,12 @@
 
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     <link href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" rel="stylesheet">
     <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
 =======
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
     {{-- <link href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" rel="stylesheet">
@@ -112,8 +115,11 @@
                 {{-- FormPengajuan --}}
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
                 <form action="ajukanqe" method="post">
 =======
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
                 <form onsubmit="return validasi()" action="{{ url('/ajukanqe') }}" method="post"
@@ -126,7 +132,10 @@
                     @if ($dataDraft)
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 =======
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
                         <div class="row mb-2">
@@ -135,7 +144,10 @@
                                 <input class="form-control" type="file" accept="application/pdf"
                                     onchange="validate(this.value);" id="attach" name="attach" required>
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 =======
+=======
+>>>>>>> Stashed changes
                             </div>
                         </div>
                         <input type="text" name="statusdoc" id="statusdoc" value="{{ $dataDraft[0]->statusdoc }}"
@@ -256,6 +268,7 @@
 
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     <footer id="footer" class="footer position-relative light-background">
 
         <div class="container">
@@ -289,6 +302,8 @@
     <script src="vendor/isotope-layout/isotope.pkgd.min.js"></script>
     <script src="vendor/swiper/swiper-bundle.min.js"></script>
 =======
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
     {{-- ModalTambahAttach --}}

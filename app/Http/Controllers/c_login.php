@@ -12,6 +12,9 @@ use App\Mail\mailPMS;
 use Exception;
 use Illuminate\Support\Facades\Log;
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
@@ -52,6 +55,7 @@ class c_login extends Controller
 
             $cekLogin = $this->users->getUser($data);
 
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
         if (count($cekLogin) > 0) {
@@ -108,6 +112,11 @@ class c_login extends Controller
             if (count($cekLogin) > 0) {
                 $sess = end($cekLogin);
 
+=======
+            if (count($cekLogin) > 0) {
+                $sess = end($cekLogin);
+
+>>>>>>> Stashed changes
                 session([
                     'iduser' => $sess->iduser,
                     'username' => $sess->username,

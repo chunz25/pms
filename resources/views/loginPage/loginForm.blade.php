@@ -42,11 +42,14 @@
 
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
                         {{-- <span class="text-danger">{{ $pesan }}</span> --}}
                         @if (Session::has('pesan'))
                             <p class="text-danger">
                                 {{ Session::get('pesan') }}</p>
 =======
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
                         <!-- Error display -->
@@ -55,6 +58,9 @@
                                 {{ $errors->first() }}
                             </div>
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
@@ -110,7 +116,10 @@
     </section>
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 =======
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 

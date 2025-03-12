@@ -13,11 +13,14 @@ class m_lpbj extends Model
     {
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         $data = DB::table('vw_getpegawai')
             ->select('*')
             ->where('userid', '=', $userid)
             ->get();
 =======
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
         try {
@@ -49,6 +52,9 @@ class m_lpbj extends Model
                 ->distinct()
                 ->get();
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
@@ -98,6 +104,9 @@ class m_lpbj extends Model
                 ->where('a.userid', $userid)
                 ->get();
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
@@ -136,6 +145,7 @@ class m_lpbj extends Model
     {
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         $data = DB::table('api_gl')
             ->select('*')
             ->where('companycode',session('cc'))
@@ -143,6 +153,8 @@ class m_lpbj extends Model
 
         return $data;
 =======
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
         try {
@@ -156,6 +168,9 @@ class m_lpbj extends Model
             return null; // or handle it as required
         }
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
@@ -165,6 +180,7 @@ class m_lpbj extends Model
     {
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         $data = DB::table('api_costcenter')
             ->select('*')
             ->where('companycode',session('cc'))
@@ -172,6 +188,8 @@ class m_lpbj extends Model
 
         return $data;
 =======
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
         try {
@@ -185,6 +203,9 @@ class m_lpbj extends Model
             return null; // or handle it as required
         }
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
@@ -194,6 +215,7 @@ class m_lpbj extends Model
     {
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         $data = DB::table('api_order')
             ->select('*')
             ->where('companycode',session('cc'))
@@ -201,6 +223,8 @@ class m_lpbj extends Model
 
         return $data;
 =======
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
         try {
@@ -214,6 +238,9 @@ class m_lpbj extends Model
             return null; // or handle it as required
         }
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
@@ -223,6 +250,7 @@ class m_lpbj extends Model
     {
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         $data = DB::table('api_asset')
             ->select('*')
             ->where('companycode',session('cc'))
@@ -230,6 +258,8 @@ class m_lpbj extends Model
 
         return $data;
 =======
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
         try {
@@ -244,6 +274,9 @@ class m_lpbj extends Model
             return null; // or handle it as required
         }
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
@@ -251,6 +284,7 @@ class m_lpbj extends Model
 
     public function insertDraft($params)
     {
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
         $date = new DateTime('now');
@@ -276,6 +310,8 @@ class m_lpbj extends Model
 =======
 =======
 >>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
         try {
             $data = DB::table('s_draftlpbj')->insert([
                 'userid' => $params['userid'],
@@ -298,6 +334,9 @@ class m_lpbj extends Model
             return false; // or handle it as required
         }
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
@@ -339,11 +378,14 @@ class m_lpbj extends Model
     {
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         $data = DB::table('vw_getdraftlpbj')
             ->select('*')
             ->where('id', '=', $id)
             ->get();
 =======
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
         try {
@@ -374,6 +416,9 @@ class m_lpbj extends Model
                     AND a.id = :id
             ", ['id' => $id]);
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
@@ -407,6 +452,7 @@ class m_lpbj extends Model
     {
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         // dd($params);
         $data = DB::table('m_lpbj_hdr')
             ->where('id', $params['hdrid'])
@@ -419,6 +465,8 @@ class m_lpbj extends Model
 
         return $data;
 =======
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
         try {
@@ -444,6 +492,9 @@ class m_lpbj extends Model
             return false; // or handle it as required
         }
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
@@ -459,6 +510,9 @@ class m_lpbj extends Model
 =======
         $divname = session('divname');
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
@@ -513,11 +567,14 @@ class m_lpbj extends Model
     {
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         $data = DB::table('vw_historylpbj')
             ->select('*')
             ->where('hdrid', '=', $id)
             ->get();
 =======
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
         try {
@@ -564,6 +621,9 @@ class m_lpbj extends Model
                     AND a.id = :hdrid
                 ", ['hdrid' => $id]);
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
@@ -633,6 +693,9 @@ class m_lpbj extends Model
                 ]
             );
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
@@ -648,11 +711,14 @@ class m_lpbj extends Model
     {
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         $data = DB::table('vw_historylpbjdtl')
             ->select('*')
             ->where('hdrid', '=', $id)
             ->get();
 =======
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
         try {
@@ -692,6 +758,9 @@ class m_lpbj extends Model
                     AND a.id = :hdrid
             ", ['hdrid' => $id]);
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
@@ -707,11 +776,14 @@ class m_lpbj extends Model
     {
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         $data = DB::table('vw_historylpbjdtl')
             ->select('*')
             ->where('dtlid', '=', $id)
             ->get();
 =======
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
         try {
@@ -751,6 +823,9 @@ class m_lpbj extends Model
                     AND b.id = :dtlid
             ", ['dtlid' => $id]);
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
@@ -766,6 +841,7 @@ class m_lpbj extends Model
     {
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         // dd($status);
         $data = DB::table('m_lpbj_hdr')
             ->where('id', $id)
@@ -777,6 +853,8 @@ class m_lpbj extends Model
 =======
 =======
 >>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
         try {
             $insertApprove = DB::table('m_lacak_lpbj')
                 ->insert([
@@ -786,6 +864,9 @@ class m_lpbj extends Model
                     'created_by' => session('iduser'),
                 ]);
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
@@ -811,6 +892,7 @@ class m_lpbj extends Model
     {
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         // dd($status);
         $data = DB::table('m_lpbj_dtl')
             ->where('id', $params['dtlid'])
@@ -831,6 +913,8 @@ class m_lpbj extends Model
 =======
 =======
 >>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
         try {
             $data = DB::table('m_lpbj_dtl')
                 ->where('id', $params['dtlid'])
@@ -849,6 +933,9 @@ class m_lpbj extends Model
                     'modified_by' => $params['userid'],
                 ]);
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
@@ -881,6 +968,7 @@ class m_lpbj extends Model
 
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         $data = DB::table('m_lpbj_dtl')->insert([
             'hdrid' => $params['hdrid'],
             'articlecode' => $params['article'],
@@ -902,12 +990,17 @@ class m_lpbj extends Model
 =======
 =======
 >>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
             return $data;
         } catch (\Exception $e) {
             Log::error('Error inserting draft history: ' . $e->getMessage());
             return false; // or handle it as required
         }
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
@@ -915,6 +1008,7 @@ class m_lpbj extends Model
 
     public function rejectLpbj($id, $status, $reason)
     {
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
         // dd($status);
@@ -951,6 +1045,18 @@ class m_lpbj extends Model
                 ]);
 
 >>>>>>> Stashed changes
+=======
+        try {
+            $data = DB::table('m_lpbj_hdr')
+                ->where('id', $id)
+                ->update([
+                    'status' => $status,
+                    'reason' => $reason,
+                    'workflow' => 'Reject_by_' . session('name'),
+                    'modified_by' => session('iduser')
+                ]);
+
+>>>>>>> Stashed changes
             if ($status == 0) {
                 $nolpbj = DB::table('m_lpbj_hdr')->select('nolpbj')->where('id', $id)->get();
 
@@ -968,6 +1074,9 @@ class m_lpbj extends Model
             return false; // or handle it as required
         }
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
