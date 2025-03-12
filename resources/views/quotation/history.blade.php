@@ -135,6 +135,15 @@
     </script>
 
     <script type="text/javascript">
+<<<<<<< Updated upstream
+=======
+        $("#history").addClass("active");
+
+        @if (Session::has('pesan'))
+            alert("{{ Session::get('pesan') }}");
+        @endif
+
+>>>>>>> Stashed changes
         $(document).ready(function() {
 
             const tbList = new DataTable('#tbList', {
@@ -144,7 +153,7 @@
                     targets: 0
                 }],
                 order: [
-                    [1, 'asc']
+                    [1, 'desc']
                 ]
             });
             tbList.on('order.dt search.dt', function() {

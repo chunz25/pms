@@ -16,8 +16,15 @@
     <link href="vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
     <link href="vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
 
+<<<<<<< Updated upstream
     <link href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" rel="stylesheet">
     <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+=======
+    {{-- <link href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" rel="stylesheet">
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script> --}}
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.0/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"></script>
+>>>>>>> Stashed changes
 
     <style>
         table {
@@ -100,11 +107,29 @@
                 <br>
 
                 {{-- FormPengajuan --}}
+<<<<<<< Updated upstream
                 <form action="ajukanqe" method="post">
+=======
+                <form onsubmit="return validasi()" action="{{ url('/ajukanqe') }}" method="post"
+                    enctype="multipart/form-data">
+                    @csrf
+>>>>>>> Stashed changes
                     @foreach ($iddtl as $c)
-                        <input type="text" name="dtl[]" value="{{ $c }}" hidden>
+                        <input type="text" name="dtl[]" id="dtl[]" value="{{ $c }}" hidden>
                     @endforeach
                     @if ($dataDraft)
+<<<<<<< Updated upstream
+=======
+                        <div class="row mb-2">
+                            <div class="col-sm-4">
+                                {{-- <label>Attachment:</label> --}}
+                                <input class="form-control" type="file" accept="application/pdf"
+                                    onchange="validate(this.value);" id="attach" name="attach" required>
+                            </div>
+                        </div>
+                        <input type="text" name="statusdoc" id="statusdoc" value="{{ $dataDraft[0]->statusdoc }}"
+                            hidden>
+>>>>>>> Stashed changes
                         @foreach ($dataVendor as $v)
                             <h4>
                                 <strong>{{ $v->vendorname }}</strong>
@@ -189,6 +214,7 @@
     @endif
     {{-- /ModalTampilFile --}}
 
+<<<<<<< Updated upstream
     <footer id="footer" class="footer position-relative light-background">
 
         <div class="container">
@@ -221,6 +247,96 @@
     <script src="vendor/imagesloaded/imagesloaded.pkgd.min.js"></script>
     <script src="vendor/isotope-layout/isotope.pkgd.min.js"></script>
     <script src="vendor/swiper/swiper-bundle.min.js"></script>
+=======
+    {{-- ModalTambahAttach --}}
+    {{-- @if ($dataVendor)
+        @foreach ($dataVendor as $v)
+            <div class="modal fade" id="modalItem" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-md">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">File Attachment</h5>
+                        </div>
+                        <div class="modal-body">
+                            <label class="mb-2">Silahkan tambah document file yang sudah approve.</label>
+                            <input class="form-control" type="file" name="qeItem" id="qeItem"
+                                accept="application/pdf" onchange="return validasiItem(this.value)" required>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" onclick="return ajukanItem()">Ajukan
+                                QE</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kembali</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @endforeach
+    @endif --}}
+    {{-- /ModalTambahAttach --}}
+
+    @include('template.footer')
+    {{-- VendorJS --}}
+    {{-- MainJS --}}
+    <script src="{{ asset('js/lpbj/main.js') }}"></script>
+    <script src="{{ asset('js/bootstrap.min.js') }}"></script>
+    <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ asset('vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ asset('vendor/aos/aos.js') }}"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous">
+    </script>
+
+    <script type="text/javascript">
+        $("#pengajuan").addClass("active");
+
+        @if (Session::has('pesan'))
+            alert("{{ Session::get('pesan') }}");
+        @endif
+
+        function validate(fileName) {
+            let a = document.getElementById("attach");
+            let ext = new Array("pdf");
+            let limit = 1700000;
+            let fileext = fileName.split('.').pop().toLowerCase();
+            // let aa = document.getElementById("qeItem").files[0];
+            // let aaa = document.getElementById("attachHdr");
+
+            if (ext.includes(fileext) && a.files[0].size < limit) {
+                // const dataTransfer = new DataTransfer();
+                // dataTransfer.items.add(aa);
+                // aaa.files = dataTransfer.files;
+                return true;
+            } else if (!ext.includes(fileext)) {
+                a.value = null;
+                alert('Format file tidak sesuai');
+            } else if (a.files[0].size > limit) {
+                a.value = null;
+                alert('Maximum ukuran file 1,5Mb');
+            }
+        }
+
+        // function ajukanItem() {
+        //     $('#modalItem').modal('hide');
+        //     return true
+        // }
+
+        function validasi() {
+            let sumPilih = {{ $sumVendor }};
+
+            if (sumPilih > 1) {
+                alert('Vendor pilihan hanya bisa 1');
+                return false
+            } else if (sumPilih < 1) {
+                alert('Vendor pilihan harus ada');
+                return false
+            } else {
+                // $('#modalItem').modal('show');
+                return true
+            }
+        }
+    </script>
+>>>>>>> Stashed changes
 
 </body>
 

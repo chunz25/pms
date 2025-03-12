@@ -77,6 +77,41 @@
                                     <li><i class="bi bi-chevron-right"></i> <strong>Tanggal Permintaan :</strong>
                                         <span>{{ $dataHeader->created_at }}</span>
                                     </li>
+<<<<<<< Updated upstream
+=======
+                                    <li><i class="bi bi-chevron-right"></i> <strong>Description QE :</strong>
+                                        <span>{{ $dataHeader->remark }}</span>
+                                    </li>
+                                    @if ($dataHeader->reason != '')
+                                        <li><i class="bi bi-chevron-right"></i> <strong>Alasan Reject :</strong>
+                                            <span>{{ $dataHeader->reason }}</span>
+                                        </li>
+                                    @endif
+                                    <a class="btn btn-outline-primary btn-sm mt-2"
+                                        href="{{ url("/lihatqedoc/$dataHeader->hdrid") }}">
+                                        <i class="bi bi-filetype-pdf"></i> Lihat Dokumen
+                                    </a>
+                                    <a class="btn btn-outline-danger btn-sm mt-2"
+                                        href="{{ url("/cetakqedoc/$dataHeader->hdrid") }}">
+                                        <i class="bi bi-filetype-pdf"></i> Print Dokumen
+                                    </a>
+                                    <button type="button" class="btn btn-outline-success btn-sm mt-2" data-bs-toggle="modal"
+                                        data-bs-target="#modalFile">
+                                        <i class="bi bi-filetype-pdf"></i> Lihat Lampiran
+                                    </button>
+                                    @if ($dataHeader->statusid == 14)
+                                        <button type="button" class="btn btn-outline-warning btn-sm mt-2"
+                                            data-bs-toggle="modal" data-bs-target="#modalClose">
+                                            <i class="bi bi-filetype-pdf"></i> Close LPBJ
+                                        </button>
+                                    @endif
+                                    @if ($dataHeader->statusid == 15)
+                                        <button type="button" class="btn btn-outline-warning btn-sm mt-2"
+                                            data-bs-toggle="modal" data-bs-target="#modalGR">
+                                            <i class="bi bi-filetype-pdf"></i> Lihat GR
+                                        </button>
+                                    @endif
+>>>>>>> Stashed changes
                                 </ul>
                             </div>
                         </div>
@@ -128,6 +163,7 @@
         </section>
     </main>
 
+<<<<<<< Updated upstream
     <footer id="footer" class="footer position-relative light-background">
 
         <div class="container">
@@ -167,6 +203,73 @@
     {{-- ScrollToTop --}}
     <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i
             class="bi bi-arrow-up-short"></i></a>
+=======
+    {{-- ModalTampilFile --}}
+    <div class="modal fade" id="modalFile" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">File Attachment</h5>
+                </div>
+                <div class="modal-body">
+                    <embed src="{{ url('/lampiran/' . $dataHeader->hdrid) }}" type="application/pdf" frameBorder="0"
+                        height="400px" width="100%"></embed>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kembali</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{-- /ModalTampilFile --}}
+
+    {{-- ModalTampilGR --}}
+    <div class="modal fade" id="modalGR" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">File GR</h5>
+                </div>
+                <div class="modal-body">
+                    <embed src="{{ url('/docgr/' . $dataHeader->hdrid) }}" type="application/pdf" frameBorder="0"
+                        height="400px" width="100%"></embed>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kembali</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{-- /ModalTampilGR --}}
+
+    {{-- ModalClosePO --}}
+    <div class="modal fade" id="modalClose" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-md">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Upload Bukti GR</h5>
+                </div>
+                <form action="{{ url('/closepo') }}" method="post" onsubmit="return yakin()"
+                    enctype="multipart/form-data">
+                    @csrf
+                    <div class="modal-body">
+                        <label>Dokumen Bukti GR:</label>
+                        <input type="text" name="qeid" value="{{ $dataHeader->hdrid }}" hidden>
+                        <input class="form-control" type="file" accept="application/pdf"
+                            onchange="validate(this.value);" id="buktigr" name="buktigr" required>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Close LPBJ</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kembali</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    {{-- /ModalClosePO --}}
+
+    @include('template.footer')
+>>>>>>> Stashed changes
 
     {{-- VendorJS --}}
     {{-- MainJS --}}
@@ -187,6 +290,39 @@
         integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous">
     </script>
 
+<<<<<<< Updated upstream
+=======
+    <script type="text/javascript">
+        $("#history").addClass("active");
+
+        function validate(fileName) {
+            let a = document.getElementById("buktigr");
+            let ext = new Array("pdf");
+            let limit = 1700000;
+            let fileext = fileName.split('.').pop().toLowerCase();
+
+            if (ext.includes(fileext) && a.files[0].size < limit) {
+                return true;
+            } else if (!ext.includes(fileext)) {
+                a.value = null;
+                alert('Format file tidak sesuai');
+            } else if (a.files[0].size > limit) {
+                a.value = null;
+                alert('Maximum ukuran file 1,5Mb');
+            }
+        }
+
+        function yakin() {
+            var result = confirm("Apa anda yakin ingin Close LPBJ?");
+            if (result) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    </script>
+
+>>>>>>> Stashed changes
 </body>
 
 </html>

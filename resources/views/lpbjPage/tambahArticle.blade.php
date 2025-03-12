@@ -107,7 +107,7 @@
                             @if ($getDraft)
                                 <input class="form-control" type="text" value="{{ $getDraft->remark }}" disabled>
                             @else
-                                <input class="form-control" type="text" name="rmkLPBJ" placeholder="Remark"
+                                <input class="form-control" maxlength="40" type="text" name="rmkLPBJ" placeholder="Remark"
                                     autocomplete="off">
                             @endif
                             <br>

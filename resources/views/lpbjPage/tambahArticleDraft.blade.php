@@ -96,7 +96,7 @@
                     <div class="row">
                         <div class="col-sm-6">
                             <label for="rmkLPBJ">Remark :</label>
-                            <input class="form-control" type="text" name="rmkLPBJ" placeholder="Remark"
+                            <input class="form-control" maxlength="40" type="text" name="rmkLPBJ" placeholder="Remark"
                                 autocomplete="off">
                             <br>
                         </div>

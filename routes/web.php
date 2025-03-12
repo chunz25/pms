@@ -65,6 +65,9 @@ route::get('lpbjdel/{id}', [c_lpbj::class, 'lpbjDel'])->name('lpbj.lpbjDel');
 
 route::post('lpbjedtdetail', [c_lpbj::class, 'lpbjEdtSave'])->name('lpbj.lpbjEdtSave');
 route::post('lpbjedtdetailadd', [c_lpbj::class, 'lpbjEdtAddArt'])->name('lpbj.lpbjEdtAddArt');
+
+route::get('reportpms/{id}', [c_lpbj::class, 'generateReport'])->name('lpbj.reportPMS');
+
 /* LPBJ */
 
 /* Quotation */
@@ -81,13 +84,46 @@ Route::get('pdf/{id}', function ($id) {
     return response()->file($filename);
 });
 
+<<<<<<< Updated upstream
 route::post('draftqe', [c_quotation::class, 'draftQe'])->name('quotation.draftQe');
+=======
+Route::get('lampiran/{id}', function ($id) {
+    $filename = public_path('uploads/quotation/header/') . $id . '_HeaderQe.pdf';
+    return response()->file($filename);
+});
+
+route::get('tempdraft/{id}', [c_quotation::class, 'draftQe'])->name('quotation.draftQe');
+route::get('editqe/{id}', [c_quotation::class, 'editQe'])->name('quotation.editQe');
+route::get('editdraftqe/{id}', [c_quotation::class, 'draftQeEdit'])->name('quotation.draftQe');
+route::get('deletedraftqe/{id}', [c_quotation::class, 'draftQeDel'])->name('quotation.draftQe');
+route::get('lihatqedoc/{id}', [c_quotation::class, 'lihatQeDoc'])->name('quotation.lihatQeDoc');
+route::get('cetakqedoc/{id}', [c_quotation::class, 'cetak'])->name('quotation.cetak');
+
+>>>>>>> Stashed changes
 route::post('tambahvendor', [c_quotation::class, 'tambahVendor'])->name('quotation.tambahVendor');
 route::get('deletedraftqe/{id}', [c_quotation::class, 'deleteVendor'])->name('quotation.deleteVendor');
 route::post('insertdraftqe', [c_quotation::class, 'insertDraft'])->name('quotation.insertDraft');
 route::post('ajukanqe', [c_quotation::class, 'ajukanQe'])->name('quotation.ajukanQe');
+<<<<<<< Updated upstream
 /* Quotation */
 
+=======
+route::post('rejectqe', [c_quotation::class, 'reject'])->name('lpbj.reject');
+
+Route::get('docgr/{id}', function ($id) {
+    $filename = public_path('uploads/buktigr/') . "CLOSED_PO_QE_ID_" . $id . '.pdf';
+    return response()->file($filename);
+});
+/* Quotation */
+
+/* API */
+route::get('kirimdata/{id}', [c_apisap::class, 'cekapi']);
+route::post('closepo', [c_apisap::class, 'closepo']);
+/* API */
+
+// route::post('kirimdata', [c_apisap::class, 'kirimData']);
+// route::get('cekapi/{id}', [c_apisap::class, 'cekapi']);
+>>>>>>> Stashed changes
 
 Route::get('sendmail', function () {
     $data = [

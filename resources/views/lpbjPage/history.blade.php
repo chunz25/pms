@@ -66,6 +66,9 @@
                     <div class="col-lg-12 content">
                         <h2 class="mb-1">List History {{ $title }}</h2>
                     </div>
+                    <div class="col-lg-12 content">
+                        <a class="btn btn-outline-success" href="{{ url("/reportpms/$user[0]") }}">Download Report</a>
+                    </div>
                 </div>
                 <br>
                 <table id="tbList" class="table-responsive-sm table-hover datatable">
@@ -156,7 +159,7 @@
                     targets: 0
                 }],
                 order: [
-                    [1, 'asc']
+                    [1, 'desc']
                 ]
             });
             tbList.on('order.dt search.dt', function() {

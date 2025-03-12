@@ -224,11 +224,285 @@ class c_quotation extends Controller
         $dtlid = $params->dtl;
         $this->db->ajukanQe($dtlid[0]);
 
+<<<<<<< Updated upstream
         foreach ($dtlid as $i) {
             $this->db->ajukanQeDetail($i);
             $this->db->updateQe($i);
         }
 
         return redirect('pengajuanqe');
+=======
+        // dd($params);
+        // dd($params->hasFile('attachHdr'));
+        // dd(session()->all());
+        if ($stat === 0) {
+            // dd('kesini');
+            $d = $this->db->updateQeRev($dtlid[0]);
+            // dd($d[0]->hdrid);
+            $databody = $this->db->getHistoryHeader($d[0]->hdrid);
+            $emailapprove = session('emailapprove');
+            $emailpengaju = $databody[0]->emailpengaju;
+
+            $details = [
+                'subject' => 'Pengajuan Baru QE Revisi',
+                'dataBody' => $databody,
+                'aksi' => 'SubmitQE',
+            ];
+
+            // dd($details);
+
+            Mail::to($emailapprove)
+                ->to($emailpengaju)
+                ->send(new mailPMS($details));
+
+            // session()->forget(['sts']);
+            return redirect('historyqe');
+        } else {
+            // dd('kesono');
+            $ajukan = $this->db->ajukanQe($dtlid[0]);
+
+            $filename = '';
+            if ($params->hasFile('attach')) {
+                $filename = $params->file('attach')->getClientOriginalName();
+                $ext = $params->file('attach')->getClientOriginalExtension();
+                $uploadpath = $ajukan . '_HeaderQe' . '.' . $ext;
+                $filename = $params->file('attach')->storeAs('quotation', $filename);
+                Storage::move($filename, 'quotation/header/' . $uploadpath);
+            }
+            // dd($filename);
+            $this->db->attachHdr($ajukan,$uploadpath);
+
+
+            foreach ($dtlid as $i) {
+                $this->db->ajukanQeDetail($i);
+                $this->db->updateQe($i);
+            }
+
+            $databody = $this->db->getHistoryHeader($ajukan);
+            $emailapprove = session('emailapprove');
+            $emailpengaju = $databody[0]->emailpengaju;
+
+            $details = [
+                'subject' => 'Pengajuan Baru QE',
+                'dataBody' => $databody,
+                'aksi' => 'SubmitQE',
+            ];
+
+            // dd($details);
+
+            Mail::to($emailapprove)
+                ->to($emailpengaju)
+                ->send(new mailPMS($details));
+
+            return redirect('historyqe');
+        }
+    }
+
+    public function approveQe()
+    {
+        if (!session('iduser')) {
+            return redirect('login')->with('pesan', 'Session anda telah habis, silahkan login kembali.');
+        }
+
+        $status = [1];
+        if (session('idgroup') == 1) {
+            $status = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+        }
+        if (session('idgroup') == 10) {
+            $status = [2];
+        }
+        if (session('idgroup') == 11) { // Parameter dengan userid karena hanya beliau BOD Procurement
+            $status = [3];
+        }
+        if (in_array(session('idgroup'), [4, 12])) {
+            $status = [4];
+        }
+        if (in_array(session('idgroup'), [3, 13])) {
+            $status = [5];
+        }
+        if (in_array(session('idgroup'), [8, 14])) {
+            $status = [6];
+        }
+        if (in_array(session('idgroup'), [15, 18])) { // Group ID untuk BOD
+            $status = [7, 10];
+        }
+        if (session('idgroup') == 16) {
+            $status = [8];
+        }
+        if (session('idgroup') == 17) {
+            $status = [9];
+        }
+
+        $dataApprove = $this->db->getApprove($status);
+
+        if ($dataApprove) {
+            session([
+                'cc' => $dataApprove[0]->companycode,
+            ]);
+        }
+
+        $data = [
+            'dataApprove' => $dataApprove,
+            'title' => 'Quotation'
+        ];
+
+        return view('quotation.approve', $data);
+    }
+
+    public function approveQeDetail($id)
+    {
+        if (!session('iduser')) {
+            return redirect('login')->with('pesan', 'Session anda telah habis, silahkan login kembali.');
+        }
+
+        $dataHeader = $this->db->getHistoryHeader($id)[0];
+        $dataVendorHdr = $this->db->getVendorHeader($id);
+
+        foreach ($dataVendorHdr as $x) {
+            $vendor = $x->vendorcode;
+            $dataVendorDtl[] = $this->db->getVendorDetail($vendor, $id);
+        }
+
+        $data = [
+            'title' => 'Quotation',
+            'dataHeader' => $dataHeader,
+            'dataVendorHdr' => $dataVendorHdr,
+            'dataVendorDtl' => $dataVendorDtl
+        ];
+
+        // dd($data);
+
+        return view('quotation/approveDetail', $data);
+    }
+
+    public function setujuQe($id)
+    {
+        $dataHeader = $this->db->getHistoryHeader($id)[0];
+        
+        $status = $dataHeader->statusid;
+        $dataHeader = $this->db->setujuQe($id, $status);
+
+        $lastStatus = $this->db->getHistoryHeader($id)[0];
+        $lastStatus = $lastStatus->statusid;
+
+        if ($dataHeader) {
+            if ($lastStatus == 11) {
+                return redirect("kirimdata/$id");
+            } else {
+                $databody = $this->db->getHistoryHeader($id);
+                $emailapprove = session('emailapprove');
+                $emailpengaju = $databody[0]->emailpengaju;
+
+                $details = [
+                    'subject' => 'Approve QE',
+                    'dataBody' => $databody,
+                    'aksi' => 'ApproveQE',
+                ];
+
+                Mail::to($emailapprove)
+                    ->to($emailpengaju)
+                    ->send(new mailPMS($details));
+                return redirect('approveqe')->with('pesan', 'Berhasil Approve Quotation.');
+            }
+        } else {
+            return redirect('approveqe')->with('pesan', 'Gagal Approve Quotation.');
+        }
+    }
+
+    public function lihatqedoc($id)
+    {
+        if (!session('iduser')) {
+            return redirect('login')->with('pesan', 'Session anda telah habis, silahkan login kembali.');
+        }
+
+        $dataHeader = $this->db->getHistoryHeader($id)[0];
+        $dataVendorHdr = $this->db->getVendorHeader($id);
+        $lacak = $this->db->getLacak($id)[0];
+
+        // dd($lacak);
+        session([
+            'cc' => $dataHeader->companycode,
+        ]);
+
+        foreach ($dataVendorHdr as $x) {
+            $vendor = $x->vendorcode;
+            $dataVendorDtl[] = $this->db->getVendorDetail($vendor, $id);
+        }
+
+        $data = [
+            'title' => 'Quotation',
+            'dataHeader' => $dataHeader,
+            'dataVendorHdr' => $dataVendorHdr,
+            'dataVendorDtl' => $dataVendorDtl,
+            'lacak' => $lacak
+        ];
+
+        return view('quotation/qeDocument', $data);
+    }
+
+    public function cetak($id)
+    {
+        if (!session('iduser')) {
+            return redirect('login')->with('pesan', 'Session anda telah habis, silahkan login kembali.');
+        }
+
+        $dataHeader = $this->db->getHistoryHeader($id)[0];
+        $dataVendorHdr = $this->db->getVendorHeader($id);
+        $lacak = $this->db->getLacak($id)[0];
+
+        // dd($lacak);
+        session([
+            'cc' => $dataHeader->companycode,
+        ]);
+
+        foreach ($dataVendorHdr as $x) {
+            $vendor = $x->vendorcode;
+            $dataVendorDtl[] = $this->db->getVendorDetail($vendor, $id);
+        }
+
+        $data = [
+            'title' => 'Quotation',
+            'dataHeader' => $dataHeader,
+            'dataVendorHdr' => $dataVendorHdr,
+            'dataVendorDtl' => $dataVendorDtl,
+            'lacak' => $lacak
+        ];
+
+        $pdf = PDF::loadView('quotation/qeDocument', $data)->setPaper('a2', 'landscape');;
+        return $pdf->stream('PrintQe.pdf');
+    }
+
+    public function reject(Request $params)
+    {
+        $hdrid = $params->hdrid;
+        $reason = $params->reason;
+        $status = $params->status;
+
+        // dd($params);
+
+        $reject = $this->db->rejectQe($hdrid, $status, $reason);
+
+        if ($reject) {
+            $databody = $this->db->getHistoryHeader($hdrid);
+            $emailapprove = session('emailapprove');
+            $emailpengaju = $databody[0]->emailpengaju;
+
+            $details = [
+                'subject' => 'Reject QE',
+                'dataBody' => $databody,
+                'aksi' => 'RejectQE',
+            ];
+
+            Mail::to($emailapprove)
+                ->to($emailpengaju)
+                ->send(new mailPMS($details));
+
+            return redirect('approveqe')->with('pesan', 'Sukses Reject QE');
+        } else {
+            return redirect('approveqe')->with('pesan', 'Gagal Reject QE');
+        }
+
+        return redirect('approveqe')->with('pesan', 'Sukses Reject QE');
+>>>>>>> Stashed changes
     }
 }
