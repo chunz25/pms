@@ -16,6 +16,9 @@ use Illuminate\Support\Facades\Log;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\Style\Border;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 
 class c_lpbj extends Controller
@@ -61,6 +64,7 @@ class c_lpbj extends Controller
     public function index()
     {
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         // dd(session()->exists('cc'));
         // dd(session()->all());
         $role = [1, 3, 4, 8];
@@ -83,10 +87,15 @@ class c_lpbj extends Controller
             'dataDraft' => $dataDraft,
             'title' => 'LPBJ'
 =======
+=======
+>>>>>>> Stashed changes
         // Define roles
         $roles = [
             'allowed' => [1, 3, 4, 8, 12, 13, 14],
             'admin' => [1, 4, 12]
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
         ];
 
@@ -128,6 +137,7 @@ class c_lpbj extends Controller
     public function tambahArticle()
     {
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         // dd(session());
         if (!session('iduser')) {
             return redirect('login')->with('pesan', 'Session anda telah habis, silahkan login kembali.');
@@ -139,6 +149,10 @@ class c_lpbj extends Controller
 =======
         $roles = [1, 3, 4, 8, 12, 13, 14];
         $dataDraft = '';
+=======
+        $roles = [1, 3, 4, 8, 12, 13, 14];
+        $dataDraft = '';
+>>>>>>> Stashed changes
 
         try {
             // Check for user session
@@ -174,6 +188,9 @@ class c_lpbj extends Controller
         } catch (\Exception $e) {
             // Handle exceptions (log the error or notify the user)
             return redirect('pengajuanlpbj')->with('pesan', 'An error occurred: ' . $e->getMessage());
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
         }
     }
@@ -181,6 +198,7 @@ class c_lpbj extends Controller
     public function ajukan(Request $params)
     {
         $userid = session('iduser');
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
         $dokumen = 1;
         if (session('doc') == 'drf') {
@@ -192,6 +210,12 @@ class c_lpbj extends Controller
         $dokumen = ($params->pilihan === 'doc') ? 1 : 0;
 >>>>>>> Stashed changes
 
+=======
+
+        // Determine the document status
+        $dokumen = ($params->pilihan === 'doc') ? 1 : 0;
+
+>>>>>>> Stashed changes
         // Prepare data for header insertion
         $data = [
             'userid' => $userid,
@@ -206,9 +230,12 @@ class c_lpbj extends Controller
             $insertHdr = $this->db->insertHdr($data);
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         if ($insertHdr) {
             $databody = $this->db->getHistoryHeader($insertHdr)->toArray();
 =======
+=======
+>>>>>>> Stashed changes
             // Check if the header insertion was successful
             if (!$insertHdr) {
                 throw new \Exception('Failed to insert header data');
@@ -216,6 +243,9 @@ class c_lpbj extends Controller
 
             // Retrieve the body data and prepare email details
             $databody = $this->db->getHistoryHeader($insertHdr);
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
             $emailapprove = session('emailapprove');
             $details = [
@@ -876,5 +906,8 @@ class c_lpbj extends Controller
             ], 500);
         }
     }
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 }

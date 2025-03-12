@@ -78,7 +78,10 @@
                                         <span>{{ $dataHeader->created_at }}</span>
                                     </li>
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 =======
+=======
+>>>>>>> Stashed changes
                                     <li><i class="bi bi-chevron-right"></i> <strong>Description QE :</strong>
                                         <span>{{ $dataHeader->remark }}</span>
                                     </li>
@@ -111,6 +114,9 @@
                                             <i class="bi bi-filetype-pdf"></i> Lihat GR
                                         </button>
                                     @endif
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
                                 </ul>
                             </div>
@@ -164,6 +170,7 @@
     </main>
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     <footer id="footer" class="footer position-relative light-background">
 
         <div class="container">
@@ -204,6 +211,8 @@
     <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i
             class="bi bi-arrow-up-short"></i></a>
 =======
+=======
+>>>>>>> Stashed changes
     {{-- ModalTampilFile --}}
     <div class="modal fade" id="modalFile" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-xl">

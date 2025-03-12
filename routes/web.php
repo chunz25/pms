@@ -85,8 +85,11 @@ Route::get('pdf/{id}', function ($id) {
 });
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 route::post('draftqe', [c_quotation::class, 'draftQe'])->name('quotation.draftQe');
 =======
+=======
+>>>>>>> Stashed changes
 Route::get('lampiran/{id}', function ($id) {
     $filename = public_path('uploads/quotation/header/') . $id . '_HeaderQe.pdf';
     return response()->file($filename);
@@ -105,6 +108,7 @@ route::get('deletedraftqe/{id}', [c_quotation::class, 'deleteVendor'])->name('qu
 route::post('insertdraftqe', [c_quotation::class, 'insertDraft'])->name('quotation.insertDraft');
 route::post('ajukanqe', [c_quotation::class, 'ajukanQe'])->name('quotation.ajukanQe');
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 /* Quotation */
 
 =======
@@ -116,6 +120,16 @@ Route::get('docgr/{id}', function ($id) {
 });
 /* Quotation */
 
+=======
+route::post('rejectqe', [c_quotation::class, 'reject'])->name('lpbj.reject');
+
+Route::get('docgr/{id}', function ($id) {
+    $filename = public_path('uploads/buktigr/') . "CLOSED_PO_QE_ID_" . $id . '.pdf';
+    return response()->file($filename);
+});
+/* Quotation */
+
+>>>>>>> Stashed changes
 /* API */
 route::get('kirimdata/{id}', [c_apisap::class, 'cekapi']);
 route::post('closepo', [c_apisap::class, 'closepo']);

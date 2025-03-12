@@ -5,7 +5,11 @@
         "This file is @generated automatically"
     ],
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     "content-hash": "fe33f98a750b8c5a51b30c78bd3fab21",
+=======
+    "content-hash": "1e3aed3e3238ffab04423d84a8041d55",
+>>>>>>> Stashed changes
 =======
     "content-hash": "1e3aed3e3238ffab04423d84a8041d55",
 >>>>>>> Stashed changes
@@ -1865,7 +1869,10 @@
         },
         {
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 =======
+=======
+>>>>>>> Stashed changes
             "name": "maennchen/zipstream-php",
             "version": "3.1.0",
             "source": {
@@ -2819,6 +2826,9 @@
             "time": "2024-08-08T02:31:26+00:00"
         },
         {
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
             "name": "phpoption/phpoption",
             "version": "1.9.2",

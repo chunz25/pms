@@ -188,6 +188,9 @@ class m_quotation extends Model
         return $data;
     }
 
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
     public function ajukanQe($id)
     {

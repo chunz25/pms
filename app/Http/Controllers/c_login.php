@@ -11,6 +11,9 @@ use Illuminate\Support\Facades\Mail;
 use App\Mail\mailPMS;
 use Exception;
 use Illuminate\Support\Facades\Log;
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 
 class c_login extends Controller
@@ -50,6 +53,7 @@ class c_login extends Controller
             $cekLogin = $this->users->getUser($data);
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         if (count($cekLogin) > 0) {
             $sess = $cekLogin->toArray()[0];
 
@@ -67,6 +71,36 @@ class c_login extends Controller
             return redirect('portal');
         } else {
             return redirect('login')->with('pesan', 'Username / Password Salah.');
+=======
+            if (count($cekLogin) > 0) {
+                $sess = end($cekLogin);
+
+                session([
+                    'iduser' => $sess->iduser,
+                    'username' => $sess->username,
+                    'kunci' => $sess->password,
+                    'name' => $sess->name,
+                    'idgroup' => $sess->idgroup,
+                    'groupname' => $sess->usergroupname,
+                    'dirname' => $sess->dirname,
+                    'depname' => $sess->depname,
+                    'divname' => $sess->divname,
+                    'email' => $sess->email,
+                    'emailapprove' => $sess->emailapprove
+                ]);
+
+                if ($sess->isreset === 1 || $sess->password === 'b626ebe3027038962d7acec9ebe4f1bc') {
+                    return redirect('cpassword')->with('isreset', 1);
+                } else {
+                    return redirect('portal');
+                }
+            } else {
+                return redirect('login')->withErrors('Username / Password Salah.');
+            }
+        } catch (Exception $e) {
+            Log::error('Error in cekLogin: ' . $e->getMessage());
+            return redirect('login')->withErrors('An error occurred during login');
+>>>>>>> Stashed changes
         }
     }
 

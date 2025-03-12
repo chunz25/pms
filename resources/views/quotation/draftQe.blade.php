@@ -17,9 +17,12 @@
     <link href="vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     <link href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" rel="stylesheet">
     <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
 =======
+=======
+>>>>>>> Stashed changes
     {{-- <link href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" rel="stylesheet">
     <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script> --}}
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.0/dist/jquery.min.js"></script>
@@ -108,8 +111,11 @@
 
                 {{-- FormPengajuan --}}
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
                 <form action="ajukanqe" method="post">
 =======
+=======
+>>>>>>> Stashed changes
                 <form onsubmit="return validasi()" action="{{ url('/ajukanqe') }}" method="post"
                     enctype="multipart/form-data">
                     @csrf
@@ -119,12 +125,46 @@
                     @endforeach
                     @if ($dataDraft)
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 =======
+=======
+>>>>>>> Stashed changes
                         <div class="row mb-2">
                             <div class="col-sm-4">
                                 {{-- <label>Attachment:</label> --}}
                                 <input class="form-control" type="file" accept="application/pdf"
                                     onchange="validate(this.value);" id="attach" name="attach" required>
+<<<<<<< Updated upstream
+=======
+                            </div>
+                        </div>
+                        <input type="text" name="statusdoc" id="statusdoc" value="{{ $dataDraft[0]->statusdoc }}"
+                            hidden>
+                        @foreach ($dataVendor as $v)
+                            <div class="row mb-2">
+                                <div class="col-sm-10">
+                                    <span>
+                                        <strong>{{ $v->vendorname }}</strong>
+                                        @if ($v->ispilih == 1)
+                                            <i class="bi bi-check2-all navicon"></i>
+                                        @endif
+                                    </span>
+                                </div>
+                                <div class="col-sm-2">
+                                    <a class="btn btn-sm btn-outline-primary"
+                                        href="{{ url("/editdraftqe/$v->hdrid,$v->vendorcode") }}">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                    <a class="btn btn-sm btn-outline-danger"
+                                        href="{{ url("/deletedraftqe/$v->hdrid,$v->vendorcode") }}">
+                                        <i class="bi bi-trash"></i>
+                                    </a>
+                                    <button type="button" class="btn btn-sm btn-outline-success" data-bs-toggle="modal"
+                                        data-bs-target="#modalFile{{ $v->vendorcode }}">
+                                        <i class="bi bi-filetype-pdf"></i>
+                                    </button>
+                                </div>
+>>>>>>> Stashed changes
                             </div>
                         </div>
                         <input type="text" name="statusdoc" id="statusdoc" value="{{ $dataDraft[0]->statusdoc }}"
@@ -215,6 +255,7 @@
     {{-- /ModalTampilFile --}}
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     <footer id="footer" class="footer position-relative light-background">
 
         <div class="container">
@@ -248,6 +289,8 @@
     <script src="vendor/isotope-layout/isotope.pkgd.min.js"></script>
     <script src="vendor/swiper/swiper-bundle.min.js"></script>
 =======
+=======
+>>>>>>> Stashed changes
     {{-- ModalTambahAttach --}}
     {{-- @if ($dataVendor)
         @foreach ($dataVendor as $v)

@@ -143,6 +143,9 @@
             alert("{{ Session::get('pesan') }}");
         @endif
 
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
         $(document).ready(function() {
 

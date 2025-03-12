@@ -12,11 +12,14 @@ class m_lpbj extends Model
     public function getPegawai($userid)
     {
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         $data = DB::table('vw_getpegawai')
             ->select('*')
             ->where('userid', '=', $userid)
             ->get();
 =======
+=======
+>>>>>>> Stashed changes
         try {
             $data = DB::table('m_pegawai as a')
                 ->select(
@@ -45,6 +48,9 @@ class m_lpbj extends Model
                 ->where('a.userid', $userid)
                 ->distinct()
                 ->get();
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 
             return $data;
@@ -91,6 +97,9 @@ class m_lpbj extends Model
                 ->where('a.isdeleted', 0)
                 ->where('a.userid', $userid)
                 ->get();
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 
             return $data;
@@ -126,6 +135,7 @@ class m_lpbj extends Model
     public function getGL()
     {
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         $data = DB::table('api_gl')
             ->select('*')
             ->where('companycode',session('cc'))
@@ -133,6 +143,8 @@ class m_lpbj extends Model
 
         return $data;
 =======
+=======
+>>>>>>> Stashed changes
         try {
             $data = DB::table('api_gl')
                 ->select('*')
@@ -143,11 +155,15 @@ class m_lpbj extends Model
             Log::error('Error fetching GL: ' . $e->getMessage());
             return null; // or handle it as required
         }
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
     }
 
     public function getCC()
     {
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
         $data = DB::table('api_costcenter')
             ->select('*')
@@ -156,6 +172,8 @@ class m_lpbj extends Model
 
         return $data;
 =======
+=======
+>>>>>>> Stashed changes
         try {
             $data = DB::table('api_costcenter')
                 ->select('*')
@@ -166,11 +184,15 @@ class m_lpbj extends Model
             Log::error('Error fetching cost centers: ' . $e->getMessage());
             return null; // or handle it as required
         }
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
     }
 
     public function getOrder()
     {
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
         $data = DB::table('api_order')
             ->select('*')
@@ -179,6 +201,8 @@ class m_lpbj extends Model
 
         return $data;
 =======
+=======
+>>>>>>> Stashed changes
         try {
             $data = DB::table('api_order')
                 ->select('*')
@@ -189,11 +213,15 @@ class m_lpbj extends Model
             Log::error('Error fetching orders: ' . $e->getMessage());
             return null; // or handle it as required
         }
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
     }
 
     public function getAsset()
     {
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
         $data = DB::table('api_asset')
             ->select('*')
@@ -202,6 +230,8 @@ class m_lpbj extends Model
 
         return $data;
 =======
+=======
+>>>>>>> Stashed changes
         try {
             $data = DB::table('api_asset')
                 ->select('*')
@@ -213,11 +243,15 @@ class m_lpbj extends Model
             Log::error('Error fetching assets: ' . $e->getMessage());
             return null; // or handle it as required
         }
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
     }
 
     public function insertDraft($params)
     {
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
         $date = new DateTime('now');
 
@@ -240,6 +274,8 @@ class m_lpbj extends Model
 
         return $data;
 =======
+=======
+>>>>>>> Stashed changes
         try {
             $data = DB::table('s_draftlpbj')->insert([
                 'userid' => $params['userid'],
@@ -261,6 +297,9 @@ class m_lpbj extends Model
             Log::error('Error inserting draft: ' . $e->getMessage());
             return false; // or handle it as required
         }
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
     }
 
@@ -299,11 +338,14 @@ class m_lpbj extends Model
     public function cekDraft($id)
     {
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         $data = DB::table('vw_getdraftlpbj')
             ->select('*')
             ->where('id', '=', $id)
             ->get();
 =======
+=======
+>>>>>>> Stashed changes
         try {
             $data = DB::select("
                 SELECT
@@ -331,6 +373,9 @@ class m_lpbj extends Model
                 WHERE a.isdeleted = 0
                     AND a.id = :id
             ", ['id' => $id]);
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 
             return $data;
@@ -361,6 +406,7 @@ class m_lpbj extends Model
     public function editHdr($params)
     {
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         // dd($params);
         $data = DB::table('m_lpbj_hdr')
             ->where('id', $params['hdrid'])
@@ -373,6 +419,8 @@ class m_lpbj extends Model
 
         return $data;
 =======
+=======
+>>>>>>> Stashed changes
         try {
             $doc = 'Draft';
             if ($params['status'] == '1') {
@@ -395,6 +443,9 @@ class m_lpbj extends Model
             Log::error('Error editing header: ' . $e->getMessage());
             return false; // or handle it as required
         }
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
     }
 
@@ -407,6 +458,9 @@ class m_lpbj extends Model
             ->get();
 =======
         $divname = session('divname');
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 
         try {
@@ -458,11 +512,14 @@ class m_lpbj extends Model
     public function getHistoryHeader($id)
     {
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         $data = DB::table('vw_historylpbj')
             ->select('*')
             ->where('hdrid', '=', $id)
             ->get();
 =======
+=======
+>>>>>>> Stashed changes
         try {
             $data = DB::select("
                 SELECT DISTINCT
@@ -506,6 +563,9 @@ class m_lpbj extends Model
                     AND b.isdeleted = 0
                     AND a.id = :hdrid
                 ", ['hdrid' => $id]);
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 
             return $data;
@@ -572,6 +632,9 @@ class m_lpbj extends Model
                     'status' => $status
                 ]
             );
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 
             return $data;
@@ -584,11 +647,14 @@ class m_lpbj extends Model
     public function getHistoryDetail($id)
     {
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         $data = DB::table('vw_historylpbjdtl')
             ->select('*')
             ->where('hdrid', '=', $id)
             ->get();
 =======
+=======
+>>>>>>> Stashed changes
         try {
             $data = DB::select("
                 SELECT
@@ -625,6 +691,9 @@ class m_lpbj extends Model
                     AND b.isdeleted = 0
                     AND a.id = :hdrid
             ", ['hdrid' => $id]);
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 
             return $data;
@@ -637,11 +706,14 @@ class m_lpbj extends Model
     public function getHistoryDetailEdt($id)
     {
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         $data = DB::table('vw_historylpbjdtl')
             ->select('*')
             ->where('dtlid', '=', $id)
             ->get();
 =======
+=======
+>>>>>>> Stashed changes
         try {
             $data = DB::select("
                 SELECT
@@ -678,6 +750,9 @@ class m_lpbj extends Model
                     AND b.isdeleted = 0
                     AND b.id = :dtlid
             ", ['dtlid' => $id]);
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 
             return $data;
@@ -690,6 +765,7 @@ class m_lpbj extends Model
     public function insertLpbj($id, $status)
     {
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         // dd($status);
         $data = DB::table('m_lpbj_hdr')
             ->where('id', $id)
@@ -699,6 +775,8 @@ class m_lpbj extends Model
                 'modified_by' => session('iduser')
             ]);
 =======
+=======
+>>>>>>> Stashed changes
         try {
             $insertApprove = DB::table('m_lacak_lpbj')
                 ->insert([
@@ -707,6 +785,9 @@ class m_lpbj extends Model
                     'approvalid' => session('iduser'),
                     'created_by' => session('iduser'),
                 ]);
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 
             if ($insertApprove) {
@@ -729,6 +810,7 @@ class m_lpbj extends Model
     public function updateDraftDetail($params)
     {
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         // dd($status);
         $data = DB::table('m_lpbj_dtl')
             ->where('id', $params['dtlid'])
@@ -747,6 +829,8 @@ class m_lpbj extends Model
                 'modified_by' => $params['userid'],
             ]);
 =======
+=======
+>>>>>>> Stashed changes
         try {
             $data = DB::table('m_lpbj_dtl')
                 ->where('id', $params['dtlid'])
@@ -764,6 +848,9 @@ class m_lpbj extends Model
                     'gambar' => $params['gambar'],
                     'modified_by' => $params['userid'],
                 ]);
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 
             return $data;
@@ -793,6 +880,7 @@ class m_lpbj extends Model
             ]);
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         $data = DB::table('m_lpbj_dtl')->insert([
             'hdrid' => $params['hdrid'],
             'articlecode' => $params['article'],
@@ -812,16 +900,22 @@ class m_lpbj extends Model
 
         return $data;
 =======
+=======
+>>>>>>> Stashed changes
             return $data;
         } catch (\Exception $e) {
             Log::error('Error inserting draft history: ' . $e->getMessage());
             return false; // or handle it as required
         }
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
     }
 
     public function rejectLpbj($id, $status, $reason)
     {
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
         // dd($status);
         $data = DB::table('m_lpbj_hdr')
@@ -845,6 +939,18 @@ class m_lpbj extends Model
                     'modified_by' => session('iduser')
                 ]);
 
+=======
+        try {
+            $data = DB::table('m_lpbj_hdr')
+                ->where('id', $id)
+                ->update([
+                    'status' => $status,
+                    'reason' => $reason,
+                    'workflow' => 'Reject_by_' . session('name'),
+                    'modified_by' => session('iduser')
+                ]);
+
+>>>>>>> Stashed changes
             if ($status == 0) {
                 $nolpbj = DB::table('m_lpbj_hdr')->select('nolpbj')->where('id', $id)->get();
 
@@ -861,6 +967,9 @@ class m_lpbj extends Model
             Log::error('Error rejecting LPBJ: ' . $e->getMessage());
             return false; // or handle it as required
         }
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
     }
 
